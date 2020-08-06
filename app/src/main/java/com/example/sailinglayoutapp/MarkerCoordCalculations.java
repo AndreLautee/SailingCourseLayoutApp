@@ -2,6 +2,7 @@ package com.example.sailinglayoutapp;
 
 
 import android.location.Location;
+import android.location.LocationManager;
 
 import java.util.ArrayList;
 
@@ -17,35 +18,43 @@ public class MarkerCoordCalculations {
         this.coords.add(userCoord);
         this.courseVariables = cV;
 
-        createShape(courseVariables.getShape());
+        //createShape(courseVariables.getShape());
     }
 
-    public void createShape(String shape) {
+    public ArrayList<Location> getCoords() {
+        return coords;
+    }
+
+    public void setCoords(ArrayList<Location> coords) {
+        this.coords = coords;
+    }
+
+    public ArrayList<Location> createShape(String shape) {
         switch (shape) {
             case "triangle":
                 if (createTriangle()) {
-                    //success
+                    return coords;
                 } else {
-                    //failure
+                    return null;
                 }
-                break;
+                //break;
             case "straight":
                 if (createStraight()) {
-                    //success
+                    return coords;
                 } else {
-                    //failure
+                    return null;
                 }
-                break;
+                //break;
             case "trapezoid":
                 if (createTrapezoid()) {
-                    //success
+                    return coords;
                 } else {
-                    //failure
+                    return null;
                 }
-                break;
+                //break;
             default:
-                // error
-                break;
+                return null;
+                //break;
         }
     }
 
@@ -235,8 +244,7 @@ public class MarkerCoordCalculations {
     }
 
 
-
-    private Location getCoordinates(double latDeg, double lonDeg, double dist, double bearRad) {
+    public Location getCoordinates(double latDeg, double lonDeg, double dist, double bearRad) {
         double latRad = (latDeg * Math.PI) / 180; // in radians
         double lonRad = (lonDeg * Math.PI) / 180; // in radians
         int r = 6371; // radius of earth in km
@@ -252,10 +260,33 @@ public class MarkerCoordCalculations {
         resultLat = (resultLat * 180) / Math.PI; // back to degrees
         resultLon = (resultLon * 180) / Math.PI;
 
-        Location l = new Location("dummyprovider");
+        Location l = new Location(LocationManager.GPS_PROVIDER);
         l.setLatitude(resultLat);
         l.setLongitude(resultLon);
 
         return l;
+    }
+
+    // Testing for correct coordinate calculations
+    public ArrayList<Double> testGetCoords(double latDeg, double lonDeg, double dist, double bearRad) {
+        double latRad = (latDeg * Math.PI) / 180; // in radians
+        double lonRad = (lonDeg * Math.PI) / 180; // in radians
+        int r = 6371; // radius of earth in km
+        double d = dist / r; // convert dist to arc radians
+
+
+        double resultLat, resultLon;
+        resultLat = Math.asin(Math.sin(latRad) * Math.cos(d) +
+                Math.cos(latRad) * Math.sin(d) * Math.cos(bearRad));
+        double dlon = Math.atan2(Math.sin(bearRad) * Math.sin(d) *
+                Math.cos(latRad), Math.cos(d)-Math.sin(latRad) * Math.sin(latRad));
+        resultLon = ((lonRad + dlon + Math.PI) % (2 * Math.PI))-Math.PI;
+        resultLat = (resultLat * 180) / Math.PI; // back to degrees
+        resultLon = (resultLon * 180) / Math.PI;
+
+        ArrayList<Double> result = new ArrayList<Double>();
+        result.add(resultLat);
+        result.add(resultLon);
+        return result;
     }
 }

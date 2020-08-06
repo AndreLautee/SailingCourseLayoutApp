@@ -9,6 +9,8 @@ public class CourseVariables {
     private String type;
     private String trapezoidType;
 
+    public CourseVariables() {}
+
     public CourseVariables(String shape, String bearing, double distance, int angle, String type, String trapezoidType) {
         this.shape = shape;
         this.bearing = getBearingsInRadians(bearing);
@@ -66,7 +68,7 @@ public class CourseVariables {
         this.trapezoidType = trapezoidType;
     }
 
-    private double getBearingsInRadians(String bearing) {
+    public double getBearingsInRadians(String bearing) {
         double bearRad;
         switch(bearing) {
             case "N":
