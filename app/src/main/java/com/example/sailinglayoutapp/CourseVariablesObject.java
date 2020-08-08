@@ -1,6 +1,6 @@
 package com.example.sailinglayoutapp;
 
-public class CourseVariables {
+public class CourseVariablesObject {
 
     private String shape;
     private double bearing;
@@ -9,9 +9,9 @@ public class CourseVariables {
     private String type;
     private String trapezoidType;
 
-    public CourseVariables() {}
+    CourseVariablesObject() {}
 
-    public CourseVariables(String shape, String bearing, double distance, int angle, String type, String trapezoidType) {
+    CourseVariablesObject(String shape, String bearing, double distance, int angle, String type, String trapezoidType) {
         this.shape = shape;
         this.bearing = getBearingsInRadians(bearing);
         this.distance = distance;
@@ -68,7 +68,7 @@ public class CourseVariables {
         this.trapezoidType = trapezoidType;
     }
 
-    public double getBearingsInRadians(String bearing) {
+    double getBearingsInRadians(String bearing) {
         double bearRad;
         switch(bearing) {
             case "N":

@@ -35,7 +35,7 @@ public class MarkerCoordCalculationsTest {
         when(mockLocation1.getLatitude()).thenReturn(100.00);
         when(mockLocation1.getLongitude()).thenReturn(-50.00);
 
-        CourseVariables cv = new CourseVariables("triangle", "N", 5, 60,
+        CourseVariablesObject cv = new CourseVariablesObject("triangle", "N", 5, 60,
                 "starboard", null);
         MarkerCoordCalculations mcc = new MarkerCoordCalculations(mockLocation1, cv);
 
@@ -60,7 +60,7 @@ public class MarkerCoordCalculationsTest {
         when(mockLocation1.getLatitude()).thenReturn(100.00);
         when(mockLocation1.getLongitude()).thenReturn(-50.00);
 
-        CourseVariables cv = new CourseVariables("triangle", "N", 5, 60,
+        CourseVariablesObject cv = new CourseVariablesObject("triangle", "N", 5, 60,
                 "starboard", null);
         MarkerCoordCalculations mcc = new MarkerCoordCalculations(mockLocation1,cv);
         //mcc.createShape("triangle");
@@ -70,7 +70,7 @@ public class MarkerCoordCalculationsTest {
 
     @Test
     public void getCorrectBearings() {
-        CourseVariables cv = new CourseVariables();
+        CourseVariablesObject cv = new CourseVariablesObject();
 
         assertEquals(Math.PI/4,cv.getBearingsInRadians("NE"),0);
     }
