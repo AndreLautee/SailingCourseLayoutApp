@@ -11,7 +11,7 @@ public class CourseVariablesObject {
 
     CourseVariablesObject() {}
 
-    CourseVariablesObject(String shape, String bearing, double distance, int angle, String type, String trapezoidType) {
+    CourseVariablesObject(String shape, double bearing, double distance, int angle, String type, String trapezoidType) {
         this.shape = shape;
         this.bearing = getBearingsInRadians(bearing);
         this.distance = distance;
@@ -68,60 +68,7 @@ public class CourseVariablesObject {
         this.trapezoidType = trapezoidType;
     }
 
-    double getBearingsInRadians(String bearing) {
-        double bearRad;
-        switch(bearing) {
-            case "N":
-                bearRad = 0;
-                break;
-            case "NNE":
-                bearRad = Math.PI/8;
-                break;
-            case "NE":
-                bearRad = Math.PI/4;
-                break;
-            case "ENE":
-                bearRad = (3*Math.PI)/8;
-                break;
-            case "E":
-                bearRad = Math.PI/2;
-                break;
-            case "ESE":
-                bearRad = (5*Math.PI)/8;
-                break;
-            case "SE":
-                bearRad = (3*Math.PI)/4;
-                break;
-            case "SSE":
-                bearRad = (7*Math.PI)/8;
-                break;
-            case "S":
-                bearRad = Math.PI;
-                break;
-            case "SSW":
-                bearRad = (9*Math.PI)/8;
-                break;
-            case "SW":
-                bearRad = (5*Math.PI)/4;
-                break;
-            case "WSW":
-                bearRad = (11*Math.PI)/8;
-                break;
-            case "W":
-                bearRad = (3*Math.PI)/2;
-                break;
-            case "WNW":
-                bearRad = (13*Math.PI)/8;
-                break;
-            case "NW":
-                bearRad = (7*Math.PI)/4;
-                break;
-            case "NNW":
-                bearRad = (15*Math.PI)/8;
-                break;
-            default:
-                bearRad = 9;
-        }
-        return bearRad;
+    double getBearingsInRadians(double bearing) {
+        return (bearing*Math.PI)/180;
     }
 }

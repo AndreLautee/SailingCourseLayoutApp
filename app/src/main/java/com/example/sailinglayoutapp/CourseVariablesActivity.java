@@ -29,7 +29,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
 
     public CourseVariablesObject createObject() {
         String shape = null;
-        String bearing;
+        double bearing;
         double distance;
         int angle;
         String type = null;
@@ -51,7 +51,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
 
         // Get bearing
         final EditText editText_bearing = findViewById(R.id.editText_bearing);
-        bearing = editText_bearing.getText().toString();
+        bearing = Double.parseDouble(editText_bearing.getText().toString());
 
         // Get bearing
         final EditText editText_distance = findViewById(R.id.editText_distance);
