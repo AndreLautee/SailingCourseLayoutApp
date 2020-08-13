@@ -38,7 +38,7 @@ public class MarkerCoordCalculations {
                     return null;
                 }
                 //break;
-            case "Windward-leeward":
+            case "windward-leeward":
                 if (createWindwardLeeward()) {
                     return coords;
                 } else {

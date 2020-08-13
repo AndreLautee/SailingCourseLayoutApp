@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">SailingLayoutApp</string>
+    <string name="wind_direction">Wind Direction</string>
+    <string name="angle">Angle</string>
+    <string name="degrees">°</string>
+    <string name="reach_length">Reach Length</string>
+    <string name="calculate">Calculate</string>
+    <string name="_1_2_beat_length">1/2 Beat Length</string>
+    <string name="_2_3_beat_length">2/3 Beat Length</string>
+    <string name="equal">Equal</string>
+    <string name="unequal">Unequal</string>
+    <string name="second_beat_length">Second Beat Length</string>
+    <string name="course_length">Course Length</string>
+    <string name="starboard">Starboard</string>
+    <string name="portboard">Portboard</string>
+    <string name="nautical_miles">Nautical Miles</string>
+    <string-array name="course_shapes">
+        <item>Windward-Leeward</item>
+        <item>Triangle</item>
+        <item>Trapezoid</item>
+        <item>Optimist</item>
+    </string-array>
+
+    <string-array name="triangle_angles">
+        <item>60°, 60°, 60°</item>
+        <item>45°, 90°, 45°</item>
+    </string-array>
+
+    <string-array name="trapezoid_angles">
+        <item>60°, 120°</item>
+        <item>70°, 110°</item>
+    </string-array>
 </resources>

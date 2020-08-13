@@ -26,5 +26,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button start = findViewById(R.id.button_courseVariables);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                startActivityForResult(intent,Request_code);
+            }
+        });
     }
 }
