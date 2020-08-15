@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent();
                 intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
-                startActivityForResult(intent,Request_code);
+                startActivity(intent);
             }
         });
     }

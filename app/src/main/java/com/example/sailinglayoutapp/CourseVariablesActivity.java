@@ -1,7 +1,9 @@
 package com.example.sailinglayoutapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,29 +15,56 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CourseVariablesActivity extends AppCompatActivity {
+
+    private RadioGroup radioGroup_type, radioGroup_angle, radioGroup_reach, radioGroup_secondBeat;
+    private Spinner spinner_shape;
+    private EditText editText_wind, editText_distance;
+    private TextView textView_angle, textView_reach, textView_secondBeat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_variables);
 
-        final RadioGroup radioGroup_angle = findViewById(R.id.radioGroup_angle);
-        final RadioGroup radioGroup_reach = findViewById(R.id.radioGroup_reach);
-        final RadioGroup radioGroup_secondBeat = findViewById(R.id.radioGroup_secondBeat);
-        final TextView textView_angle = findViewById(R.id.textView_angle);
-        final TextView textView_reach = findViewById(R.id.textView_reach);
-        final TextView textView_secondBeat = findViewById(R.id.textView_secondBeat);
+        radioGroup_type = findViewById(R.id.radioGroup_type);
+        spinner_shape = findViewById(R.id.spinner_shape);
+        editText_wind = findViewById(R.id.editText_bearing);
+        editText_distance = findViewById(R.id.editText_distance);
+        radioGroup_angle = findViewById(R.id.radioGroup_angle);
+        radioGroup_reach = findViewById(R.id.radioGroup_reach);
+        radioGroup_secondBeat = findViewById(R.id.radioGroup_secondBeat);
+        textView_angle = findViewById(R.id.textView_angle);
+        textView_reach = findViewById(R.id.textView_reach);
+        textView_secondBeat = findViewById(R.id.textView_secondBeat);
+
+        setSpinner();
+
+        Intent intent = getIntent();
+        Bundle userInput = intent.getExtras();
+        if (userInput != null) {
+            radioGroup_type.check(userInput.getInt("TYPE"));
+            spinner_shape.setSelection(userInput.getInt("SHAPE"));
+            editText_wind.setText(userInput.getString("BEARING"));
+            editText_distance.setText(userInput.getString("DISTANCE"));
+            radioGroup_angle.check(userInput.getInt("ANGLE"));
+            radioGroup_reach.check(userInput.getInt("REACH"));
+            radioGroup_secondBeat.check(userInput.getInt("SECOND_BEAT"));
+
+        }
+         /*   Integer type = savedInstanceState.getInt("TYPE");
+            String bearing = savedInstanceState.getString("BEARING");
+
+            if(type != null) {radioGroup_type.check(type);}
+            if(bearing != null) {editText_wind.setText(bearing);}*/
 
 
-        Spinner spinner = findViewById(R.id.spinner_shape);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.course_shapes, android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner_shape.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(parent.getItemAtPosition(position).toString()) {
@@ -85,6 +114,19 @@ public class CourseVariablesActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                Bundle userInput = new Bundle();
+                userInput.putInt("TYPE", radioGroup_type.getCheckedRadioButtonId());
+                userInput.putInt("SHAPE", spinner_shape.getSelectedItemPosition());
+                userInput.putString("BEARING", editText_wind.getText().toString());
+                userInput.putString("DISTANCE", editText_distance.getText().toString());
+                userInput.putInt("ANGLE", radioGroup_angle.getCheckedRadioButtonId());
+                userInput.putInt("REACH", radioGroup_reach.getCheckedRadioButtonId());
+                userInput.putInt("SECOND_BEAT", radioGroup_secondBeat.getCheckedRadioButtonId());
+
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(),MainActivity2.class);
+                intent.putExtras(userInput);
+                startActivity(intent);
                 //CourseVariablesObject courseVariablesObject = createObject();
                 // Need to get location here
                 //MarkerCoordCalculations(location, courseVariablesObject);
@@ -93,6 +135,11 @@ public class CourseVariablesActivity extends AppCompatActivity {
     }
 
 
+    public void setSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.course_shapes, android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_shape.setAdapter(adapter);
+    }
 /*
     public CourseVariablesObject createObject() {
         String shape = null;
