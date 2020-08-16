@@ -2,7 +2,6 @@ package com.example.sailinglayoutapp;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 
 import java.util.Map;
 
@@ -12,7 +11,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class LayoutGLRenderer implements GLSurfaceView.Renderer {
 
     Map<String, String> variables;
-    Triangle triangle;
+    Shape shape;
 
     public LayoutGLRenderer(Map<String, String> vars) {
         variables = vars;
@@ -35,9 +34,9 @@ public class LayoutGLRenderer implements GLSurfaceView.Renderer {
         // Set the background frame color
         GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         if (variables.get("TYPE").equals("starboard")) {
-            triangle = new Triangle(new float[]{-0.5f,0.5f,0.0f,-0.5f,-0.5f,0.0f,0.5f,0.0f,0.0f});
+            shape = new Shape(new float[]{-0.5f,0.5f,0.0f,-0.5f,-0.5f,0.0f,0.5f,0.0f,0.0f});
         } else if (variables.get("TYPE").equals("portboard")) {
-            triangle = new Triangle(new float[]{0.5f,0.5f,0.0f,-0.5f,0.0f,0.0f,0.5f,-0.5f,0.0f});
+            shape = new Shape(new float[]{0.5f,0.5f,0.0f,-0.5f,0.0f,0.0f,0.0f,0.0f,0.0f,0.5f,-0.5f,0.0f});
         }
 
     }
@@ -51,7 +50,7 @@ public class LayoutGLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl) {
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        triangle.draw();
+        shape.draw();
 
     }
 }
