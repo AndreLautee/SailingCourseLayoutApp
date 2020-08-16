@@ -31,16 +31,7 @@ public class MainActivity2 extends AppCompatActivity implements SensorEventListe
         compassimg=(ImageView)findViewById(R.id.compass);
         mSensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
 
-        Button start = findViewById(R.id.button_CourseVariables);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= getIntent();
-                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
-                intent.putExtra("PREVIOUS_ACTIVITY", "2");
-                startActivity(intent);
-            }
-        });
+
     }
 
     @Override

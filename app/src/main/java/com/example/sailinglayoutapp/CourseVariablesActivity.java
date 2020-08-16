@@ -45,7 +45,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
         setSpinner();
 
         Intent intent = getIntent();
-        Bundle userInput = intent.getExtras();
+        final Bundle userInput = intent.getExtras();
         if (userInput != null) {
             radioGroup_type.check(userInput.getInt("TYPE"));
             spinner_shape.setSelection(userInput.getInt("SHAPE"));
@@ -70,8 +70,11 @@ public class CourseVariablesActivity extends AppCompatActivity {
                 switch(parent.getItemAtPosition(position).toString()) {
                     case "Triangle":
                         radioGroup_angle.setVisibility(View.VISIBLE);
+                        if(userInput == null) {radioGroup_angle.clearCheck();}
                         radioGroup_reach.setVisibility(View.INVISIBLE);
+                        radioGroup_reach.clearCheck();
                         radioGroup_secondBeat.setVisibility(View.INVISIBLE);
+                        radioGroup_secondBeat.clearCheck();
                         textView_angle.setVisibility(View.VISIBLE);
                         textView_reach.setVisibility(View.INVISIBLE);
                         textView_secondBeat.setVisibility(View.INVISIBLE);
@@ -82,8 +85,11 @@ public class CourseVariablesActivity extends AppCompatActivity {
                         break;
                     case "Trapezoid":
                         radioGroup_angle.setVisibility(View.VISIBLE);
+                        if(userInput == null) {radioGroup_angle.clearCheck();}
                         radioGroup_reach.setVisibility(View.VISIBLE);
+                        if(userInput == null) {radioGroup_reach.clearCheck();}
                         radioGroup_secondBeat.setVisibility(View.VISIBLE);
+                        if(userInput == null) {radioGroup_secondBeat.clearCheck();}
                         textView_angle.setVisibility(View.VISIBLE);
                         textView_reach.setVisibility(View.VISIBLE);
                         textView_secondBeat.setVisibility(View.VISIBLE);
@@ -94,8 +100,11 @@ public class CourseVariablesActivity extends AppCompatActivity {
                         break;
                     default:
                         radioGroup_angle.setVisibility(View.INVISIBLE);
+                        radioGroup_angle.clearCheck();
                         radioGroup_reach.setVisibility(View.INVISIBLE);
+                        radioGroup_reach.clearCheck();
                         radioGroup_secondBeat.setVisibility(View.INVISIBLE);
+                        radioGroup_secondBeat.clearCheck();
                         textView_angle.setVisibility(View.INVISIBLE);
                         textView_reach.setVisibility(View.INVISIBLE);
                         textView_secondBeat.setVisibility(View.INVISIBLE);
@@ -124,7 +133,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
                 userInput.putInt("SECOND_BEAT", radioGroup_secondBeat.getCheckedRadioButtonId());
 
                 Intent intent = new Intent();
-                intent.setClass(getApplicationContext(),MainActivity2.class);
+                intent.setClass(getApplicationContext(), CourseLayoutActivity.class);
                 intent.putExtras(userInput);
                 startActivity(intent);
                 //CourseVariablesObject courseVariablesObject = createObject();
