@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorLightBlue"
     tools:context=".CourseVariablesActivity">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -11,6 +12,7 @@
         android:layout_width="138dp"
         android:layout_height="61dp"
         android:layout_marginBottom="14dp"
+        android:textColor="@color/colorDarkBlue"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout_distance"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -98,6 +100,8 @@
             android:layout_width="115dp"
             android:layout_height="wrap_content"
             android:text="@string/starboard"
+            android:textColor="@color/colorDarkBlue"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -105,6 +109,8 @@
             android:id="@+id/radioButton_portboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorDarkBlue"
+            android:textStyle="bold"
             android:text="@string/portboard" />
     </RadioGroup>
 
@@ -136,6 +142,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/colorDarkBlue"
+            android:textStyle="bold"
             android:text="45°, 90°, 45°" />
 
         <RadioButton
@@ -143,6 +151,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/colorDarkBlue"
+            android:textStyle="bold"
             android:text="60°, 60°, 60°" />
     </RadioGroup>
 
@@ -156,6 +166,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/colorDarkBlue"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout_distance" />
 
     <RadioGroup
@@ -173,6 +185,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/colorDarkBlue"
+            android:textStyle="bold"
             android:text="@string/_1_2_beat_length" />
 
         <RadioButton
@@ -180,6 +194,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/colorDarkBlue"
+            android:textStyle="bold"
             android:text="@string/_2_3_beat_length" />
     </RadioGroup>
 
@@ -191,6 +207,8 @@
         app:layout_constraintBottom_toTopOf="@+id/radioGroup_reach"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/colorDarkBlue"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup_angle" />
 
     <RadioGroup
@@ -210,6 +228,8 @@
             android:layout_width="84dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/colorDarkBlue"
+            android:textStyle="bold"
             android:text="@string/equal" />
 
         <RadioButton
@@ -217,6 +237,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/colorDarkBlue"
+            android:textStyle="bold"
             android:text="@string/unequal" />
     </RadioGroup>
 
@@ -230,6 +252,8 @@
         app:layout_constraintBottom_toTopOf="@+id/radioGroup_secondBeat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/colorDarkBlue"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup_reach" />
 
 
