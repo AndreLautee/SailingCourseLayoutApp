@@ -1,12 +1,15 @@
 package com.example.sailinglayoutapp;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +30,8 @@ public class MainActivity2 extends AppCompatActivity implements SensorEventListe
 
         compassimg=(ImageView)findViewById(R.id.compass);
         mSensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
+
+
     }
 
     @Override

@@ -3,6 +3,7 @@
     package="com.example.sailinglayoutapp">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -26,6 +27,7 @@
         </activity>
         <activity android:name=".MainActivity2"></activity>
         <activity android:name=".CourseVariablesActivity"></activity>
+        <activity android:name=".CourseLayoutActivity"></activity>
     </application>
 
 </manifest>

@@ -7,17 +7,19 @@ public class CourseVariablesObject {
     private double distance;
     private int angle;
     private String type;
-    private String trapezoidType;
+    private String reach;
+    private String secondBeat;
 
     CourseVariablesObject() {}
 
-    CourseVariablesObject(String shape, double bearing, double distance, int angle, String type, String trapezoidType) {
+    CourseVariablesObject(String shape, double bearing, double distance, int angle, String type, String reach, String secondBeat) {
         this.shape = shape;
         this.bearing = getBearingsInRadians(bearing);
         this.distance = distance;
         this.angle = angle;
         this.type = type;
-        this.trapezoidType = trapezoidType;
+        this.reach = reach;
+        this.secondBeat = secondBeat;
     }
 
     String getShape() {
@@ -60,12 +62,16 @@ public class CourseVariablesObject {
         this.type = type;
     }
 
-    String getTrapezoidType() {
-        return trapezoidType;
+    String getReach() { return reach; }
+
+    public void setReach(String reach) { this.reach = reach; }
+
+    String getSecondBeat() {
+        return secondBeat;
     }
 
-    public void setTrapezoidType(String trapezoidType) {
-        this.trapezoidType = trapezoidType;
+    public void setSecondBeat(String secondBeat) {
+        this.secondBeat = secondBeat;
     }
 
     double getBearingsInRadians(double bearing) {
