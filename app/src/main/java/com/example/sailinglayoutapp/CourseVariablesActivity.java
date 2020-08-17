@@ -160,7 +160,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
                             completeForm = false;
                         }
                 }
-
+                Log.d("STARBOARD", String.valueOf(radioGroup_type.getCheckedRadioButtonId()));
                 if (completeForm) {
                     Bundle userInput = new Bundle();
                     userInput.putInt("TYPE", radioGroup_type.getCheckedRadioButtonId());
