@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
 import java.util.Map;
+import java.util.Objects;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -33,11 +34,22 @@ public class LayoutGLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         // Set the background frame color
         GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        if (variables.get("TYPE").equals("starboard")) {
-            shape = new Shape(new float[]{-0.5f,0.5f,0.0f,-0.5f,-0.5f,0.0f,0.5f,0.0f,0.0f});
-        } else if (variables.get("TYPE").equals("portboard")) {
-            shape = new Shape(new float[]{0.5f,0.5f,0.0f,-0.5f,0.0f,0.0f,0.0f,0.0f,0.0f,0.5f,-0.5f,0.0f});
+        switch (Objects.requireNonNull(variables.get("SHAPE"))) {
+            case "windward_leeward":
+                createWindwardLeewardShape();
+                break;
+            case "triangle":
+                createTriangleShape();
+                break;
+            case "trapezoid":
+                createTrapezoidShape();
+                break;
+            case "optimist":
+                createOptimistShape();
+                break;
+
         }
+
 
     }
 
@@ -52,5 +64,49 @@ public class LayoutGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         shape.draw();
 
+    }
+
+    public void createWindwardLeewardShape() {
+        shape = new Shape(new float[]{0.0f,-0.5f,0.0f,0.0f,0.5f,0.0f}, 2);
+    }
+
+    public void createTriangleShape() {
+        if (Objects.requireNonNull(variables.get("TYPE")).equals("starboard")) {
+            if (Objects.requireNonNull(variables.get("ANGLE")).equals("45")) {
+                shape = new Shape(new float[]{-0.5f,0.5f,0.0f,-0.5f,-0.5f,0.0f,0.5f,0.0f,0.0f}, 2);
+            } else if (Objects.requireNonNull(variables.get("ANGLE")).equals("60")) {
+                shape = new Shape(new float[]{-0.6f,0.42f,0.0f,-0.6f,-0.42f,0.0f,0.6f,0.0f,0.0f}, 2);
+            }
+        } else if (Objects.requireNonNull(variables.get("TYPE")).equals("portboard")) {
+            if (Objects.requireNonNull(variables.get("ANGLE")).equals("45")) {
+                shape = new Shape(new float[]{0.5f,-0.5f,0.0f,0.5f,0.5f,0.0f,-0.5f,0.0f,0.0f}, 2);
+            } else if (Objects.requireNonNull(variables.get("ANGLE")).equals("60")) {
+                shape = new Shape(new float[]{0.6f,-0.42f,0.0f,0.6f,0.42f,0.0f,-0.6f,0.0f,0.0f}, 2);
+            }
+        }
+    }
+
+    public void createTrapezoidShape() {
+        if (Objects.requireNonNull(variables.get("TYPE")).equals("starboard")) {
+            if (Objects.requireNonNull(variables.get("SECOND_BEAT")).equals("short")) {
+                shape = new Shape(new float[]{0.5f,-0.1f,0.0f,0.5f,0.5f,0.0f,-0.5f,0.7f,0.0f,-0.5f,-0.3f,0.0f}, 2);
+            } else if (Objects.requireNonNull(variables.get("SECOND_BEAT")).equals("equal")) {
+                shape = new Shape(new float[]{0.5f,-0.5f,0.0f,0.5f,0.5f,0.0f,-0.5f,0.7f,0.0f,-0.5f,-0.3f,0.0f}, 2);
+            }
+        } else if (Objects.requireNonNull(variables.get("TYPE")).equals("portboard")) {
+            if (Objects.requireNonNull(variables.get("SECOND_BEAT")).equals("short")) {
+                shape = new Shape(new float[]{0.5f,-0.3f,0.0f,0.5f,0.7f,0.0f,-0.5f,0.5f,0.0f,-0.5f,-0.1f,0.0f}, 2);
+            } else if (Objects.requireNonNull(variables.get("SECOND_BEAT")).equals("equal")) {
+                shape = new Shape(new float[]{0.5f,-0.3f,0.0f,0.5f,0.7f,0.0f,-0.5f,0.5f,0.0f,-0.5f,-0.5f,0.0f}, 2);
+            }
+        }
+    }
+
+    public void createOptimistShape() {
+        if (Objects.requireNonNull(variables.get("TYPE")).equals("starboard")) {
+            shape = new Shape(new float[]{0.5f,-0.5f,0.0f,0.5f,0.5f,0.0f,-0.5f,0.7f,0.0f,-0.5f,-0.3f,0.0f}, 3);
+        } else if (Objects.requireNonNull(variables.get("TYPE")).equals("portboard")) {
+            shape = new Shape(new float[]{0.5f,-0.3f,0.0f,0.5f,0.7f,0.0f,-0.5f,0.5f,0.0f,-0.5f,-0.5f,0.0f}, 3);
+        }
     }
 }

@@ -110,8 +110,8 @@
 
     <Spinner
         android:id="@+id/spinner_shape"
-        android:layout_width="264dp"
-        android:layout_height="44dp"
+        android:layout_width="223dp"
+        android:layout_height="47dp"
         android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout_bearing"
         app:layout_constraintEnd_toEndOf="parent"

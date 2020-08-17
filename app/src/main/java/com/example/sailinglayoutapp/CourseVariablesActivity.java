@@ -1,9 +1,12 @@
 package com.example.sailinglayoutapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -123,24 +127,68 @@ public class CourseVariablesActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Bundle userInput = new Bundle();
-                userInput.putInt("TYPE", radioGroup_type.getCheckedRadioButtonId());
-                userInput.putInt("SHAPE", spinner_shape.getSelectedItemPosition());
-                userInput.putString("BEARING", editText_wind.getText().toString());
-                userInput.putString("DISTANCE", editText_distance.getText().toString());
-                userInput.putInt("ANGLE", radioGroup_angle.getCheckedRadioButtonId());
-                userInput.putInt("REACH", radioGroup_reach.getCheckedRadioButtonId());
-                userInput.putInt("SECOND_BEAT", radioGroup_secondBeat.getCheckedRadioButtonId());
+                boolean completeForm = true;
+                String errorText = "";
 
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), CourseLayoutActivity.class);
-                intent.putExtras(userInput);
-                startActivity(intent);
-                //CourseVariablesObject courseVariablesObject = createObject();
-                // Need to get location here
-                //MarkerCoordCalculations(location, courseVariablesObject);
+                switch (spinner_shape.getSelectedItemPosition()) {
+                    case 2:
+                        if (radioGroup_secondBeat.getCheckedRadioButtonId() == -1) {
+                            errorText = errorText + "Please select a second beat length\n";
+                            completeForm = false;
+                        }
+                        if (radioGroup_reach.getCheckedRadioButtonId() == -1) {
+                            errorText = errorText + "Please select a reach length\n";
+                            completeForm = false;
+                        }
+                    case 1:
+                        if (radioGroup_angle.getCheckedRadioButtonId() == -1) {
+                            errorText = errorText + "Please select an angle\n";
+                            completeForm = false;
+                        }
+                    case 3:
+                        if (radioGroup_type.getCheckedRadioButtonId() == -1) {
+                            errorText = errorText + "Please select a Starboard or Portboard\n";
+                            completeForm = false;
+                        }
+                    default:
+                        if (TextUtils.isEmpty(editText_wind.getText())) {
+                            errorText = errorText + "Please enter the wind direction\n";
+                            completeForm = false;
+                        }
+                        if (TextUtils.isEmpty(editText_distance.getText())) {
+                            errorText = errorText + "Please enter the distance\n";
+                            completeForm = false;
+                        }
+                }
+
+                if (completeForm) {
+                    Bundle userInput = new Bundle();
+                    userInput.putInt("TYPE", radioGroup_type.getCheckedRadioButtonId());
+                    userInput.putInt("SHAPE", spinner_shape.getSelectedItemPosition());
+                    userInput.putString("BEARING", editText_wind.getText().toString());
+                    userInput.putString("DISTANCE", editText_distance.getText().toString());
+                    userInput.putInt("ANGLE", radioGroup_angle.getCheckedRadioButtonId());
+                    userInput.putInt("REACH", radioGroup_reach.getCheckedRadioButtonId());
+                    userInput.putInt("SECOND_BEAT", radioGroup_secondBeat.getCheckedRadioButtonId());
+
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), CourseLayoutActivity.class);
+                    intent.putExtras(userInput);
+                    startActivity(intent);
+                    //CourseVariablesObject courseVariablesObject = createObject();
+                    // Need to get location here
+                    //MarkerCoordCalculations(location, courseVariablesObject);
+                } else {
+                    Context context = getApplicationContext();
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, errorText, duration);
+                    toast.show();
+                }
+
             }
         });
+
+
     }
 
 

@@ -143,14 +143,14 @@ public class MarkerCoordCalculations {
                 double bearingToMarkC = courseVariablesObject.getBearing() + Math.PI;
 
                 // Check for short or long second straight before calculating mark C
-                if(courseVariablesObject.getTrapezoidType().equals("short")) {
+                if(courseVariablesObject.getSecondBeat().equals("short")) {
                     // Calculate distance to mark C from mark B
                     double distanceToMarkC = courseVariablesObject.getDistance()*0.66;
 
                     // Use mark B coordinates to calculate mark C
                     coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
                             distanceToMarkC,bearingToMarkC));
-                } else if(courseVariablesObject.getTrapezoidType().equals("long")) {
+                } else if(courseVariablesObject.getSecondBeat().equals("long")) {
                     // Use mark B coordinates to calculate mark C
                     coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
                             courseVariablesObject.getDistance(),bearingToMarkC));
@@ -168,14 +168,14 @@ public class MarkerCoordCalculations {
                 // Calculate bearing to mark C from mark B
                 double bearingToMarkC = courseVariablesObject.getBearing() + Math.PI;
                 // Check for short or long second straight before calculating mark C
-                if(courseVariablesObject.getTrapezoidType().equals("short")) {
+                if(courseVariablesObject.getSecondBeat().equals("short")) {
                     // Calculate distance to mark C from mark B
                     double distanceToMarkC = courseVariablesObject.getDistance()*0.66;
 
                     // Use mark B coordinates to calculate mark C
                     coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
                             distanceToMarkC,bearingToMarkC));
-                } else if(courseVariablesObject.getTrapezoidType().equals("long")) {
+                } else if(courseVariablesObject.getSecondBeat().equals("long")) {
                     // Use mark B coordinates to calculate mark C
                     coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
                             courseVariablesObject.getDistance(),bearingToMarkC));
@@ -197,14 +197,14 @@ public class MarkerCoordCalculations {
                 // Calculate bearing to mark C from mark B
                 double bearingToMarkC = courseVariablesObject.getBearing() + Math.PI;
                 // Check for short or long second straight before calculating mark C
-                if(courseVariablesObject.getTrapezoidType().equals("short")) {
+                if(courseVariablesObject.getSecondBeat().equals("short")) {
                     // Calculate distance to mark C from mark B
                     double distanceToMarkC = courseVariablesObject.getDistance()*0.66;
 
                     // Use mark B coordinates to calculate mark C
                     coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
                             distanceToMarkC,bearingToMarkC));
-                } else if(courseVariablesObject.getTrapezoidType().equals("long")) {
+                } else if(courseVariablesObject.getSecondBeat().equals("long")) {
                     // Use mark B coordinates to calculate mark C
                     coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
                             courseVariablesObject.getDistance(),bearingToMarkC));
@@ -222,14 +222,14 @@ public class MarkerCoordCalculations {
                 // Calculate bearing to mark C from mark B
                 double bearingToMarkC = courseVariablesObject.getBearing() + Math.PI;
                 // Check for short or long second straight before calculating mark C
-                if(courseVariablesObject.getTrapezoidType().equals("short")) {
+                if(courseVariablesObject.getSecondBeat().equals("short")) {
                     // Calculate distance to mark C from mark B
                     double distanceToMarkC = courseVariablesObject.getDistance()*0.66;
 
                     // Use mark B coordinates to calculate mark C
                     coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
                             distanceToMarkC,bearingToMarkC));
-                } else if(courseVariablesObject.getTrapezoidType().equals("long")) {
+                } else if(courseVariablesObject.getSecondBeat().equals("long")) {
                     // Use mark B coordinates to calculate mark C
                     coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
                             courseVariablesObject.getDistance(),bearingToMarkC));

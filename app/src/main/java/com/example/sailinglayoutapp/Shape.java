@@ -1,6 +1,7 @@
 package com.example.sailinglayoutapp;
 
 import android.opengl.GLES20;
+import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -25,12 +26,15 @@ class Shape {
 
     // number of coordinates per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
-    static float shapeCoords[];
+    static float[] shapeCoords;
 
     // Set color with red, green, blue and alpha (opacity) values
-    float color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    float[] color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-    public Shape(float[] shapeCo) {
+    private int lineType;
+
+    public Shape(float[] shapeCo, int line) {
+        lineType = line;
         shapeCoords = shapeCo;
         vertexCount = shapeCo.length/COORDS_PER_VERTEX;
         // initialize vertex byte buffer for shape coordinates
@@ -71,7 +75,10 @@ class Shape {
     private int vertexCount;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
+
     public void draw() {
+        Log.d("LINELOOP", String.valueOf(GLES20.GL_LINE_LOOP));
+        Log.d("LINESTRIP", String.valueOf(GLES20.GL_LINE_STRIP));
         // Add program to OpenGL ES environment
         GLES20.glUseProgram(mProgram);
 
@@ -94,7 +101,7 @@ class Shape {
         // Set width of line
         GLES20.glLineWidth(10);
         // Draw the shape by using lines
-        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertexCount);
+        GLES20.glDrawArrays(lineType, 0, vertexCount);
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(positionHandle);
