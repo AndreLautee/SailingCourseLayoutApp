@@ -6,34 +6,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    Button compass;
+    TextView Start;
     private int Request_code = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        compass=findViewById(R.id.compassBtn);
 
-        compass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.setClass(getApplicationContext(),MainActivity2.class);
-                startActivityForResult(intent,Request_code);
+        Start=findViewById(R.id.Start);
 
-            }
-        });
 
-        Button start = findViewById(R.id.button_courseVariables);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
-                startActivity(intent);
-            }
-        });
+    }
+
+    public void Start_onclick(View view) {
+        Intent intent=new Intent();
+        intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+        startActivityForResult(intent,Request_code);
+    }
+
+    public void Navi_onclick(View view) {
+
+    }
+
+    public void Setting_onclick(View view) {
     }
 }
