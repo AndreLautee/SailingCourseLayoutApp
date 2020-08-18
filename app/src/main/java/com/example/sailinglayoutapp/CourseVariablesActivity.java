@@ -122,6 +122,14 @@ public class CourseVariablesActivity extends AppCompatActivity {
             }
         });
 
+        final Button button_weather = findViewById(R.id.button_weather);
+        button_weather.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), WeatherAPIActivity.class);
+                startActivity(intent);
+            }
+        });
 
         final Button button = findViewById(R.id.button_calculate);
         button.setOnClickListener(new View.OnClickListener() {

@@ -14,18 +14,24 @@
     <string name="starboard">Starboard</string>
     <string name="portboard">Portboard</string>
     <string name="nautical_miles">Nautical Miles</string>
+    <string name="title_activity_navigation_a_p_i">NavigationAPIActivity</string>
+
+    <string name="hello_world">Hello Square World!</string>
+
     <string-array name="course_shapes">
         <item>Windward-Leeward</item>
         <item>Triangle</item>
         <item>Trapezoid</item>
         <item>Optimist</item>
     </string-array>
-
     <string-array name="triangle_angles">
         <item>60°, 60°, 60°</item>
         <item>45°, 90°, 45°</item>
     </string-array>
-
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
     <string-array name="trapezoid_angles">
         <item>60°, 120°</item>
         <item>70°, 110°</item>
