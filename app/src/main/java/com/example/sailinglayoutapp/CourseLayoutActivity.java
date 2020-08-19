@@ -66,9 +66,9 @@ public class CourseLayoutActivity extends AppCompatActivity {
     public Map<String, String> setVariableArray(Bundle extras) {
         Map<String, String> result = new HashMap<>();
 
-        if (extras.getInt("TYPE") == 2131296484) {
+        if (extras.getInt("TYPE") == 0) {
             result.put("TYPE", "starboard");
-        } else if (extras.getInt("TYPE") == 2131296483){
+        } else if (extras.getInt("TYPE") == 1){
             result.put("TYPE", "portboard");
         }
 
@@ -78,17 +78,17 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 break;
             case 1:
                 result.put("SHAPE", "triangle");
-                if (extras.getInt("ANGLE") == 2131296480) {
+                if (extras.getInt("ANGLE") == 0) {
                     result.put("ANGLE", "60");
-                } else if (extras.getInt("ANGLE") == 2131296481) {
+                } else if (extras.getInt("ANGLE") == 1) {
                     result.put("ANGLE", "45");
                 }
                 break;
             case 2:
                 result.put("SHAPE", "trapezoid");
-                if (extras.getInt("SECOND_BEAT") == 2131296478) {
+                if (extras.getInt("SECOND_BEAT") == 0) {
                     result.put("SECOND_BEAT", "equal");
-                } else if (extras.getInt("SECOND_BEAT") == 2131296479) {
+                } else if (extras.getInt("SECOND_BEAT") == 1) {
                     result.put("SECOND_BEAT", "short");
                 }
                 break;

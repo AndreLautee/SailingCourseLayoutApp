@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -51,23 +52,22 @@ public class CourseVariablesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final Bundle userInput = intent.getExtras();
         if (userInput != null) {
-            radioGroup_type.check(userInput.getInt("TYPE"));
+            RadioButton rb;
+            rb = (RadioButton) radioGroup_type.getChildAt(userInput.getInt("TYPE"));
+            rb.setChecked(true);
             spinner_shape.setSelection(userInput.getInt("SHAPE"));
             editText_wind.setText(userInput.getString("BEARING"));
             editText_distance.setText(userInput.getString("DISTANCE"));
-            radioGroup_angle.check(userInput.getInt("ANGLE"));
-            radioGroup_reach.check(userInput.getInt("REACH"));
-            radioGroup_secondBeat.check(userInput.getInt("SECOND_BEAT"));
+            rb = (RadioButton) radioGroup_angle.getChildAt(userInput.getInt("ANGLE"));
+            rb.setChecked(true);
+            rb = (RadioButton) radioGroup_reach.getChildAt(userInput.getInt("REACH"));
+            rb.setChecked(true);
+            rb = (RadioButton) radioGroup_secondBeat.getChildAt(userInput.getInt("SECOND_BEAT"));
+            rb.setChecked(true);
 
         }
-         /*   Integer type = savedInstanceState.getInt("TYPE");
-            String bearing = savedInstanceState.getString("BEARING");
 
-            if(type != null) {radioGroup_type.check(type);}
-            if(bearing != null) {editText_wind.setText(bearing);}*/
-
-
-
+        // Change what options are available based on the course shape
         spinner_shape.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -138,6 +138,9 @@ public class CourseVariablesActivity extends AppCompatActivity {
                 boolean completeForm = true;
                 String errorText = "";
 
+                Log.d("STARBOARD", String.valueOf(radioGroup_type.getCheckedRadioButtonId()));
+                Log.d("ANGLE", String.valueOf(radioGroup_angle.getCheckedRadioButtonId()));
+                Log.d("BEAT", String.valueOf(radioGroup_secondBeat.getCheckedRadioButtonId()));
                 switch (spinner_shape.getSelectedItemPosition()) {
                     case 2:
                         if (radioGroup_secondBeat.getCheckedRadioButtonId() == -1) {
@@ -171,13 +174,23 @@ public class CourseVariablesActivity extends AppCompatActivity {
                 Log.d("STARBOARD", String.valueOf(radioGroup_type.getCheckedRadioButtonId()));
                 if (completeForm) {
                     Bundle userInput = new Bundle();
-                    userInput.putInt("TYPE", radioGroup_type.getCheckedRadioButtonId());
+                    int selectedRBID;
+                    View rb;
+                    selectedRBID = radioGroup_type.getCheckedRadioButtonId();
+                    rb = findViewById(selectedRBID);
+                    userInput.putInt("TYPE", radioGroup_type.indexOfChild(rb));
                     userInput.putInt("SHAPE", spinner_shape.getSelectedItemPosition());
                     userInput.putString("BEARING", editText_wind.getText().toString());
                     userInput.putString("DISTANCE", editText_distance.getText().toString());
-                    userInput.putInt("ANGLE", radioGroup_angle.getCheckedRadioButtonId());
-                    userInput.putInt("REACH", radioGroup_reach.getCheckedRadioButtonId());
-                    userInput.putInt("SECOND_BEAT", radioGroup_secondBeat.getCheckedRadioButtonId());
+                    selectedRBID = radioGroup_angle.getCheckedRadioButtonId();
+                    rb = findViewById(selectedRBID);
+                    userInput.putInt("ANGLE", radioGroup_angle.indexOfChild(rb));
+                    selectedRBID = radioGroup_reach.getCheckedRadioButtonId();
+                    rb = findViewById(selectedRBID);
+                    userInput.putInt("REACH", radioGroup_reach.indexOfChild(rb));
+                    selectedRBID = radioGroup_secondBeat.getCheckedRadioButtonId();
+                    rb = findViewById(selectedRBID);
+                    userInput.putInt("SECOND_BEAT", radioGroup_secondBeat.indexOfChild(rb));
 
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), CourseLayoutActivity.class);
