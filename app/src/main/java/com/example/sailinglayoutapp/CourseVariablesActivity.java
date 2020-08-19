@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,6 +22,10 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class CourseVariablesActivity extends AppCompatActivity {
 
@@ -28,12 +33,13 @@ public class CourseVariablesActivity extends AppCompatActivity {
     private Spinner spinner_shape;
     private EditText editText_wind, editText_distance;
     private TextView textView_angle, textView_reach, textView_secondBeat;
-
+    BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_variables);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
 
         radioGroup_type = findViewById(R.id.radioGroup_type);
         spinner_shape = findViewById(R.id.spinner_shape);
@@ -46,6 +52,12 @@ public class CourseVariablesActivity extends AppCompatActivity {
         textView_reach = findViewById(R.id.textView_reach);
         textView_secondBeat = findViewById(R.id.textView_secondBeat);
 
+        if (savedInstanceState != null) {
+            // FRAGMENTS_TAG
+            savedInstanceState.remove("android:support:fragments");
+            savedInstanceState.remove("android:fragments");
+        }
+        super.onCreate(savedInstanceState);
         setSpinner();
 
         Intent intent = getIntent();
@@ -197,6 +209,34 @@ public class CourseVariablesActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_shape.setAdapter(adapter);
     }
+
+  /*  public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.nav_variables:
+                            openFragment(VariablesFragment.newInstance("", ""));
+                            return true;
+                        case R.id.nav_bouyCoor:
+                            openFragment(BuoyCoorFragment.newInstance("", ""));
+                            return true;
+                        case R.id.nav_layout:
+                            openFragment(LayoutFragment.newInstance("", ""));
+                            return true;
+                        case R.id.nav_compass:
+                            openFragment(CompassFragment.newInstance("", ""));
+                            return true;
+                    }
+                    return false;
+                }
+        };
+*/
 /*
     public CourseVariablesObject createObject() {
         String shape = null;

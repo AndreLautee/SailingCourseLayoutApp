@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_variables"
+        android:icon="@drawable/ic_baseline_tune_24"
+        android:title="Course Variables"
+        />
+
+    <item
+        android:id="@+id/nav_bouyCoor"
+        android:icon="@drawable/ic_baseline_location_on_24"
+        android:title="Bouy Coordinates"/>
+
+    <item
+        android:id="@+id/nav_layout"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="Course Layout" />
+
+    <item
+        android:id="@+id/nav_compass"
+        android:icon="@drawable/ic_baseline_compass_calibration_24"
+        android:title="Compass"/>
+
+
+</menu>

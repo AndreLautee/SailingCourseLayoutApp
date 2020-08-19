@@ -6,13 +6,19 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity2 extends AppCompatActivity implements SensorEventListener {
 
@@ -22,6 +28,7 @@ public class MainActivity2 extends AppCompatActivity implements SensorEventListe
     private float azimuth=0f;
     private float currentAzimuth=0f;
     private SensorManager mSensorManager;
+    BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +37,15 @@ public class MainActivity2 extends AppCompatActivity implements SensorEventListe
 
         compassimg=(ImageView)findViewById(R.id.compass);
         mSensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
+        if (savedInstanceState != null) {
+            // FRAGMENTS_TAG
+            savedInstanceState.remove("android:support:fragments");
+            savedInstanceState.remove("android:fragments");
+        }
 
 
     }
+
 
     @Override
     protected void onResume() {
