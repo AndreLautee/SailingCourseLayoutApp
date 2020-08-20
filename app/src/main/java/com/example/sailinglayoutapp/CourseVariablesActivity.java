@@ -54,16 +54,16 @@ public class CourseVariablesActivity extends AppCompatActivity {
         if (userInput != null) {
             RadioButton rb;
             rb = (RadioButton) radioGroup_type.getChildAt(userInput.getInt("TYPE"));
-            if (rb != null) { rb.setChecked(true); };
+            rb.setChecked(true);
             spinner_shape.setSelection(userInput.getInt("SHAPE"));
-            editText_wind.setText(userInput.getString("BEARING"));
-            editText_distance.setText(userInput.getString("DISTANCE"));
+            editText_wind.setText(String.valueOf(userInput.getDouble("BEARING")));
+            editText_distance.setText(String.valueOf(userInput.getDouble("DISTANCE")));
             rb = (RadioButton) radioGroup_angle.getChildAt(userInput.getInt("ANGLE"));
-            if (rb != null) { rb.setChecked(true); };
+            rb.setChecked(true);
             rb = (RadioButton) radioGroup_reach.getChildAt(userInput.getInt("REACH"));
-            if (rb != null) { rb.setChecked(true); };
+            rb.setChecked(true);
             rb = (RadioButton) radioGroup_secondBeat.getChildAt(userInput.getInt("SECOND_BEAT"));
-            if (rb != null) { rb.setChecked(true); };
+            rb.setChecked(true);
 
         }
 
@@ -168,6 +168,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
                             completeForm = false;
                         }
                 }
+                Log.d("STARBOARD", String.valueOf(radioGroup_type.getCheckedRadioButtonId()));
                 if (completeForm) {
                     Bundle userInput = new Bundle();
                     int selectedRBID;
@@ -176,7 +177,8 @@ public class CourseVariablesActivity extends AppCompatActivity {
                     rb = findViewById(selectedRBID);
                     userInput.putInt("TYPE", radioGroup_type.indexOfChild(rb));
                     userInput.putInt("SHAPE", spinner_shape.getSelectedItemPosition());
-                    userInput.putString("BEARING", editText_wind.getText().toString());
+                    userInput.putDouble("BEARING", Double.parseDouble(editText_wind.getText().toString()));
+                    //userInput.putString("BEARING", editText_wind.getText().toString());
                     userInput.putString("DISTANCE", editText_distance.getText().toString());
                     selectedRBID = radioGroup_angle.getCheckedRadioButtonId();
                     rb = findViewById(selectedRBID);

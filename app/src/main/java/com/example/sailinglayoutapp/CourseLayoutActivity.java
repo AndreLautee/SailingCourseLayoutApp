@@ -27,9 +27,6 @@ import java.util.Map;
 
 public class CourseLayoutActivity extends AppCompatActivity {
 
-    private GLSurfaceView gLView;
-    private Map<String, String> variables;
-
     RadioButton r1, r2, r3, r4;
     RelativeLayout rl;
     DrawView drawView;
@@ -203,9 +200,66 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
+    public CourseVariablesObject setCourseVariablesObject(Bundle extras) {
+        String type = null;
+        String shape = null;
+        double bearing;
+        double distance;
+        int angle = 0;
+        double reach = 0;
+        String secondBeat = null;
+
+        if (extras.getInt("TYPE") == 0) {
+            type = "starboard";
+        } else if (extras.getInt("TYPE") == 1){
+            type = "portboard";
+        }
+
+        bearing = extras.getDouble("BEARING");
+        distance = extras.getDouble("DISTANCE");
+
+        switch (extras.getInt("SHAPE")) {
+            case 0:
+                shape = "windward_leeward";
+                break;
+            case 1:
+                shape = "triangle";
+                if (extras.getInt("ANGLE") == 0) {
+                    angle = 60;
+                } else if (extras.getInt("ANGLE") == 1) {
+                    angle = 45;
+                }
+                break;
+            case 2:
+                shape = "trapezoid";
+                if (extras.getInt("ANGLE") == 0) {
+                    angle = 60;
+                } else if (extras.getInt("ANGLE") == 1) {
+                    angle = 70;
+                }
+                if (extras.getInt("REACH") == 0) {
+                    reach = 0.5;
+                } else if (extras.getInt("REACH") == 1) {
+                    reach = 0.66;
+                }
+                if (extras.getInt("SECOND_BEAT") == 0) {
+                    secondBeat = "equal";
+                } else if (extras.getInt("SECOND_BEAT") == 1) {
+                    secondBeat = "short";
+                }
+                break;
+            case 3:
+                shape = "optimist";
+                break;
+        }
+
+        CourseVariablesObject result = new CourseVariablesObject(type, shape, bearing, distance, angle, reach, secondBeat);
+        return result;
+    }
+    /*
     public Map<String, String> setVariableArray(Bundle extras) {
         Map<String, String> result = new HashMap<>();
 
@@ -241,8 +295,8 @@ public class CourseLayoutActivity extends AppCompatActivity {
         }
 
 
-        return result; */
-    }
+        return result;
+    }*/
 
     View.OnClickListener radioButton_listener = new View.OnClickListener() {
         @Override
