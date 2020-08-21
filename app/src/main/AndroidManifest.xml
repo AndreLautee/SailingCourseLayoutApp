@@ -30,6 +30,8 @@
 
         <activity android:name=".WeatherAPIActivity" />
 
+        <activity android:name=".NavigationMap" />
+
 
         <service
             android:name=".NavigationService"

@@ -1,9 +1,17 @@
 package com.example.sailinglayoutapp;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -14,11 +22,17 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +44,9 @@ public class CourseLayoutActivity extends AppCompatActivity {
     RadioButton r1, r2, r3, r4;
     RelativeLayout rl;
     DrawView drawView;
-
+    Location currentLocation;
+    CourseVariablesObject cvObject;
+    MarkerCoordCalculations markerCoordCalculations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +55,30 @@ public class CourseLayoutActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
+
+        cvObject = setCourseVariablesObject(extras);
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationServicesEnabled(this);
+
+        currentLocation = null;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Check Permissions Now
+            final int REQUEST_LOCATION = 2;
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION);
+        }
+        currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        TextView textView_coords = findViewById(R.id.textView_coords);
+        if (currentLocation != null) {
+            markerCoordCalculations = new MarkerCoordCalculations(currentLocation, cvObject);
+            textView_coords.setText(String.valueOf(markerCoordCalculations.getCoords().get(1).getLatitude()));
+        } else {
+            textView_coords.setText("Could not get coords");
+        }
 
         r1 = findViewById(R.id.radioButton_layout_1);
         RelativeLayout.LayoutParams r1_layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -56,15 +96,13 @@ public class CourseLayoutActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams r4_layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         r4.setOnClickListener(radioButton_listener);
 
-        rl = findViewById(R.id.rl_line);
+        rl = findViewById(R.id.rl_courseLayout);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
 
-        Log.d("height", String.valueOf(height));
-        Log.d("width", String.valueOf(width));
         switch (extras.getInt("SHAPE")) {
             case 0: // windward-leeward
                 r3.setVisibility(View.INVISIBLE);
@@ -145,31 +183,12 @@ public class CourseLayoutActivity extends AppCompatActivity {
         button_navigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // add code to go to navigation page
+                Intent intent = getIntent();
+                intent.putExtra("COURSE", markerCoordCalculations);
+                intent.setClass(getApplicationContext(),NavigationMap.class);
+                startActivity(intent);
             }
         });
-
-        View.OnClickListener radioButton_listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (r1.getId() != v.getId()) {
-                    r1.setChecked(false);
-                }
-                if (r2.getId() != v.getId()) {
-                    r2.setChecked(false);
-                }
-                if (r3.getId() != v.getId()) {
-                    r3.setChecked(false);
-                }
-                if (r4.getId() != v.getId()) {
-                    r4.setChecked(false);
-                }
-            }
-        };
-
-
-
-
         /*
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -201,6 +220,13 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });*/
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
     }
 
     public CourseVariablesObject setCourseVariablesObject(Bundle extras) {
@@ -259,44 +285,30 @@ public class CourseLayoutActivity extends AppCompatActivity {
         CourseVariablesObject result = new CourseVariablesObject(type, shape, bearing, distance, angle, reach, secondBeat);
         return result;
     }
-    /*
-    public Map<String, String> setVariableArray(Bundle extras) {
-        Map<String, String> result = new HashMap<>();
 
-        if (extras.getInt("TYPE") == 0) {
-            result.put("TYPE", "starboard");
-        } else if (extras.getInt("TYPE") == 1){
-            result.put("TYPE", "portboard");
-        }
+    public void locationServicesEnabled(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
 
-        switch (extras.getInt("SHAPE")) {
-            case 0:
-                result.put("SHAPE", "windward_leeward");
-                break;
-            case 1:
-                result.put("SHAPE", "triangle");
-                if (extras.getInt("ANGLE") == 0) {
-                    result.put("ANGLE", "60");
-                } else if (extras.getInt("ANGLE") == 1) {
-                    result.put("ANGLE", "45");
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) { }
+        if ( !gps_enabled ){
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage("GPS not enabled");
+            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //this will navigate user to the device location settings screen
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
                 }
-                break;
-            case 2:
-                result.put("SHAPE", "trapezoid");
-                if (extras.getInt("SECOND_BEAT") == 0) {
-                    result.put("SECOND_BEAT", "equal");
-                } else if (extras.getInt("SECOND_BEAT") == 1) {
-                    result.put("SECOND_BEAT", "short");
-                }
-                break;
-            case 3:
-                result.put("SHAPE", "optimist");
-                break;
+            });
+            AlertDialog alert = dialog.create();
+            alert.show();
         }
-
-
-        return result;
-    }*/
+    }
 
     View.OnClickListener radioButton_listener = new View.OnClickListener() {
         @Override
@@ -315,5 +327,6 @@ public class CourseLayoutActivity extends AppCompatActivity {
             }
         }
     };
+
 }
 
