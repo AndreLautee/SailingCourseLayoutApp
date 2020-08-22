@@ -17,8 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import static androidx.navigation.Navigation.findNavController;
 
 public class MainActivity2 extends AppCompatActivity implements SensorEventListener {
 
@@ -37,11 +41,37 @@ public class MainActivity2 extends AppCompatActivity implements SensorEventListe
 
         compassimg=(ImageView)findViewById(R.id.compass);
         mSensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
-        if (savedInstanceState != null) {
-            // FRAGMENTS_TAG
-            savedInstanceState.remove("android:support:fragments");
-            savedInstanceState.remove("android:fragments");
-        }
+        bottomNavigation=findViewById(R.id.bottom_navigation);
+
+        //set selected page
+        bottomNavigation.setSelectedItemId(R.id.nav_compass);
+
+        //perform ItemSelectedListener
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_variables:
+                        startActivity(new Intent(getApplicationContext(),
+                                CourseVariablesActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                switch (item.getItemId()){
+                    case R.id.nav_compass:
+                        return true;
+                }
+                switch (item.getItemId()){
+                    case R.id.nav_layout:
+                        startActivity(new Intent(getApplicationContext(),
+                                Testingclass.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                return false;
+            }
+        });
+
 
 
     }

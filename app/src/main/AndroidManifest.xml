@@ -28,6 +28,7 @@
         <activity android:name=".MainActivity2"></activity>
         <activity android:name=".CourseVariablesActivity"></activity>
         <activity android:name=".CourseLayoutActivity"></activity>
+        <activity android:name=".Testingclass"></activity>
     </application>
 
 </manifest>

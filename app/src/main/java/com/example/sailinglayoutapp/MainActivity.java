@@ -24,37 +24,13 @@ public class MainActivity extends AppCompatActivity {
 
         Start=findViewById(R.id.Start);
         bottomNavigation = findViewById(R.id.bottom_navigation);
-        bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+
 
 
 
 
     }
-    BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment=null;
 
-                    switch (item.getItemId()) {
-                        case R.id.nav_variables:
-                            selectedFragment=new VariablesFragment();
-                            break;
-                        case R.id.nav_bouyCoor:
-                            selectedFragment=new BuoyCoorFragment();
-                            break;
-                        case R.id.nav_layout:
-                            selectedFragment=new LayoutFragment();
-                            break;
-                        case R.id.nav_compass:
-                            selectedFragment=new CompassFragment();
-                            break;
-                    }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container,selectedFragment).commit();
-
-                    return true;
-                }
-            };
 
     public void Start_onclick(View view) {
         Intent intent=new Intent();
