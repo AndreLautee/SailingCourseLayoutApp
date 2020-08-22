@@ -31,10 +31,7 @@ class Shape {
     // Set color with red, green, blue and alpha (opacity) values
     float[] color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-    private int lineType;
-
-    public Shape(float[] shapeCo, int line) {
-        lineType = line;
+    public Shape(float[] shapeCo) {
         shapeCoords = shapeCo;
         vertexCount = shapeCo.length/COORDS_PER_VERTEX;
         // initialize vertex byte buffer for shape coordinates
@@ -99,7 +96,7 @@ class Shape {
         // Set width of line
         GLES20.glLineWidth(10);
         // Draw the shape by using lines
-        GLES20.glDrawArrays(lineType, 0, vertexCount);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(positionHandle);

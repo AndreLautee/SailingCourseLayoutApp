@@ -8,9 +8,10 @@ import java.nio.FloatBuffer;
 
 public class Circle {
     private final String vertexShaderCode =
+            "uniform mat4 uMVPMatrix;" +
             "attribute vec4 vPosition;" +
                     "void main() {" +
-                    "  gl_Position = vPosition;" +
+                    "  gl_Position = uMVPMatrix * vPosition;" +
                     "}";
 
     private final String fragmentShaderCode =
@@ -20,6 +21,7 @@ public class Circle {
                     "  gl_FragColor = vColor;" +
                     "}";
 
+    private int vPMatrixHandle;
     private FloatBuffer vertexBuffer;
     private final int mProgram;
 
@@ -35,9 +37,15 @@ public class Circle {
     float center_z = 0.0f;
 
     // Set color with red, green, blue and alpha (opacity) values
-    float[] color = { 1.0f, 0.0f, 0.0f, 1.0f };
+    float[] color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-    public Circle(float cntr_x, float cntr_y) {
+    public Circle(float cntr_x, float cntr_y, boolean clr) {
+        if(clr) {
+            color = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
+        } else {
+            color = new float[]{1.0f, 0.0f, 0.0f, 1.0f};
+        }
+
         center_x = cntr_x;
         center_y = cntr_y;
         // Create a buffer for vertex data
@@ -105,7 +113,7 @@ public class Circle {
    // private int vertexCount;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
-    public void draw() {
+    public void draw(float[] mvpMatrix) {
         // Add program to OpenGL ES environment
         GLES20.glUseProgram(mProgram);
 
@@ -129,6 +137,18 @@ public class Circle {
         GLES20.glLineWidth(1);
         // Draw the shape by using lines
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, vertexCount);
+
+        // Disable vertex array
+        GLES20.glDisableVertexAttribArray(positionHandle);
+
+        // get handle to shape's transformation matrix
+        vPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
+
+        // Pass the projection and view transformation to the shader
+        GLES20.glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0);
+
+        // Draw the triangle
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(positionHandle);

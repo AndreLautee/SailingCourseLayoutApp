@@ -28,16 +28,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.Task;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class CourseLayoutActivity extends AppCompatActivity {
 
@@ -272,7 +262,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     reach = 0.66;
                 }
                 if (extras.getInt("SECOND_BEAT") == 0) {
-                    secondBeat = "equal";
+                    secondBeat = "long";
                 } else if (extras.getInt("SECOND_BEAT") == 1) {
                     secondBeat = "short";
                 }
