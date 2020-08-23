@@ -10,12 +10,15 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +43,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_variables);
         bottomNavigation = findViewById(R.id.bottom_navigation);
+
 
         //set selected page
         bottomNavigation.setSelectedItemId(R.id.nav_variables);
@@ -80,6 +84,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
         textView_angle = findViewById(R.id.textView_angle);
         textView_reach = findViewById(R.id.textView_reach);
         textView_secondBeat = findViewById(R.id.textView_secondBeat);
+        final RelativeLayout variablesLayout=(RelativeLayout) findViewById(R.id.variablesLayout);
 
 
         setSpinner();
@@ -106,17 +111,19 @@ public class CourseVariablesActivity extends AppCompatActivity {
         spinner_shape.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 switch(parent.getItemAtPosition(position).toString()) {
                     case "Triangle":
                         radioGroup_angle.setVisibility(View.VISIBLE);
                         if(userInput == null) {radioGroup_angle.clearCheck();}
-                        radioGroup_reach.setVisibility(View.INVISIBLE);
+                        radioGroup_reach.setVisibility(View.GONE);
                         radioGroup_reach.clearCheck();
-                        radioGroup_secondBeat.setVisibility(View.INVISIBLE);
+                        radioGroup_secondBeat.setVisibility(View.GONE);
                         radioGroup_secondBeat.clearCheck();
                         textView_angle.setVisibility(View.VISIBLE);
-                        textView_reach.setVisibility(View.INVISIBLE);
-                        textView_secondBeat.setVisibility(View.INVISIBLE);
+                        textView_reach.setVisibility(View.GONE);
+                        textView_secondBeat.setVisibility(View.GONE);
+
                         String[] triangleStrings = getResources().getStringArray(R.array.triangle_angles);
                         for (int i = 0; i < radioGroup_angle.getChildCount(); i++) {
                             ((RadioButton) radioGroup_angle.getChildAt(i)).setText(triangleStrings[i]);
@@ -138,15 +145,15 @@ public class CourseVariablesActivity extends AppCompatActivity {
                         }
                         break;
                     default:
-                        radioGroup_angle.setVisibility(View.INVISIBLE);
+                        radioGroup_angle.setVisibility(View.GONE);
                         radioGroup_angle.clearCheck();
-                        radioGroup_reach.setVisibility(View.INVISIBLE);
+                        radioGroup_reach.setVisibility(View.GONE);
                         radioGroup_reach.clearCheck();
-                        radioGroup_secondBeat.setVisibility(View.INVISIBLE);
+                        radioGroup_secondBeat.setVisibility(View.GONE);
                         radioGroup_secondBeat.clearCheck();
-                        textView_angle.setVisibility(View.INVISIBLE);
-                        textView_reach.setVisibility(View.INVISIBLE);
-                        textView_secondBeat.setVisibility(View.INVISIBLE);
+                        textView_angle.setVisibility(View.GONE);
+                        textView_reach.setVisibility(View.GONE);
+                        textView_secondBeat.setVisibility(View.GONE);
                 }
 
             }
