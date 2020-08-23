@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void Start_onclick(View view) {
         Intent intent=new Intent();
-        intent.setClass(getApplicationContext(),MainActivity2.class);
+        intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
         startActivityForResult(intent,Request_code);
     }
 
