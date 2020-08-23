@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,10 +20,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.util.ArrayList;
+
 public class NavigationMap extends AppCompatActivity {
 
     GLSurfaceView gLView;
     MarkerCoordCalculations course;
+    ArrayList<Location> locations;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,23 +49,29 @@ public class NavigationMap extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION);
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5,10, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
 
-        Location currentLocation = null;
-        currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        locations = new ArrayList<>();
+        locations.add(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
 
-        gLView = new NavMapGLSurfaceView(this, course.getCoords(), currentLocation);
+        gLView = new NavMapGLSurfaceView(this, course.getCoords(), locations);
 
         layoutGL.addView(gLView);
 
     }
 
     LocationListener locationListener = new LocationListener() {
+
         @Override
         public void onLocationChanged(Location location) {
             RelativeLayout layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
-
-            gLView = new NavMapGLSurfaceView(NavigationMap.this, course.getCoords(), location);
+            if (locations.size() < 5) {
+                locations.add(location);
+            } else {
+                locations.remove(0);
+                locations.add(location);
+            }
+            gLView = new NavMapGLSurfaceView(NavigationMap.this, course.getCoords(), locations);
 
             layoutGL.addView(gLView);
         }

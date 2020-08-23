@@ -7,6 +7,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -17,15 +18,13 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     private ArrayList<Location> coordinates;
     NavMap navMap;
     List<Circle> circles;
-    Circle cursor;
-    double x_dispersion;
-    double y_dispersion;
-    Location currentLocation;
+    List<Circle> cursors;
+    ArrayList<Location> locations;
 
 
-    NavMapGLRenderer(ArrayList<Location> coords, Location location) {
+    NavMapGLRenderer(ArrayList<Location> coords, ArrayList<Location> lct) {
         coordinates = coords;
-        currentLocation = location;
+        locations = lct;
     }
 
     public static int loadShader(int type, String shaderCode) {
@@ -44,10 +43,11 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
         circles = new ArrayList<>();
-        createMap(currentLocation);
-
+        cursors = new ArrayList<>();
+        createMap();
     }
 
+    // vPMatrix is an abbreviation for "Model View Projection Matrix"
     private final float[] vPMatrix = new float[16];
     private final float[] projectionMatrix = new float[16];
     private final float[] viewMatrix = new float[16];
@@ -68,7 +68,7 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
         // Set the camera position (View matrix)
-        Matrix.setLookAtM(viewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(viewMatrix, 0, 0, 0, 5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         // Calculate the projection and view transformation
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
@@ -76,10 +76,12 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         for (int i=0; i < circles.size(); i++) {
             circles.get(i).draw(vPMatrix);
         }
-        cursor.draw(vPMatrix);
+        for (int i=0; i < cursors.size(); i++) {
+            cursors.get(i).draw(vPMatrix);
+        }
     }
 
-    public void createMap(Location location) {
+    public void createMap() {
         double centre_x = 0;
         double centre_y = 0;
 
@@ -108,6 +110,8 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
 
         double max_xy_dispersion;
 
+        double max_x_dispersion = rightmost_coord - centre_x;
+        double max_y_dispersion = upmost_coord - centre_y;
         if (upmost_coord - centre_y > rightmost_coord - centre_x) {
             max_xy_dispersion = upmost_coord - centre_y;
         } else {
@@ -117,9 +121,9 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         double topLeft_x = centre_x - max_xy_dispersion;
         double topLeft_y = centre_y + max_xy_dispersion;
 
-        /*
+/*
         Log.d("max dispersion", String.valueOf(max_xy_dispersion));
-        Log.d("course distance", String.valueOf(course_distance));
+        //Log.d("course distance", String.valueOf(course_distance));
         Log.d("topLeft x", String.valueOf(topLeft_x));
         Log.d("centre x", String.valueOf(centre_x));
         Log.d("coord 0 x", String.valueOf(coordinates.get(0).getLongitude()));
@@ -132,39 +136,49 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         Log.d("coord 1 y", String.valueOf(coordinates.get(1).getLatitude()));
         //Log.d("coord 2 y", String.valueOf(coordinates.get(2).getLatitude()));
         //Log.d("coord 3 y", String.valueOf(coordinates.get(3).getLatitude()));
-        Log.d("number of coords", String.valueOf(coordinates.size())); */
+        Log.d("number of coords", String.valueOf(coordinates.size()));
+*/
 
-        float x = 0.7f;
-        float y = 0.7f;
-        double ratio_x = Math.abs((location.getLongitude() - centre_x)/(topLeft_x - centre_x));
-        double ratio_y = Math.abs((location.getLatitude() - centre_y)/(topLeft_y - centre_y));
+        float x;
+        float y;
+        double ratio_x;
+        double ratio_y;
 
-        if (location.getLongitude() - centre_x < 0) {
-            x = (float) -(x * ratio_x);
-        } else if (location.getLongitude() - centre_x > 0) {
-            x = (float) (x * ratio_x);
-        } else {
-            x = 0;
+        for (int i = 0; i < locations.size(); i++) {
+            x = 0.7f;
+            y = 1.3f;
+            ratio_x = Math.abs((locations.get(i).getLongitude() - centre_x)/max_x_dispersion);
+            ratio_y = Math.abs((locations.get(i).getLatitude() - centre_y)/max_y_dispersion);
+
+            if (locations.get(i).getLongitude() - centre_x < 0) {
+                x = (float) -(x * ratio_x);
+            } else if (locations.get(i).getLongitude() - centre_x > 0) {
+                x = (float) (x * ratio_x);
+            } else {
+                x = 0;
+            }
+
+            if (locations.get(i).getLatitude() - centre_y < 0) {
+                y = (float) -(y * ratio_y);
+            } else if (locations.get(i).getLatitude() - centre_y > 0) {
+                y = (float) (y * ratio_y);
+            } else {
+                y = 0;
+            }
+
+            cursors.add(new Circle(x,y,locations.size()-i));
         }
 
-        if (location.getLatitude() - centre_y < 0) {
-            y = (float) -(y * ratio_y);
-        } else if (location.getLatitude() - centre_y > 0) {
-            y = (float) (y * ratio_y);
-        } else {
-            y = 0;
-        }
 
-        cursor = new Circle(x,y,false);
 
         for (int i = 0; i < coordinates.size(); i++) {
             x = 0.7f;
-            y = 0.7f;
-            ratio_x = Math.abs((coordinates.get(i).getLongitude() - centre_x)/(topLeft_x - centre_x));
-            ratio_y = Math.abs((coordinates.get(i).getLatitude() - centre_y)/(topLeft_y - centre_y));
+            y = 1.3f;
+            ratio_x = Math.abs((coordinates.get(i).getLongitude() - centre_x)/max_x_dispersion);
+            ratio_y = Math.abs((coordinates.get(i).getLatitude() - centre_y)/max_y_dispersion);
 
-            //Log.d("ratio x", String.valueOf(ratio_x));
-            //Log.d("ratio y", String.valueOf(ratio_y));
+            Log.d("ratio x", String.valueOf(ratio_x));
+            Log.d("ratio y", String.valueOf(ratio_y));
             if (coordinates.get(i).getLongitude() - centre_x < 0) {
                 x = (float) -(x * ratio_x);
             } else if (coordinates.get(i).getLongitude() - centre_x > 0) {
@@ -172,6 +186,8 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
             } else {
                 x = 0;
             }
+            Log.d("X", String.valueOf(x));
+
 
             if (coordinates.get(i).getLatitude() - centre_y < 0) {
                 y = (float) -(y * ratio_y);
@@ -180,8 +196,10 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
             } else {
                 y = 0;
             }
+            Log.d("Y", String.valueOf(y));
 
-            circles.add(new Circle(x,y,true));
+
+            circles.add(new Circle(x,y,-1));
         }
     }
 
