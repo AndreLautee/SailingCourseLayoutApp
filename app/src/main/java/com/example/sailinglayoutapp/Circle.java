@@ -1,6 +1,7 @@
 package com.example.sailinglayoutapp;
 
 import android.opengl.GLES20;
+import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -8,9 +9,11 @@ import java.nio.FloatBuffer;
 
 public class Circle {
     private final String vertexShaderCode =
-            "attribute vec4 vPosition;" +
+
+            "uniform mat4 uMVPMatrix;" +
+                    "attribute vec4 vPosition;" +
                     "void main() {" +
-                    "  gl_Position = vPosition;" +
+                    "  gl_Position = uMVPMatrix * vPosition;" +
                     "}";
 
     private final String fragmentShaderCode =
@@ -20,6 +23,7 @@ public class Circle {
                     "  gl_FragColor = vColor;" +
                     "}";
 
+    private int vPMatrixHandle;
     private FloatBuffer vertexBuffer;
     private final int mProgram;
 
@@ -29,15 +33,36 @@ public class Circle {
     private int points = 360;
 
     int vertexCount = 100;
-    float radius = 0.05f;
+    float radius = 0.03f;
     float center_x;
     float center_y;
     float center_z = 0.0f;
 
     // Set color with red, green, blue and alpha (opacity) values
-    float[] color = { 1.0f, 0.0f, 0.0f, 1.0f };
+    float[] color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-    public Circle(float cntr_x, float cntr_y) {
+    public Circle(float cntr_x, float cntr_y, int clr) {
+        switch(clr) {
+            case -1:
+                color = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
+                break;
+            case 1:
+                color = new float[]{1.0f, 0.0f, 0.0f, 1.0f};
+                break;
+            case 2:
+                color = new float[]{0.9f, 0.1f, 0.2f, 1.0f};
+                break;
+            case 3:
+                color = new float[]{0.8f, 0.2f, 0.4f, 1.0f};
+                break;
+            case 4:
+                color = new float[]{0.7f, 0.3f, 0.6f, 1.0f};
+                break;
+            case 5:
+                color = new float[]{0.6f, 0.4f, 0.8f, 1.0f};
+                break;
+        }
+
         center_x = cntr_x;
         center_y = cntr_y;
         // Create a buffer for vertex data
@@ -81,9 +106,9 @@ public class Circle {
         // set the buffer to read the first coordinate
         vertexBuffer.position(0);
 
-        int vertexShader = LayoutGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
+        int vertexShader = NavMapGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
                 vertexShaderCode);
-        int fragmentShader = LayoutGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
+        int fragmentShader = NavMapGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
                 fragmentShaderCode);
 
         // create empty OpenGL ES Program
@@ -105,7 +130,7 @@ public class Circle {
    // private int vertexCount;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
-    public void draw() {
+    public void draw(float[] mvpMatrix) {
         // Add program to OpenGL ES environment
         GLES20.glUseProgram(mProgram);
 
@@ -127,7 +152,18 @@ public class Circle {
         GLES20.glUniform4fv(colorHandle, 1, color, 0);
         // Set width of line
         GLES20.glLineWidth(1);
-        // Draw the shape by using lines
+
+        //Log.d("1", String.valueOf(mvpMatrix[0]));
+        //Log.d("2", String.valueOf(mvpMatrix[1]));
+        //Log.d("4", String.valueOf(mvpMatrix[2]));
+
+        // get handle to shape's transformation matrix
+        vPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
+
+        // Pass the projection and view transformation to the shader
+        GLES20.glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0);
+
+        // Draw the shape
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, vertexCount);
 
         // Disable vertex array

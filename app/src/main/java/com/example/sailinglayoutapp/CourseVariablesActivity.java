@@ -54,16 +54,16 @@ public class CourseVariablesActivity extends AppCompatActivity {
         if (userInput != null) {
             RadioButton rb;
             rb = (RadioButton) radioGroup_type.getChildAt(userInput.getInt("TYPE"));
-            rb.setChecked(true);
+            if(rb != null) {rb.setChecked(true);}
             spinner_shape.setSelection(userInput.getInt("SHAPE"));
-            editText_wind.setText(userInput.getString("BEARING"));
-            editText_distance.setText(userInput.getString("DISTANCE"));
+            editText_wind.setText(String.valueOf(userInput.getDouble("BEARING")));
+            editText_distance.setText(String.valueOf(userInput.getDouble("DISTANCE")));
             rb = (RadioButton) radioGroup_angle.getChildAt(userInput.getInt("ANGLE"));
-            rb.setChecked(true);
+            if(rb != null) {rb.setChecked(true);}
             rb = (RadioButton) radioGroup_reach.getChildAt(userInput.getInt("REACH"));
-            rb.setChecked(true);
+            if(rb!= null) {rb.setChecked(true);}
             rb = (RadioButton) radioGroup_secondBeat.getChildAt(userInput.getInt("SECOND_BEAT"));
-            rb.setChecked(true);
+            if(rb != null) {rb.setChecked(true);}
 
         }
 
@@ -138,9 +138,6 @@ public class CourseVariablesActivity extends AppCompatActivity {
                 boolean completeForm = true;
                 String errorText = "";
 
-                Log.d("STARBOARD", String.valueOf(radioGroup_type.getCheckedRadioButtonId()));
-                Log.d("ANGLE", String.valueOf(radioGroup_angle.getCheckedRadioButtonId()));
-                Log.d("BEAT", String.valueOf(radioGroup_secondBeat.getCheckedRadioButtonId()));
                 switch (spinner_shape.getSelectedItemPosition()) {
                     case 2:
                         if (radioGroup_secondBeat.getCheckedRadioButtonId() == -1) {
@@ -171,7 +168,6 @@ public class CourseVariablesActivity extends AppCompatActivity {
                             completeForm = false;
                         }
                 }
-                Log.d("STARBOARD", String.valueOf(radioGroup_type.getCheckedRadioButtonId()));
                 if (completeForm) {
                     Bundle userInput = new Bundle();
                     int selectedRBID;
@@ -180,8 +176,8 @@ public class CourseVariablesActivity extends AppCompatActivity {
                     rb = findViewById(selectedRBID);
                     userInput.putInt("TYPE", radioGroup_type.indexOfChild(rb));
                     userInput.putInt("SHAPE", spinner_shape.getSelectedItemPosition());
-                    userInput.putString("BEARING", editText_wind.getText().toString());
-                    userInput.putString("DISTANCE", editText_distance.getText().toString());
+                    userInput.putDouble("BEARING", Double.parseDouble(editText_wind.getText().toString()));
+                    userInput.putDouble("DISTANCE", Double.parseDouble(editText_distance.getText().toString()));
                     selectedRBID = radioGroup_angle.getCheckedRadioButtonId();
                     rb = findViewById(selectedRBID);
                     userInput.putInt("ANGLE", radioGroup_angle.indexOfChild(rb));
@@ -196,9 +192,6 @@ public class CourseVariablesActivity extends AppCompatActivity {
                     intent.setClass(getApplicationContext(), CourseLayoutActivity.class);
                     intent.putExtras(userInput);
                     startActivity(intent);
-                    //CourseVariablesObject courseVariablesObject = createObject();
-                    // Need to get location here
-                    //MarkerCoordCalculations(location, courseVariablesObject);
                 } else {
                     Context context = getApplicationContext();
                     int duration = Toast.LENGTH_LONG;
