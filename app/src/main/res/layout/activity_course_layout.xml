@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
+            android:gravity="center"
             android:text="Mark 1" />
 
         <RadioButton
@@ -28,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:minWidth="0dp"
             android:text="Mark 2" />
 
         <RadioButton
@@ -36,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:minWidth="0dp"
             android:text="Mark 3" />
 
         <RadioButton
@@ -44,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:minWidth="0dp"
             android:text="Mark 4" />
 
         <Button
@@ -67,13 +71,21 @@
             android:text="Navigation" />
 
         <TextView
-            android:id="@+id/textView_coords"
+            android:id="@+id/textView_lat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="83dp"
-            android:layout_marginEnd="160dp"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="50dp"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/textView_lon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="80dp"
             android:text="TextView" />
     </RelativeLayout>
 </LinearLayout>

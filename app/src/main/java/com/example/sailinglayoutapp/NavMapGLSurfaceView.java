@@ -21,13 +21,13 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
     private final NavMapGLRenderer renderer;
 
-    public NavMapGLSurfaceView(Context context, ArrayList<Location> coords, ArrayList<Location> locations) {
+    public NavMapGLSurfaceView(Context context, ArrayList<Location> coords, ArrayList<Location> locations, int selectedMark) {
         super(context);
 
         // Create an OpenGL ES 3.0 context
         setEGLContextClientVersion(2);
 
-        renderer = new NavMapGLRenderer(coords, locations);
+        renderer = new NavMapGLRenderer(coords, locations, selectedMark);
 
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(renderer);

@@ -20,11 +20,13 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     List<Circle> circles;
     List<Circle> cursors;
     ArrayList<Location> locations;
+    int selectedMark;
 
 
-    NavMapGLRenderer(ArrayList<Location> coords, ArrayList<Location> lct) {
+    NavMapGLRenderer(ArrayList<Location> coords, ArrayList<Location> lct, int sM) {
         coordinates = coords;
         locations = lct;
+        selectedMark = sM;
     }
 
     public static int loadShader(int type, String shaderCode) {
@@ -110,16 +112,11 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
 
         double max_xy_dispersion;
 
-        double max_x_dispersion = rightmost_coord - centre_x;
-        double max_y_dispersion = upmost_coord - centre_y;
-        if (upmost_coord - centre_y > rightmost_coord - centre_x) {
-            max_xy_dispersion = upmost_coord - centre_y;
+        if (upmost_coord - downmost_coord > rightmost_coord - leftmost_coord) {
+            max_xy_dispersion = (upmost_coord - downmost_coord)/2;
         } else {
-            max_xy_dispersion = rightmost_coord - centre_x;
+            max_xy_dispersion = (rightmost_coord - leftmost_coord)/2;
         }
-
-        double topLeft_x = centre_x - max_xy_dispersion;
-        double topLeft_y = centre_y + max_xy_dispersion;
 
 /*
         Log.d("max dispersion", String.valueOf(max_xy_dispersion));
@@ -147,16 +144,10 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         for (int i = 0; i < locations.size(); i++) {
             x = 0.7f;
             y = 0.7f;
-            if (max_x_dispersion != 0) {
-                ratio_x = Math.abs((locations.get(i).getLongitude() - centre_x) / max_xy_dispersion);
-            } else {
-                ratio_x = 0;
-            }
-            if (max_y_dispersion != 0) {
-                ratio_y = Math.abs((locations.get(i).getLatitude() - centre_y) / max_xy_dispersion);
-            } else {
-                ratio_y = 0;
-            }
+
+            ratio_x = Math.abs((locations.get(i).getLongitude() - centre_x) / max_xy_dispersion);
+
+            ratio_y = Math.abs((locations.get(i).getLatitude() - centre_y) / max_xy_dispersion);
 
             if (locations.get(i).getLongitude() - centre_x < 0) {
                 x = (float) -(x * ratio_x);
@@ -174,7 +165,7 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
                 y = 0;
             }
 
-            cursors.add(new Circle(x,y,locations.size()-i));
+            cursors.add(new Circle(x,y,locations.size()-i, 0.03f));
         }
 
 
@@ -182,16 +173,10 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         for (int i = 0; i < coordinates.size(); i++) {
             x = 0.7f;
             y = 0.7f;
-            if (max_x_dispersion != 0) {
-                ratio_x = Math.abs((coordinates.get(i).getLongitude() - centre_x) / max_xy_dispersion);
-            } else {
-                ratio_x = 0;
-            }
-            if (max_y_dispersion != 0) {
-                ratio_y = Math.abs((coordinates.get(i).getLatitude() - centre_y) / max_xy_dispersion);
-            } else {
-                ratio_y = 0;
-            }
+
+            ratio_x = Math.abs((coordinates.get(i).getLongitude() - centre_x) / max_xy_dispersion);
+
+            ratio_y = Math.abs((coordinates.get(i).getLatitude() - centre_y) / max_xy_dispersion);
 
             Log.d("ratio x", String.valueOf(ratio_x));
             Log.d("ratio y", String.valueOf(ratio_y));
@@ -215,7 +200,13 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
             Log.d("Y", String.valueOf(y));
 
 
-            circles.add(new Circle(x,y,-1));
+            Log.d("Selected mark", String.valueOf(selectedMark));
+
+            if (i == selectedMark) {
+                circles.add(new Circle(x,y,-1, 0.05f));
+            } else {
+                circles.add(new Circle(x,y,-1,0.03f));
+            }
         }
     }
 

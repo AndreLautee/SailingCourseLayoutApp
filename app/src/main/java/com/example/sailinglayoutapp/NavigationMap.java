@@ -12,6 +12,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -37,9 +38,11 @@ public class NavigationMap extends AppCompatActivity {
     ArrayList<Location> locations;
     TextView textView_distance, textView_bearing;
     LinearLayout layoutCourseLayout;
+    RelativeLayout layoutGL;
     RadioGroup radioGroup;
-    RadioButton[] radioButtons;
+    ArrayList<RadioButton> radioButtons;
     int selectedMark;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +57,10 @@ public class NavigationMap extends AppCompatActivity {
         textView_bearing = new TextView(this);
         radioGroup = new RadioGroup(this);
         radioGroup.setOrientation(RadioGroup.HORIZONTAL);
-        radioButtons = new RadioButton[courseSize];
+        radioButtons = new ArrayList<>();
 
         layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_navigationMap);
-        RelativeLayout layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
+        layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationServicesEnabled(this);
@@ -74,11 +77,15 @@ public class NavigationMap extends AppCompatActivity {
         locations.add(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
 
         // Set number of radio buttons to number of marks
+
         for(int i = 0; i < courseSize; i++){
-            radioButtons[i]  = new RadioButton(this);
-            radioGroup.addView(radioButtons[i]); //the RadioButtons are added to the radioGroup instead of the layout
-            radioButtons[i].setText("Mark " + (i+1));
+            radioButtons.add(new RadioButton(this));
+            radioButtons.get(i).setId(i+1);
+            radioGroup.removeView(radioButtons.get(i));
+            radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
+            radioButtons.get(i).setText("Mark " + (i+1));
         }
+        layoutCourseLayout.removeView(radioGroup);
         layoutCourseLayout.addView(radioGroup);
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -89,29 +96,35 @@ public class NavigationMap extends AppCompatActivity {
                 } else {
                     selectedMark = checkedId;
                 }
+                Log.d("selectedmark activity", String.valueOf(selectedMark));
+
                 // Display updated distance to newly selected mark
-                String distText = String.valueOf(distanceBetweenPoints(
+                String distText = "Distance to selected mark: " + distanceBetweenPoints(
                         course.getCoords().get(selectedMark).getLatitude(),
                         course.getCoords().get(selectedMark).getLongitude(),
-                        locations.get(locations.size()-1).getLatitude(),
-                        locations.get(locations.size()-1).getLongitude()));
+                        locations.get(locations.size() - 1).getLatitude(),
+                        locations.get(locations.size() - 1).getLongitude());
                 textView_distance.setText(distText);
                 layoutCourseLayout.removeView(textView_distance);
                 layoutCourseLayout.addView(textView_distance);
 
                 // Display updated bearing to newly selected mark
-                String bearingText = String.valueOf(bearingBetweenPoints(
-                        locations.get(locations.size()-1).getLatitude(),
-                        locations.get(locations.size()-1).getLongitude(),
+                String bearingText = "Bearing to selected mark: " + bearingBetweenPoints(
+                        locations.get(locations.size() - 1).getLatitude(),
+                        locations.get(locations.size() - 1).getLongitude(),
                         course.getCoords().get(selectedMark).getLatitude(),
-                        course.getCoords().get(selectedMark).getLongitude()));
+                        course.getCoords().get(selectedMark).getLongitude());
                 textView_bearing.setText(bearingText);
                 layoutCourseLayout.removeView(textView_bearing);
                 layoutCourseLayout.addView(textView_bearing);
+
+                gLView = new NavMapGLSurfaceView(NavigationMap.this, course.getCoords(), locations, selectedMark);
+
+                layoutGL.addView(gLView);
             }
         });
 
-        gLView = new NavMapGLSurfaceView(this, course.getCoords(), locations);
+        gLView = new NavMapGLSurfaceView(this, course.getCoords(), locations, selectedMark);
 
         layoutGL.addView(gLView);
 
@@ -128,26 +141,26 @@ public class NavigationMap extends AppCompatActivity {
             locations.add(location);
 
             // Display new distance to selected mark
-            String distText = String.valueOf(distanceBetweenPoints(course.getCoords().get(selectedMark).getLatitude(),
+            String distText = "Distance to selected mark: " + distanceBetweenPoints(course.getCoords().get(selectedMark).getLatitude(),
                     course.getCoords().get(selectedMark).getLongitude(),
-                    locations.get(locations.size()-1).getLatitude(),
-                    locations.get(locations.size()-1).getLongitude()));
+                    locations.get(locations.size() - 1).getLatitude(),
+                    locations.get(locations.size() - 1).getLongitude());
             textView_distance.setText(distText);
             layoutCourseLayout.removeView(textView_distance);
             layoutCourseLayout.addView(textView_distance);
 
             // Display updated bearing to newly selected mark
-            String bearingText = String.valueOf(bearingBetweenPoints(
-                    locations.get(locations.size()-1).getLatitude(),
-                    locations.get(locations.size()-1).getLongitude(),
+            String bearingText = "Bearing to selected mark: " + bearingBetweenPoints(
+                    locations.get(locations.size() - 1).getLatitude(),
+                    locations.get(locations.size() - 1).getLongitude(),
                     course.getCoords().get(selectedMark).getLatitude(),
-                    course.getCoords().get(selectedMark).getLongitude()));
+                    course.getCoords().get(selectedMark).getLongitude());
             textView_bearing.setText(bearingText);
             layoutCourseLayout.removeView(textView_bearing);
             layoutCourseLayout.addView(textView_bearing);
 
             // Display new glview with new location
-            gLView = new NavMapGLSurfaceView(NavigationMap.this, course.getCoords(), locations);
+            gLView = new NavMapGLSurfaceView(NavigationMap.this, course.getCoords(), locations,selectedMark);
             layoutGL.addView(gLView);
         }
 
