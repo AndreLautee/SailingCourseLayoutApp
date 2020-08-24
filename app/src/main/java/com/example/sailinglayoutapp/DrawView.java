@@ -10,16 +10,18 @@ public class DrawView extends View {
 
     View startView, endView;
     Paint paint = new Paint();
+    int buffer;
 
-    public DrawView(Context context, View startView, View endView) {
+    public DrawView(Context context, View startView, View endView, int width) {
         super(context);
         this.startView = startView;
         this.endView = endView;
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(8);
+        buffer = (int) (0.04027778 * width);
     }
 
     public void onDraw(Canvas canvas) {
-        canvas.drawLine(startView.getX() + 58, startView.getY() + 58, endView.getX() + 58, endView.getY() + 58, paint);
+        canvas.drawLine(startView.getX() + buffer, startView.getY() + buffer, endView.getX() + buffer, endView.getY() + buffer, paint);
     }
 }

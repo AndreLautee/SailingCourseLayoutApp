@@ -1,6 +1,7 @@
 package com.example.sailinglayoutapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,8 +43,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
     Location currentLocation;
     CourseVariablesObject cvObject;
     MarkerCoordCalculations markerCoordCalculations;
+    TextView textView_lat, textView_lon;
+    int courseSize;
     BottomNavigationView bottomNavigation;
 
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,15 +103,19 @@ public class CourseLayoutActivity extends AppCompatActivity {
         }
         currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        TextView textView_coords = findViewById(R.id.textView_coords);
+        textView_lat = findViewById(R.id.textView_lat);
+        textView_lon = findViewById(R.id.textView_lon);
         if (currentLocation != null) {
             markerCoordCalculations = new MarkerCoordCalculations(currentLocation, cvObject);
-            textView_coords.setText(String.valueOf(markerCoordCalculations.getCoords().get(1).getLatitude()));
+            courseSize = markerCoordCalculations.getCoords().size();
+            textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLatitude()));
+            textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLongitude()));
         } else {
-            textView_coords.setText("Could not get coords");
+            textView_lat.setText("Could not get coords");
         }
 
         r1 = findViewById(R.id.radioButton_layout_1);
+        r1.setChecked(true);
         RelativeLayout.LayoutParams r1_layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         r1.setOnClickListener(radioButton_listener);
 
@@ -141,7 +149,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 r2_layoutParams.setMargins(width/2, (3*height)/5, 0,0);
                 r2.setLayoutParams(r2_layoutParams);
 
-                drawView = new DrawView(this, r1, r2);
+                drawView = new DrawView(this, r1, r2, width);
                 rl.addView(drawView);
                 break;
             case 1: // triangle
@@ -156,11 +164,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
                    r3_layoutParams.setMargins(width/6,(3*height)/5, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
-                    drawView = new DrawView(this, r1, r2);
+                    drawView = new DrawView(this, r1, r2, width);
                     rl.addView(drawView);
-                    drawView = new DrawView(this, r2, r3);
+                    drawView = new DrawView(this, r2, r3, width);
                     rl.addView(drawView);
-                    drawView = new DrawView(this, r3, r1);
+                    drawView = new DrawView(this, r3, r1, width);
                     rl.addView(drawView);
                     break;
                 } else if (extras.getInt("TYPE") == 1) { // portboard
@@ -338,19 +346,48 @@ public class CourseLayoutActivity extends AppCompatActivity {
     }
 
     View.OnClickListener radioButton_listener = new View.OnClickListener() {
+        @SuppressLint({"DefaultLocale", "SetTextI18n"})
         @Override
         public void onClick(View v) {
-            if (r1.getId() != v.getId()) {
-                r1.setChecked(false);
-            }
-            if (r2.getId() != v.getId()) {
+            if (r1.getId() == v.getId()) {
                 r2.setChecked(false);
-            }
-            if (r3.getId() != v.getId()) {
                 r3.setChecked(false);
-            }
-            if (r4.getId() != v.getId()) {
                 r4.setChecked(false);
+                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLatitude()));
+                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLongitude()));
+            }
+            if (r2.getId() == v.getId()) {
+                r1.setChecked(false);
+                r3.setChecked(false);
+                r4.setChecked(false);
+                int i;
+                if (courseSize == 2) {
+                    i = 0;
+                } else {
+                    i = 2;
+                }
+                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLatitude()));
+                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLongitude()));
+            }
+            if (r3.getId() == v.getId()) {
+                r1.setChecked(false);
+                r2.setChecked(false);
+                r4.setChecked(false);
+                int i;
+                if (courseSize == 3) {
+                    i = 0;
+                } else {
+                    i = 3;
+                }
+                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLatitude()));
+                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLongitude()));
+            }
+            if (r4.getId() == v.getId()) {
+                r1.setChecked(false);
+                r2.setChecked(false);
+                r3.setChecked(false);
+                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(0).getLatitude()));
+                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(0).getLongitude()));
             }
         }
     };

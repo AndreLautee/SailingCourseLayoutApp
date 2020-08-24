@@ -41,7 +41,8 @@ public class Circle {
     // Set color with red, green, blue and alpha (opacity) values
     float[] color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-    public Circle(float cntr_x, float cntr_y, int clr) {
+    public Circle(float cntr_x, float cntr_y, int clr, float r) {
+        radius = r;
         switch(clr) {
             case -1:
                 color = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
