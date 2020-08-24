@@ -8,13 +8,17 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,18 +27,64 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+
 public class CourseVariablesActivity extends AppCompatActivity {
 
     private RadioGroup radioGroup_type, radioGroup_angle, radioGroup_reach, radioGroup_secondBeat;
     private Spinner spinner_shape;
     private EditText editText_wind, editText_distance;
     private TextView textView_angle, textView_reach, textView_secondBeat;
-
+    BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_variables);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+
+
+        //set selected page
+        bottomNavigation.setSelectedItemId(R.id.nav_variables);
+
+        //perform ItemSelectedListener
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                String errorText = "Please complete course variables";
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast.makeText(context, errorText, duration);
+
+                switch (item.getItemId()){
+                    case R.id.nav_variables:
+                        return true;
+                    case R.id.nav_layout:
+                        Bundle userInput = passBundle();
+                        if(userInput != null) {
+                            Intent intent = new Intent();
+                            intent.setClass(getApplicationContext(), CourseLayoutActivity.class);
+                            intent.putExtras(userInput);
+                            startActivity(intent);
+                            overridePendingTransition(0,0);
+                        }
+                        return true;
+                    case R.id.nav_compass:
+                    case R.id.nav_map:
+                        toast.show();
+                        return true;
+                }
+                switch (item.getItemId()){
+                    case R.id.nav_home:
+                        startActivity(new Intent(getApplicationContext(),
+                                MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                return false;
+            }
+        });
 
         radioGroup_type = findViewById(R.id.radioGroup_type);
         spinner_shape = findViewById(R.id.spinner_shape);
@@ -46,6 +96,8 @@ public class CourseVariablesActivity extends AppCompatActivity {
         textView_angle = findViewById(R.id.textView_angle);
         textView_reach = findViewById(R.id.textView_reach);
         textView_secondBeat = findViewById(R.id.textView_secondBeat);
+        final RelativeLayout variablesLayout=(RelativeLayout) findViewById(R.id.variablesLayout);
+
 
         setSpinner();
 
@@ -71,17 +123,19 @@ public class CourseVariablesActivity extends AppCompatActivity {
         spinner_shape.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 switch(parent.getItemAtPosition(position).toString()) {
                     case "Triangle":
                         radioGroup_angle.setVisibility(View.VISIBLE);
                         if(userInput == null) {radioGroup_angle.clearCheck();}
-                        radioGroup_reach.setVisibility(View.INVISIBLE);
+                        radioGroup_reach.setVisibility(View.GONE);
                         radioGroup_reach.clearCheck();
-                        radioGroup_secondBeat.setVisibility(View.INVISIBLE);
+                        radioGroup_secondBeat.setVisibility(View.GONE);
                         radioGroup_secondBeat.clearCheck();
                         textView_angle.setVisibility(View.VISIBLE);
-                        textView_reach.setVisibility(View.INVISIBLE);
-                        textView_secondBeat.setVisibility(View.INVISIBLE);
+                        textView_reach.setVisibility(View.GONE);
+                        textView_secondBeat.setVisibility(View.GONE);
+
                         String[] triangleStrings = getResources().getStringArray(R.array.triangle_angles);
                         for (int i = 0; i < radioGroup_angle.getChildCount(); i++) {
                             ((RadioButton) radioGroup_angle.getChildAt(i)).setText(triangleStrings[i]);
@@ -103,15 +157,15 @@ public class CourseVariablesActivity extends AppCompatActivity {
                         }
                         break;
                     default:
-                        radioGroup_angle.setVisibility(View.INVISIBLE);
+                        radioGroup_angle.setVisibility(View.GONE);
                         radioGroup_angle.clearCheck();
-                        radioGroup_reach.setVisibility(View.INVISIBLE);
+                        radioGroup_reach.setVisibility(View.GONE);
                         radioGroup_reach.clearCheck();
-                        radioGroup_secondBeat.setVisibility(View.INVISIBLE);
+                        radioGroup_secondBeat.setVisibility(View.GONE);
                         radioGroup_secondBeat.clearCheck();
-                        textView_angle.setVisibility(View.INVISIBLE);
-                        textView_reach.setVisibility(View.INVISIBLE);
-                        textView_secondBeat.setVisibility(View.INVISIBLE);
+                        textView_angle.setVisibility(View.GONE);
+                        textView_reach.setVisibility(View.GONE);
+                        textView_secondBeat.setVisibility(View.GONE);
                 }
 
             }
@@ -134,83 +188,115 @@ public class CourseVariablesActivity extends AppCompatActivity {
         final Button button = findViewById(R.id.button_calculate);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                boolean completeForm = true;
-                String errorText = "";
-
-                switch (spinner_shape.getSelectedItemPosition()) {
-                    case 2:
-                        if (radioGroup_secondBeat.getCheckedRadioButtonId() == -1) {
-                            errorText = errorText + "Please select a second beat length\n";
-                            completeForm = false;
-                        }
-                        if (radioGroup_reach.getCheckedRadioButtonId() == -1) {
-                            errorText = errorText + "Please select a reach length\n";
-                            completeForm = false;
-                        }
-                    case 1:
-                        if (radioGroup_angle.getCheckedRadioButtonId() == -1) {
-                            errorText = errorText + "Please select an angle\n";
-                            completeForm = false;
-                        }
-                    case 3:
-                        if (radioGroup_type.getCheckedRadioButtonId() == -1) {
-                            errorText = errorText + "Please select a Starboard or Portboard\n";
-                            completeForm = false;
-                        }
-                    default:
-                        if (TextUtils.isEmpty(editText_wind.getText())) {
-                            errorText = errorText + "Please enter the wind direction\n";
-                            completeForm = false;
-                        }
-                        if (TextUtils.isEmpty(editText_distance.getText())) {
-                            errorText = errorText + "Please enter the distance\n";
-                            completeForm = false;
-                        }
-                }
-                if (completeForm) {
-                    Bundle userInput = new Bundle();
-                    int selectedRBID;
-                    View rb;
-                    selectedRBID = radioGroup_type.getCheckedRadioButtonId();
-                    rb = findViewById(selectedRBID);
-                    userInput.putInt("TYPE", radioGroup_type.indexOfChild(rb));
-                    userInput.putInt("SHAPE", spinner_shape.getSelectedItemPosition());
-                    userInput.putDouble("BEARING", Double.parseDouble(editText_wind.getText().toString()));
-                    userInput.putDouble("DISTANCE", Double.parseDouble(editText_distance.getText().toString()));
-                    selectedRBID = radioGroup_angle.getCheckedRadioButtonId();
-                    rb = findViewById(selectedRBID);
-                    userInput.putInt("ANGLE", radioGroup_angle.indexOfChild(rb));
-                    selectedRBID = radioGroup_reach.getCheckedRadioButtonId();
-                    rb = findViewById(selectedRBID);
-                    userInput.putInt("REACH", radioGroup_reach.indexOfChild(rb));
-                    selectedRBID = radioGroup_secondBeat.getCheckedRadioButtonId();
-                    rb = findViewById(selectedRBID);
-                    userInput.putInt("SECOND_BEAT", radioGroup_secondBeat.indexOfChild(rb));
-
+                Bundle userInput = passBundle();
+                if(userInput != null) {
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), CourseLayoutActivity.class);
                     intent.putExtras(userInput);
                     startActivity(intent);
-                } else {
-                    Context context = getApplicationContext();
-                    int duration = Toast.LENGTH_LONG;
-                    Toast toast = Toast.makeText(context, errorText, duration);
-                    toast.show();
                 }
-
             }
         });
 
 
     }
 
+    public Bundle passBundle(){
+        boolean completeForm = true;
+        String errorText = "";
+
+        switch (spinner_shape.getSelectedItemPosition()) {
+            case 2:
+                if (radioGroup_secondBeat.getCheckedRadioButtonId() == -1) {
+                    errorText = errorText + "Please select a second beat length\n";
+                    completeForm = false;
+                }
+                if (radioGroup_reach.getCheckedRadioButtonId() == -1) {
+                    errorText = errorText + "Please select a reach length\n";
+                    completeForm = false;
+                }
+            case 1:
+                if (radioGroup_angle.getCheckedRadioButtonId() == -1) {
+                    errorText = errorText + "Please select an angle\n";
+                    completeForm = false;
+                }
+            case 3:
+                if (radioGroup_type.getCheckedRadioButtonId() == -1) {
+                    errorText = errorText + "Please select a Starboard or Portboard\n";
+                    completeForm = false;
+                }
+            default:
+                if (TextUtils.isEmpty(editText_wind.getText())) {
+                    errorText = errorText + "Please enter the wind direction\n";
+                    completeForm = false;
+                }
+                if (TextUtils.isEmpty(editText_distance.getText())) {
+                    errorText = errorText + "Please enter the distance\n";
+                    completeForm = false;
+                }
+        }
+        if (completeForm) {
+            Bundle userInput = new Bundle();
+            int selectedRBID;
+            View rb;
+            selectedRBID = radioGroup_type.getCheckedRadioButtonId();
+            rb = findViewById(selectedRBID);
+            userInput.putInt("TYPE", radioGroup_type.indexOfChild(rb));
+            userInput.putInt("SHAPE", spinner_shape.getSelectedItemPosition());
+            userInput.putDouble("BEARING", Double.parseDouble(editText_wind.getText().toString()));
+            userInput.putDouble("DISTANCE", Double.parseDouble(editText_distance.getText().toString()));
+            selectedRBID = radioGroup_angle.getCheckedRadioButtonId();
+            rb = findViewById(selectedRBID);
+            userInput.putInt("ANGLE", radioGroup_angle.indexOfChild(rb));
+            selectedRBID = radioGroup_reach.getCheckedRadioButtonId();
+            rb = findViewById(selectedRBID);
+            userInput.putInt("REACH", radioGroup_reach.indexOfChild(rb));
+            selectedRBID = radioGroup_secondBeat.getCheckedRadioButtonId();
+            rb = findViewById(selectedRBID);
+            userInput.putInt("SECOND_BEAT", radioGroup_secondBeat.indexOfChild(rb));
+            return userInput;
+        } else {
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, errorText, duration);
+            toast.show();
+            return null;
+        }
+    }
 
     public void setSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.course_shapes, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_shape.setAdapter(adapter);
     }
+
+  /*  public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.nav_variables:
+                            openFragment(VariablesFragment.newInstance("", ""));
+                            return true;
+                        case R.id.nav_bouyCoor:
+                            openFragment(BuoyCoorFragment.newInstance("", ""));
+                            return true;
+                        case R.id.nav_layout:
+                            openFragment(LayoutFragment.newInstance("", ""));
+                            return true;
+                        case R.id.nav_compass:
+                            openFragment(CompassFragment.newInstance("", ""));
+                            return true;
+                    }
+                    return false;
+                }
+        };
+*/
 /*
     public CourseVariablesObject createObject() {
         String shape = null;

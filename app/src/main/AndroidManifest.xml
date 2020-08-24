@@ -33,6 +33,8 @@
         <activity android:name=".NavigationMap" />
 
 
+
+
         <service
             android:name=".NavigationService"
             android:enabled="true"

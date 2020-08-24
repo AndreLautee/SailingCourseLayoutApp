@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -23,11 +24,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class CourseLayoutActivity extends AppCompatActivity {
 
@@ -37,12 +42,44 @@ public class CourseLayoutActivity extends AppCompatActivity {
     Location currentLocation;
     CourseVariablesObject cvObject;
     MarkerCoordCalculations markerCoordCalculations;
+    BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_layout);
 
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+
+        //set selected page
+        bottomNavigation.setSelectedItemId(R.id.nav_variables);
+
+        //perform ItemSelectedListener
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent = getIntent();
+                switch (item.getItemId()){
+                    case R.id.nav_variables:
+                        intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.nav_layout:
+                        return true;
+                    case R.id.nav_compass:
+                        intent.putExtra("COURSE", markerCoordCalculations);
+                        //intent.setClass(getApplicationContext(),NavigationCompass.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.nav_map:
+                        intent.putExtra("COURSE", markerCoordCalculations);
+                        intent.setClass(getApplicationContext(),NavigationMap.class);
+                        startActivity(intent);
+                        return true;
+                }
+                return false;
+            }
+        });
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
