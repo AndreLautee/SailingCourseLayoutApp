@@ -6,13 +6,15 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.View;
+import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity2 extends AppCompatActivity implements SensorEventListener {
 
@@ -22,6 +24,7 @@ public class MainActivity2 extends AppCompatActivity implements SensorEventListe
     private float azimuth=0f;
     private float currentAzimuth=0f;
     private SensorManager mSensorManager;
+    BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +33,48 @@ public class MainActivity2 extends AppCompatActivity implements SensorEventListe
 
         compassimg=(ImageView)findViewById(R.id.compass);
         mSensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
+        bottomNavigation=findViewById(R.id.bottom_navigation);
+
+        //set selected page
+        bottomNavigation.setSelectedItemId(R.id.nav_compass);
+
+        //perform ItemSelectedListener
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_variables:
+                        startActivity(new Intent(getApplicationContext(),
+                                CourseVariablesActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                switch (item.getItemId()){
+                    case R.id.nav_compass:
+                        return true;
+                }
+                switch (item.getItemId()){
+                    case R.id.nav_layout:
+                        startActivity(new Intent(getApplicationContext(),
+                                Testingclass.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                switch (item.getItemId()){
+                    case R.id.nav_home:
+                        startActivity(new Intent(getApplicationContext(),
+                                MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                return false;
+            }
+        });
+
 
 
     }
+
 
     @Override
     protected void onResume() {
