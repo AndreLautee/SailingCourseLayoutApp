@@ -68,7 +68,7 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
         // Set the camera position (View matrix)
-        Matrix.setLookAtM(viewMatrix, 0, 0, 0, 5, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(viewMatrix, 0, 0, 0, 5, 0f, 0f, 0f, 0.0f, 1.0f, 0.0f);
 
         // Calculate the projection and view transformation
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
@@ -146,9 +146,17 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
 
         for (int i = 0; i < locations.size(); i++) {
             x = 0.7f;
-            y = 1.3f;
-            ratio_x = Math.abs((locations.get(i).getLongitude() - centre_x)/max_x_dispersion);
-            ratio_y = Math.abs((locations.get(i).getLatitude() - centre_y)/max_y_dispersion);
+            y = 0.7f;
+            if (max_x_dispersion != 0) {
+                ratio_x = Math.abs((locations.get(i).getLongitude() - centre_x) / max_xy_dispersion);
+            } else {
+                ratio_x = 0;
+            }
+            if (max_y_dispersion != 0) {
+                ratio_y = Math.abs((locations.get(i).getLatitude() - centre_y) / max_xy_dispersion);
+            } else {
+                ratio_y = 0;
+            }
 
             if (locations.get(i).getLongitude() - centre_x < 0) {
                 x = (float) -(x * ratio_x);
@@ -173,9 +181,17 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
 
         for (int i = 0; i < coordinates.size(); i++) {
             x = 0.7f;
-            y = 1.3f;
-            ratio_x = Math.abs((coordinates.get(i).getLongitude() - centre_x)/max_x_dispersion);
-            ratio_y = Math.abs((coordinates.get(i).getLatitude() - centre_y)/max_y_dispersion);
+            y = 0.7f;
+            if (max_x_dispersion != 0) {
+                ratio_x = Math.abs((coordinates.get(i).getLongitude() - centre_x) / max_xy_dispersion);
+            } else {
+                ratio_x = 0;
+            }
+            if (max_y_dispersion != 0) {
+                ratio_y = Math.abs((coordinates.get(i).getLatitude() - centre_y) / max_xy_dispersion);
+            } else {
+                ratio_y = 0;
+            }
 
             Log.d("ratio x", String.valueOf(ratio_x));
             Log.d("ratio y", String.valueOf(ratio_y));

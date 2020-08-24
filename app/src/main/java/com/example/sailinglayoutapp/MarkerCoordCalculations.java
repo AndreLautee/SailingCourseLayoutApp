@@ -171,24 +171,26 @@ public class MarkerCoordCalculations implements Parcelable {
                     return false;
                 }
 
-                // Calculate bearing to mark C from mark B
-                double bearingToMarkC = courseVariablesObject.getBearing() + Math.PI;
-
+                // Calculate distance to mark C from mark D
+                double distanceToMarkC = courseVariablesObject.getReach()*courseVariablesObject.getDistance();
                 // Check for short or long second straight before calculating mark C
                 if(courseVariablesObject.getSecondBeat().equals("short")) {
-                    // Calculate distance to mark C from mark B
-                    double distanceToMarkC = courseVariablesObject.getDistance()*0.66;
+                    // Calculate bearing to mark C from mark D
+                    double bearingToMarkC = courseVariablesObject.getBearing() + (Math.PI)/3;
 
-                    // Use mark B coordinates to calculate mark C
-                    if(!coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
+                    // Use mark D coordinates to calculate mark C
+                    if(!coords.add(getCoordinates(coords.get(0).getLatitude(),coords.get(0).getLongitude(),
                             distanceToMarkC,bearingToMarkC))) {
                         //Return false if cannot add coordinate
                         return false;
                     }
                 } else if(courseVariablesObject.getSecondBeat().equals("long")) {
-                    // Use mark B coordinates to calculate mark C
-                    if(!coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
-                            courseVariablesObject.getDistance(),bearingToMarkC))) {
+                    // Calculate bearing to mark C from mark D
+                    double bearingToMarkC = courseVariablesObject.getBearing() + (2*Math.PI)/3;
+
+                    // Use mark D coordinates to calculate mark C
+                    if(!coords.add(getCoordinates(coords.get(0).getLatitude(),coords.get(0).getLongitude(),
+                            distanceToMarkC,bearingToMarkC))) {
                         //Return false if cannot add coordinate
                         return false;
                     }
@@ -206,23 +208,26 @@ public class MarkerCoordCalculations implements Parcelable {
                     return false;
                 }
 
-                // Calculate bearing to mark C from mark B
-                double bearingToMarkC = courseVariablesObject.getBearing() + Math.PI;
+                // Calculate distance to mark C from mark D
+                double distanceToMarkC = courseVariablesObject.getReach()*courseVariablesObject.getDistance();
                 // Check for short or long second straight before calculating mark C
                 if(courseVariablesObject.getSecondBeat().equals("short")) {
-                    // Calculate distance to mark C from mark B
-                    double distanceToMarkC = courseVariablesObject.getDistance()*0.66;
+                    // Calculate bearing to mark C from mark D
+                    double bearingToMarkC = courseVariablesObject.getBearing() + (7*Math.PI)/18;
 
-                    // Use mark B coordinates to calculate mark C
-                    if(!coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
+                    // Use mark D coordinates to calculate mark C
+                    if(!coords.add(getCoordinates(coords.get(0).getLatitude(),coords.get(0).getLongitude(),
                             distanceToMarkC,bearingToMarkC))) {
                         //Return false if cannot add coordinate
                         return false;
                     }
                 } else if(courseVariablesObject.getSecondBeat().equals("long")) {
-                    // Use mark B coordinates to calculate mark C
-                    if(!coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
-                            courseVariablesObject.getDistance(),bearingToMarkC))) {
+                    // Calculate bearing to mark C from mark D
+                    double bearingToMarkC = courseVariablesObject.getBearing() + (11*Math.PI)/18;
+
+                    // Use mark D coordinates to calculate mark C
+                    if(!coords.add(getCoordinates(coords.get(0).getLatitude(),coords.get(0).getLongitude(),
+                            distanceToMarkC,bearingToMarkC))) {
                         //Return false if cannot add coordinate
                         return false;
                     }
@@ -244,23 +249,26 @@ public class MarkerCoordCalculations implements Parcelable {
                     return false;
                 }
 
-                // Calculate bearing to mark C from mark B
-                double bearingToMarkC = courseVariablesObject.getBearing() + Math.PI;
+                // Calculate distance to mark C from mark D
+                double distanceToMarkC = courseVariablesObject.getReach()*courseVariablesObject.getDistance();
+
                 // Check for short or long second straight before calculating mark C
                 if(courseVariablesObject.getSecondBeat().equals("short")) {
-                    // Calculate distance to mark C from mark B
-                    double distanceToMarkC = courseVariablesObject.getDistance()*0.66;
+                    // Calculate bearing to mark C from mark D
+                    double bearingToMarkC = courseVariablesObject.getBearing() + (5*Math.PI)/3;
 
-                    // Use mark B coordinates to calculate mark C
-                    if(!coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
+                    // Use mark D coordinates to calculate mark C
+                    if(!coords.add(getCoordinates(coords.get(0).getLatitude(),coords.get(0).getLongitude(),
                             distanceToMarkC,bearingToMarkC))) {
                         //Return false if cannot add coordinate
                         return false;
                     }
                 } else if(courseVariablesObject.getSecondBeat().equals("long")) {
+                    // Calculate bearing to mark C from mark D
+                    double bearingToMarkC = courseVariablesObject.getBearing() + (4*Math.PI)/3;
                     // Use mark B coordinates to calculate mark C
-                    if(!coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
-                            courseVariablesObject.getDistance(),bearingToMarkC))) {
+                    if(!coords.add(getCoordinates(coords.get(0).getLatitude(),coords.get(0).getLongitude(),
+                            distanceToMarkC,bearingToMarkC))) {
                         //Return false if cannot add coordinate
                         return false;
                     }
@@ -278,23 +286,25 @@ public class MarkerCoordCalculations implements Parcelable {
                     return false;
                 }
 
-                // Calculate bearing to mark C from mark B
-                double bearingToMarkC = courseVariablesObject.getBearing() + Math.PI;
+                // Calculate distance to mark C from mark D
+                double distanceToMarkC = courseVariablesObject.getReach()*courseVariablesObject.getDistance();
                 // Check for short or long second straight before calculating mark C
                 if(courseVariablesObject.getSecondBeat().equals("short")) {
-                    // Calculate distance to mark C from mark B
-                    double distanceToMarkC = courseVariablesObject.getDistance()*0.66;
+                    // Calculate bearing to mark C from mark B
+                    double bearingToMarkC = courseVariablesObject.getBearing() + (29*Math.PI)/18;
 
                     // Use mark B coordinates to calculate mark C
-                    if(!coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
+                    if(!coords.add(getCoordinates(coords.get(0).getLatitude(),coords.get(0).getLongitude(),
                             distanceToMarkC,bearingToMarkC))) {
                         //Return false if cannot add coordinate
                         return false;
                     }
                 } else if(courseVariablesObject.getSecondBeat().equals("long")) {
+                    // Calculate bearing to mark C from mark B
+                    double bearingToMarkC = courseVariablesObject.getBearing() + (25*Math.PI)/18;
                     // Use mark B coordinates to calculate mark C
-                    if(!coords.add(getCoordinates(coords.get(2).getLatitude(),coords.get(2).getLongitude(),
-                            courseVariablesObject.getDistance(),bearingToMarkC))) {
+                    if(!coords.add(getCoordinates(coords.get(0).getLatitude(),coords.get(0).getLongitude(),
+                            distanceToMarkC,bearingToMarkC))) {
                         //Return false if cannot add coordinate
                         return false;
                     }
