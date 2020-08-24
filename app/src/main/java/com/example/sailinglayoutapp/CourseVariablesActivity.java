@@ -75,6 +75,13 @@ public class CourseVariablesActivity extends AppCompatActivity {
                         toast.show();
                         return true;
                 }
+                switch (item.getItemId()){
+                    case R.id.nav_home:
+                        startActivity(new Intent(getApplicationContext(),
+                                MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
                 return false;
             }
         });

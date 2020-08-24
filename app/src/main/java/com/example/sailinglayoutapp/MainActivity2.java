@@ -60,6 +60,13 @@ public class MainActivity2 extends AppCompatActivity implements SensorEventListe
                         overridePendingTransition(0,0);
                         return true;
                 }
+                switch (item.getItemId()){
+                    case R.id.nav_home:
+                        startActivity(new Intent(getApplicationContext(),
+                                MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
                 return false;
             }
         });
