@@ -110,13 +110,14 @@ public class CourseLayoutActivity extends AppCompatActivity {
             case 1: // triangle
                 r4.setVisibility(View.INVISIBLE); // only three points needed so make r4 invisible
                 if (extras.getInt("TYPE") == 0) { // starboard
+
                     r1_layoutParams.setMargins(width/6, height/5,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                   r2_layoutParams.setMargins((4*width)/6, (2*height)/5, 0,0);
+                    r2_layoutParams.setMargins((4*width)/6, (2*height)/5, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                   r3_layoutParams.setMargins(width/6,(3*height)/5, 0, 0);
+                    r3_layoutParams.setMargins(width/6,(3*height)/5, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
                     drawView = new DrawView(this, r1, r2);
@@ -128,33 +129,164 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     break;
                 } else if (extras.getInt("TYPE") == 1) { // portboard
 
+                    r1_layoutParams.setMargins((4*width)/6, height/5,0,0);
+                    r1.setLayoutParams(r1_layoutParams);
+
+                    r2_layoutParams.setMargins(width/6, (2*height)/5, 0,0);
+                    r2.setLayoutParams(r2_layoutParams);
+
+                    r3_layoutParams.setMargins((4*width)/6, (3*height)/5, 0, 0);
+                    r3.setLayoutParams(r3_layoutParams);
+
+                    drawView = new DrawView(this, r1, r2);
+                    rl.addView(drawView);
+                    drawView = new DrawView(this, r2, r3);
+                    rl.addView(drawView);
+                    drawView = new DrawView(this, r3, r1);
+                    rl.addView(drawView);
                     break;
                 }
             case 2: // trapezoid
                 if (extras.getInt("TYPE") == 0) { // if starboard
                     if (extras.getInt("SECOND_BEAT") == 0) { // if equal length second beat
 
+                        r1_layoutParams.setMargins(width/6, height/5,0,0);
+                        r1.setLayoutParams(r1_layoutParams);
+
+                        r2_layoutParams.setMargins((4*width)/6, (2*height)/5, 0,0);
+                        r2.setLayoutParams(r2_layoutParams);
+
+                        r3_layoutParams.setMargins((4*width)/6, (5*height)/5, 0, 0);
+                        r3.setLayoutParams(r3_layoutParams);
+
+                        r4_layoutParams.setMargins(width/6, (4*height)/5, 0, 0);
+                        r4.setLayoutParams(r4_layoutParams);
+
+                        drawView = new DrawView(this, r1, r2);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r2, r3);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r3, r4);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r4, r1);
+                        rl.addView(drawView);
                         break;
                     } else if (extras.getInt("SECOND_BEAT") == 1) { // if unequal length second beat
 
+                        r1_layoutParams.setMargins(width/6, height/5,0,0);
+                        r1.setLayoutParams(r1_layoutParams);
+
+                        r2_layoutParams.setMargins((4*width)/6, (2*height)/5, 0,0);
+                        r2.setLayoutParams(r2_layoutParams);
+
+                        r3_layoutParams.setMargins((4*width)/6, (3*height)/5, 0, 0);
+                        r3.setLayoutParams(r3_layoutParams);
+
+                        r4_layoutParams.setMargins(width/6, (4*height)/5, 0, 0);
+                        r4.setLayoutParams(r4_layoutParams);
+
+                        drawView = new DrawView(this, r1, r2);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r2, r3);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r3, r4);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r4, r1);
+                        rl.addView(drawView);
                         break;
                     }
                 } else if (extras.getInt("TYPE") == 1) { // if portboard
                     if (extras.getInt("SECOND_BEAT") == 0) { // if equal length second beat
 
+                        r1_layoutParams.setMargins((4*width)/6, height/5,0,0);
+                        r1.setLayoutParams(r1_layoutParams);
+
+                        r2_layoutParams.setMargins(width/6, (2*height)/5, 0,0);
+                        r2.setLayoutParams(r2_layoutParams);
+
+                        r3_layoutParams.setMargins(width/6, (5*height)/5, 0, 0);
+                        r3.setLayoutParams(r3_layoutParams);
+
+                        r4_layoutParams.setMargins((4*width)/6, (4*height)/5, 0, 0);
+                        r4.setLayoutParams(r4_layoutParams);
+
+                        drawView = new DrawView(this, r1, r2);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r2, r3);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r3, r4);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r4, r1);
+                        rl.addView(drawView);
                         break;
                     } else if (extras.getInt("SECOND_BEAT") == 1) { // if unequal length second beat
 
+                        r1_layoutParams.setMargins((4*width)/6, height/5,0,0);
+                        r1.setLayoutParams(r1_layoutParams);
+
+                        r2_layoutParams.setMargins(width/6, (2*height)/5, 0,0);
+                        r2.setLayoutParams(r2_layoutParams);
+
+                        r3_layoutParams.setMargins(width/6, (3*height)/5, 0, 0);
+                        r3.setLayoutParams(r3_layoutParams);
+
+                        r4_layoutParams.setMargins((4*width)/6, (4*height)/5, 0, 0);
+                        r4.setLayoutParams(r4_layoutParams);
+
+                        drawView = new DrawView(this, r1, r2);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r2, r3);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r3, r4);
+                        rl.addView(drawView);
+                        drawView = new DrawView(this, r4, r1);
+                        rl.addView(drawView);
                         break;
                     }
                 }
             case 3: // optimist
                 if (extras.getInt("TYPE") == 0) { // if starboard
 
+                    r1_layoutParams.setMargins(width/6, height/5,0,0);
+                    r1.setLayoutParams(r1_layoutParams);
+
+                    r2_layoutParams.setMargins((4*width)/6, (2*height)/5, 0,0);
+                    r2.setLayoutParams(r2_layoutParams);
+
+                    r3_layoutParams.setMargins((4*width)/6, (5*height)/5, 0, 0);
+                    r3.setLayoutParams(r3_layoutParams);
+
+                    r4_layoutParams.setMargins(width/6, (4*height)/5, 0, 0);
+                    r4.setLayoutParams(r4_layoutParams);
+
+                    drawView = new DrawView(this, r1, r2);
+                    rl.addView(drawView);
+                    drawView = new DrawView(this, r2, r3);
+                    rl.addView(drawView);
+                    drawView = new DrawView(this, r4, r1);
+                    rl.addView(drawView);
                     break;
                 } else if (extras.getInt("TYPE") == 1) { // if portboard
 
-                   break;
+                    r1_layoutParams.setMargins((4*width)/6, height/5,0,0);
+                    r1.setLayoutParams(r1_layoutParams);
+
+                    r2_layoutParams.setMargins(width/6, (2*height)/5, 0,0);
+                    r2.setLayoutParams(r2_layoutParams);
+
+                    r3_layoutParams.setMargins(width/6, (3*height)/5, 0, 0);
+                    r3.setLayoutParams(r3_layoutParams);
+
+                    r4_layoutParams.setMargins((4*width)/6, (4*height)/5, 0, 0);
+                    r4.setLayoutParams(r4_layoutParams);
+
+                    drawView = new DrawView(this, r1, r2);
+                    rl.addView(drawView);
+                    drawView = new DrawView(this, r2, r3);
+                    rl.addView(drawView);
+                    drawView = new DrawView(this, r4, r1);
+                    rl.addView(drawView);
+                    break;
                 }
         }
 
