@@ -46,7 +46,12 @@ public class WeatherAPIActivity extends AppCompatActivity {
     public void find_weather()
     {
 
-        String url = "http://api.openweathermap.org/data/2.5/weather?lat=-37.915047&lon=145.129272&units=imperial&appid=57df42a409e4c7c20a3221979d61174d";
+       Intent gpsIntent = new Intent(this,CourseLayoutActivity.class);
+        startService(gpsIntent);
+        double lon = gpsIntent.getDoubleExtra("longitude",0);
+        double lat = gpsIntent.getDoubleExtra("latitude",0);
+
+        String url = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=imperial&appid=57df42a409e4c7c20a3221979d61174d";;
 
         JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
