@@ -96,11 +96,10 @@ public class CourseVariablesActivity extends AppCompatActivity {
         textView_angle = findViewById(R.id.textView_angle);
         textView_reach = findViewById(R.id.textView_reach);
         textView_secondBeat = findViewById(R.id.textView_secondBeat);
-        final RelativeLayout variablesLayout=(RelativeLayout) findViewById(R.id.variablesLayout);
-
 
         setSpinner();
 
+        // If returning to page, reset previously filled in variables
         Intent intent = getIntent();
         final Bundle userInput = intent.getExtras();
         if (userInput != null) {
@@ -126,6 +125,8 @@ public class CourseVariablesActivity extends AppCompatActivity {
 
                 switch(parent.getItemAtPosition(position).toString()) {
                     case "Triangle":
+                        radioGroup_type.setVisibility(View.VISIBLE);
+                        if(userInput == null) {radioGroup_type.clearCheck();}
                         radioGroup_angle.setVisibility(View.VISIBLE);
                         if(userInput == null) {radioGroup_angle.clearCheck();}
                         radioGroup_reach.setVisibility(View.GONE);
@@ -142,6 +143,8 @@ public class CourseVariablesActivity extends AppCompatActivity {
                         }
                         break;
                     case "Trapezoid":
+                        radioGroup_type.setVisibility(View.VISIBLE);
+                        if(userInput == null) {radioGroup_type.clearCheck();}
                         radioGroup_angle.setVisibility(View.VISIBLE);
                         if(userInput == null) {radioGroup_angle.clearCheck();}
                         radioGroup_reach.setVisibility(View.VISIBLE);
@@ -156,6 +159,9 @@ public class CourseVariablesActivity extends AppCompatActivity {
                             ((RadioButton) radioGroup_angle.getChildAt(i)).setText(trapezoidStrings[i]);
                         }
                         break;
+                    case "Windward-Leeward":
+                        radioGroup_type.setVisibility(View.GONE);
+                        radioGroup_type.clearCheck();
                     default:
                         radioGroup_angle.setVisibility(View.GONE);
                         radioGroup_angle.clearCheck();
@@ -205,6 +211,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
         boolean completeForm = true;
         String errorText = "";
 
+        // Ensure all fields are filled in
         switch (spinner_shape.getSelectedItemPosition()) {
             case 2:
                 if (radioGroup_secondBeat.getCheckedRadioButtonId() == -1) {
@@ -235,6 +242,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
                     completeForm = false;
                 }
         }
+        // Create a bundle containing the inputted variables, to attach to the intent for future use
         if (completeForm) {
             Bundle userInput = new Bundle();
             int selectedRBID;

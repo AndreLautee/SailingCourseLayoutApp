@@ -183,11 +183,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     r3_layoutParams.setMargins((4*width)/6, (3*height)/5, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
-                    drawView = new DrawView(this, r1, r2);
+                    drawView = new DrawView(this, r1, r2, width);
                     rl.addView(drawView);
-                    drawView = new DrawView(this, r2, r3);
+                    drawView = new DrawView(this, r2, r3, width);
                     rl.addView(drawView);
-                    drawView = new DrawView(this, r3, r1);
+                    drawView = new DrawView(this, r3, r1, width);
                     rl.addView(drawView);
                     break;
                 }
@@ -195,25 +195,25 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 if (extras.getInt("TYPE") == 0) { // if starboard
                     if (extras.getInt("SECOND_BEAT") == 0) { // if equal length second beat
 
-                        r1_layoutParams.setMargins(width/6, height/5,0,0);
+                        r1_layoutParams.setMargins(width/6, (3*height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins((4*width)/6, (2*height)/5, 0,0);
+                        r2_layoutParams.setMargins((4*width)/6, (5*height)/20, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins((4*width)/6, (5*height)/5, 0, 0);
+                        r3_layoutParams.setMargins((4*width)/6, (13*height)/20, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins(width/6, (4*height)/5, 0, 0);
+                        r4_layoutParams.setMargins(width/6, (11*height)/20, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
-                        drawView = new DrawView(this, r1, r2);
+                        drawView = new DrawView(this, r1, r2, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r2, r3);
+                        drawView = new DrawView(this, r2, r3, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r3, r4);
+                        drawView = new DrawView(this, r3, r4, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r4, r1);
+                        drawView = new DrawView(this, r4, r1, width);
                         rl.addView(drawView);
                         break;
                     } else if (extras.getInt("SECOND_BEAT") == 1) { // if unequal length second beat
@@ -221,47 +221,47 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         r1_layoutParams.setMargins(width/6, height/5,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins((4*width)/6, (2*height)/5, 0,0);
+                        r2_layoutParams.setMargins((4*width)/6, (3*height)/10, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins((4*width)/6, (3*height)/5, 0, 0);
+                        r3_layoutParams.setMargins((4*width)/6, (5*height)/10, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins(width/6, (4*height)/5, 0, 0);
+                        r4_layoutParams.setMargins(width/6, (3*height)/5, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
-                        drawView = new DrawView(this, r1, r2);
+                        drawView = new DrawView(this, r1, r2, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r2, r3);
+                        drawView = new DrawView(this, r2, r3, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r3, r4);
+                        drawView = new DrawView(this, r3, r4, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r4, r1);
+                        drawView = new DrawView(this, r4, r1, width);
                         rl.addView(drawView);
                         break;
                     }
                 } else if (extras.getInt("TYPE") == 1) { // if portboard
                     if (extras.getInt("SECOND_BEAT") == 0) { // if equal length second beat
 
-                        r1_layoutParams.setMargins((4*width)/6, height/5,0,0);
+                        r1_layoutParams.setMargins((4*width)/6, (3*height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins(width/6, (2*height)/5, 0,0);
+                        r2_layoutParams.setMargins(width/6, (5*height)/20, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins(width/6, (5*height)/5, 0, 0);
+                        r3_layoutParams.setMargins(width/6, (13*height)/20, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins((4*width)/6, (4*height)/5, 0, 0);
+                        r4_layoutParams.setMargins((4*width)/6, (11*height)/20, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
-                        drawView = new DrawView(this, r1, r2);
+                        drawView = new DrawView(this, r1, r2, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r2, r3);
+                        drawView = new DrawView(this, r2, r3, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r3, r4);
+                        drawView = new DrawView(this, r3, r4, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r4, r1);
+                        drawView = new DrawView(this, r4, r1, width);
                         rl.addView(drawView);
                         break;
                     } else if (extras.getInt("SECOND_BEAT") == 1) { // if unequal length second beat
@@ -269,22 +269,22 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         r1_layoutParams.setMargins((4*width)/6, height/5,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins(width/6, (2*height)/5, 0,0);
+                        r2_layoutParams.setMargins(width/6, (3*height)/10, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins(width/6, (3*height)/5, 0, 0);
+                        r3_layoutParams.setMargins(width/6, (5*height)/10, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins((4*width)/6, (4*height)/5, 0, 0);
+                        r4_layoutParams.setMargins((4*width)/6, (3*height)/5, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
-                        drawView = new DrawView(this, r1, r2);
+                        drawView = new DrawView(this, r1, r2, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r2, r3);
+                        drawView = new DrawView(this, r2, r3, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r3, r4);
+                        drawView = new DrawView(this, r3, r4, width);
                         rl.addView(drawView);
-                        drawView = new DrawView(this, r4, r1);
+                        drawView = new DrawView(this, r4, r1, width);
                         rl.addView(drawView);
                         break;
                     }
@@ -292,44 +292,44 @@ public class CourseLayoutActivity extends AppCompatActivity {
             case 3: // optimist
                 if (extras.getInt("TYPE") == 0) { // if starboard
 
-                    r1_layoutParams.setMargins(width/6, height/5,0,0);
+                    r1_layoutParams.setMargins(width/8, height/5,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                    r2_layoutParams.setMargins((4*width)/6, (2*height)/5, 0,0);
+                    r2_layoutParams.setMargins((6*width)/8, (6*height)/20, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                    r3_layoutParams.setMargins((4*width)/6, (5*height)/5, 0, 0);
+                    r3_layoutParams.setMargins((6*width)/8, (13*height)/20, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
-                    r4_layoutParams.setMargins(width/6, (4*height)/5, 0, 0);
+                    r4_layoutParams.setMargins(width/8, (11*height)/20, 0, 0);
                     r4.setLayoutParams(r4_layoutParams);
 
-                    drawView = new DrawView(this, r1, r2);
+                    drawView = new DrawView(this, r1, r2, width);
                     rl.addView(drawView);
-                    drawView = new DrawView(this, r2, r3);
+                    drawView = new DrawView(this, r2, r3, width);
                     rl.addView(drawView);
-                    drawView = new DrawView(this, r4, r1);
+                    drawView = new DrawView(this, r4, r1, width);
                     rl.addView(drawView);
                     break;
                 } else if (extras.getInt("TYPE") == 1) { // if portboard
 
-                    r1_layoutParams.setMargins((4*width)/6, height/5,0,0);
+                    r1_layoutParams.setMargins((6*width)/8, height/5,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                    r2_layoutParams.setMargins(width/6, (2*height)/5, 0,0);
+                    r2_layoutParams.setMargins(width/8, (6*height)/20, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                    r3_layoutParams.setMargins(width/6, (3*height)/5, 0, 0);
+                    r3_layoutParams.setMargins(width/8, (13*height)/20, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
-                    r4_layoutParams.setMargins((4*width)/6, (4*height)/5, 0, 0);
+                    r4_layoutParams.setMargins((6*width)/8, (11*height)/20, 0, 0);
                     r4.setLayoutParams(r4_layoutParams);
 
-                    drawView = new DrawView(this, r1, r2);
+                    drawView = new DrawView(this, r1, r2, width);
                     rl.addView(drawView);
-                    drawView = new DrawView(this, r2, r3);
+                    drawView = new DrawView(this, r2, r3, width);
                     rl.addView(drawView);
-                    drawView = new DrawView(this, r4, r1);
+                    drawView = new DrawView(this, r4, r1, width);
                     rl.addView(drawView);
                     break;
                 }
@@ -389,13 +389,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
         });*/
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-
-    }
-
+    // Extract variables from bundle to create an object
     public CourseVariablesObject setCourseVariablesObject(Bundle extras) {
         String type = null;
         String shape = null;
