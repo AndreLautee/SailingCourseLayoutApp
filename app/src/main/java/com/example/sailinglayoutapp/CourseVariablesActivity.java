@@ -1,10 +1,16 @@
 package com.example.sailinglayoutapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,7 +31,9 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -37,6 +45,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
     private EditText editText_wind, editText_distance;
     private TextView textView_angle, textView_reach, textView_secondBeat;
     BottomNavigationView bottomNavigation;
+    Location currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +127,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
 
         }
 
-        // Change what options are available based on the course shape
+        // Change what options are available based on the course triangle
         spinner_shape.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -182,11 +191,25 @@ public class CourseVariablesActivity extends AppCompatActivity {
             }
         });
 
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationServicesEnabled(this);
+
+        currentLocation = null;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Check Permissions Now
+            final int REQUEST_LOCATION = 2;
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION);
+        }
+        currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         final Button button_weather = findViewById(R.id.button_weather);
         button_weather.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), WeatherAPIActivity.class);
+                intent.putExtra("location", currentLocation);
                 startActivity(intent);
             }
         });
@@ -278,6 +301,30 @@ public class CourseVariablesActivity extends AppCompatActivity {
         spinner_shape.setAdapter(adapter);
     }
 
+    public void locationServicesEnabled(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) { }
+        if ( !gps_enabled ){
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage("GPS not enabled");
+            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //this will navigate user to the device location settings screen
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+            AlertDialog alert = dialog.create();
+            alert.show();
+        }
+    }
+
   /*  public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
@@ -307,25 +354,25 @@ public class CourseVariablesActivity extends AppCompatActivity {
 */
 /*
     public CourseVariablesObject createObject() {
-        String shape = null;
+        String triangle = null;
         double bearing;
         double distance;
         int angle;
         String type = null;
         String trapezoidType = null;
 
-        // Get shape
+        // Get triangle
         final RadioGroup radioGroup_shape = findViewById(R.id.radioGroup_shape);
         // get selected radio button from radioGroup
         int selectedId = radioGroup_shape.getCheckedRadioButtonId();
 
         if(selectedId == -1) {
-            // Course shape not selected
+            // Course triangle not selected
             // Error
         } else {
             // find the radiobutton by returned id
             RadioButton selectedRadioButton = findViewById(selectedId);
-            shape = selectedRadioButton.getText().toString();
+            triangle = selectedRadioButton.getText().toString();
         }
 
         // Get bearing
@@ -346,7 +393,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
         selectedId = radioGroup_type.getCheckedRadioButtonId();
 
         if(selectedId == -1) {
-            // Course shape not selected
+            // Course triangle not selected
             // Error
         } else {
             // find the radiobutton by returned id
@@ -354,7 +401,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
             type = selectedRadioButton.getText().toString();
         }
 
-        return new CourseVariablesObject(shape, bearing, distance, angle, type, trapezoidType);
+        return new CourseVariablesObject(triangle, bearing, distance, angle, type, trapezoidType);
 
     }
 

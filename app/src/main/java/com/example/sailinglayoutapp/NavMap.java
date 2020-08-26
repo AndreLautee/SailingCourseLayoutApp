@@ -32,7 +32,7 @@ class NavMap {
 
     public NavMap() {
         vertexCount = shapeCoords.length/COORDS_PER_VERTEX;
-        // initialize vertex byte buffer for shape coordinates
+        // initialize vertex byte buffer for triangle coordinates
         ByteBuffer bb = ByteBuffer.allocateDirect(
                 // (number of coordinate values * 4 bytes per float)
                 shapeCoords.length * 4);
@@ -77,10 +77,10 @@ class NavMap {
         // get handle to vertex shader's vPosition member
         positionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
 
-        // Enable a handle to the shape vertices
+        // Enable a handle to the triangle vertices
         GLES20.glEnableVertexAttribArray(positionHandle);
 
-        // Prepare the shape coordinate data
+        // Prepare the triangle coordinate data
         GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 vertexStride, vertexBuffer);
@@ -88,11 +88,11 @@ class NavMap {
         // get handle to fragment shader's vColor member
         colorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
 
-        // Set color for drawing the shape
+        // Set color for drawing the triangle
         GLES20.glUniform4fv(colorHandle, 1, color, 0);
         // Set width of line
         GLES20.glLineWidth(10);
-        // Draw the shape by using lines
+        // Draw the triangle by using lines
         GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertexCount);
 
         // Disable vertex array
