@@ -19,14 +19,17 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     NavMap navMap;
     List<Circle> circles;
     List<Circle> cursors;
+    Triangle triangle;
     ArrayList<Location> locations;
     int selectedMark;
+    double bearingDirection;
 
 
-    NavMapGLRenderer(ArrayList<Location> coords, ArrayList<Location> lct, int sM) {
+    NavMapGLRenderer(ArrayList<Location> coords, ArrayList<Location> lct, int sM, double bearing) {
         coordinates = coords;
         locations = lct;
         selectedMark = sM;
+        bearingDirection = deg2rad(bearing);
     }
 
     public static int loadShader(int type, String shaderCode) {
@@ -45,7 +48,7 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
         circles = new ArrayList<>();
-        cursors = new ArrayList<>();
+        //cursors = new ArrayList<>();
         createMap();
     }
 
@@ -78,9 +81,10 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         for (int i=0; i < circles.size(); i++) {
             circles.get(i).draw(vPMatrix);
         }
-        for (int i=0; i < cursors.size(); i++) {
+      /*  for (int i=0; i < cursors.size(); i++) {
             cursors.get(i).draw(vPMatrix);
-        }
+        }*/
+        triangle.draw(vPMatrix);
     }
 
     public void createMap() {
@@ -141,33 +145,75 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         double ratio_x;
         double ratio_y;
 
-        for (int i = 0; i < locations.size(); i++) {
+        float length = 0.1f;
+
+        x = 0.7f;
+        y = 0.7f;
+
+        int j;
+        if (locations.size() == 1) {
+            j = 0;
+        } else {
+            j = 1;
+        }
+
+        ratio_x = Math.abs((locations.get(j).getLongitude() - centre_x) / max_xy_dispersion);
+
+        ratio_y = Math.abs((locations.get(j).getLatitude() - centre_y) / max_xy_dispersion);
+
+        if (locations.get(j).getLongitude() - centre_x < 0) {
+            x = (float) -(x * ratio_x);
+        } else if (locations.get(j).getLongitude() - centre_x > 0) {
+            x = (float) (x * ratio_x);
+        } else {
+            x = 0;
+        }
+
+        if (locations.get(j).getLatitude() - centre_y < 0) {
+            y = (float) -(y * ratio_y);
+        } else if (locations.get(j).getLatitude() - centre_y > 0) {
+            y = (float) (y * ratio_y);
+        } else {
+            y = 0;
+        }
+
+        float XmidBase = (float) (-Math.sin(bearingDirection)*length) + x;
+        float YmidBase = (float) (-Math.cos(bearingDirection)*length) + y;
+
+        float x2 = (float) (Math.sin(bearingDirection + (Math.PI/2))*(length/2)) + XmidBase;
+        float y2 = (float) (Math.cos(bearingDirection + (Math.PI/2))*(length/2)) + YmidBase;
+        float x3 = (float) (Math.sin(bearingDirection - (Math.PI/2))*(length/2)) + XmidBase;
+        float y3 = (float) (Math.cos(bearingDirection - (Math.PI/2))*(length/2)) + YmidBase;
+
+        triangle = new Triangle(new float[] {x,y,0.0f,x2,y2,0.0f,x3,y3,0.0f});
+/*
+        for (int j = 0; j < locations.size(); j++) {
             x = 0.7f;
             y = 0.7f;
 
-            ratio_x = Math.abs((locations.get(i).getLongitude() - centre_x) / max_xy_dispersion);
+            ratio_x = Math.abs((locations.get(j).getLongitude() - centre_x) / max_xy_dispersion);
 
-            ratio_y = Math.abs((locations.get(i).getLatitude() - centre_y) / max_xy_dispersion);
+            ratio_y = Math.abs((locations.get(j).getLatitude() - centre_y) / max_xy_dispersion);
 
-            if (locations.get(i).getLongitude() - centre_x < 0) {
+            if (locations.get(j).getLongitude() - centre_x < 0) {
                 x = (float) -(x * ratio_x);
-            } else if (locations.get(i).getLongitude() - centre_x > 0) {
+            } else if (locations.get(j).getLongitude() - centre_x > 0) {
                 x = (float) (x * ratio_x);
             } else {
                 x = 0;
             }
 
-            if (locations.get(i).getLatitude() - centre_y < 0) {
+            if (locations.get(j).getLatitude() - centre_y < 0) {
                 y = (float) -(y * ratio_y);
-            } else if (locations.get(i).getLatitude() - centre_y > 0) {
+            } else if (locations.get(j).getLatitude() - centre_y > 0) {
                 y = (float) (y * ratio_y);
             } else {
                 y = 0;
             }
 
-            cursors.add(new Circle(x,y,locations.size()-i, 0.03f));
+            cursors.add(new Circle(x,y,locations.size()-j, 0.03f));
         }
-
+*/
 
 
         for (int i = 0; i < coordinates.size(); i++) {
@@ -210,5 +256,8 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         }
     }
 
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
 
 }
