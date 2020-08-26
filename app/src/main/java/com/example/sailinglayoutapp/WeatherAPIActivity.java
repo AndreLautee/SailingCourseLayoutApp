@@ -3,7 +3,10 @@ package com.example.sailinglayoutapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -46,17 +49,20 @@ public class WeatherAPIActivity extends AppCompatActivity {
     public void find_weather()
     {
 
-       Intent gpsIntent = new Intent(this,CourseLayoutActivity.class);
-        startService(gpsIntent);
-        double lon = gpsIntent.getDoubleExtra("longitude",0);
-        double lat = gpsIntent.getDoubleExtra("latitude",0);
+        Intent gpsIntent = getIntent();
+        Location location = gpsIntent.getParcelableExtra("location");
+
+        double lat = location.getLatitude();
+        double lon = location.getLongitude();
+        Log.d("lat", String.valueOf(lat));
+        Log.d("lon", String.valueOf(lon));
 
         String url = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=imperial&appid=57df42a409e4c7c20a3221979d61174d";;
 
         JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                Log.d("Response", "test");
                 try
                 {
                     JSONObject main_object = response.getJSONObject("main");
@@ -71,6 +77,8 @@ public class WeatherAPIActivity extends AppCompatActivity {
                     String wind = String.valueOf(wind_object.getDouble("speed"));
                     String wind1 = String.valueOf(wind_object.getDouble("deg"));
 
+                    Log.d("wind", wind);
+                    Log.d("wind", wind1);
 
                     // t1_temp.setText(temp);
                     t2_city.setText(city);
@@ -105,6 +113,7 @@ public class WeatherAPIActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d("Response Error", "test");
 
             }
         }

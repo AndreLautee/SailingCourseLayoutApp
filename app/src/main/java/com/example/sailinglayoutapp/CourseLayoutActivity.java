@@ -110,16 +110,6 @@ public class CourseLayoutActivity extends AppCompatActivity {
             courseSize = markerCoordCalculations.getCoords().size();
             textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLatitude()));
             textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLongitude()));
-            
-            String Longitude = String.valueOf(textView_lon);
-            String Latitude = String.valueOf(textView_lat);
-
-            double lon = Double.parseDouble(Longitude);
-            double lat = Double.parseDouble(Latitude);
-            intent.putExtra("longitude",lon);
-            intent.putExtra("latitude",lat);
-            sendBroadcast(intent);
-            
         } else {
             textView_lat.setText("Could not get coords");
         }

@@ -93,7 +93,7 @@ public class Circle {
         }
 
         //vertexCount = buffer.length/COORDS_PER_VERTEX;
-        // initialize vertex byte buffer for shape coordinates
+        // initialize vertex byte buffer for triangle coordinates
         ByteBuffer bb = ByteBuffer.allocateDirect(
                 // (number of coordinate values * 4 bytes per float)
                 buffer.length * 4);
@@ -138,10 +138,10 @@ public class Circle {
         // get handle to vertex shader's vPosition member
         positionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
 
-        // Enable a handle to the shape vertices
+        // Enable a handle to the triangle vertices
         GLES20.glEnableVertexAttribArray(positionHandle);
 
-        // Prepare the shape coordinate data
+        // Prepare the triangle coordinate data
         GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 vertexStride, vertexBuffer);
@@ -149,7 +149,7 @@ public class Circle {
         // get handle to fragment shader's vColor member
         colorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
 
-        // Set color for drawing the shape
+        // Set color for drawing the triangle
         GLES20.glUniform4fv(colorHandle, 1, color, 0);
         // Set width of line
         GLES20.glLineWidth(1);
@@ -158,13 +158,13 @@ public class Circle {
         //Log.d("2", String.valueOf(mvpMatrix[1]));
         //Log.d("4", String.valueOf(mvpMatrix[2]));
 
-        // get handle to shape's transformation matrix
+        // get handle to triangle's transformation matrix
         vPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
 
         // Pass the projection and view transformation to the shader
         GLES20.glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0);
 
-        // Draw the shape
+        // Draw the triangle
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, vertexCount);
 
         // Disable vertex array
