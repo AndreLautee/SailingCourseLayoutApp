@@ -54,15 +54,12 @@ public class WeatherAPIActivity extends AppCompatActivity {
 
         double lat = location.getLatitude();
         double lon = location.getLongitude();
-        Log.d("lat", String.valueOf(lat));
-        Log.d("lon", String.valueOf(lon));
 
-        String url = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=imperial&appid=57df42a409e4c7c20a3221979d61174d";;
+        String url = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=imperial&appid=57df42a409e4c7c20a3221979d61174d";;
 
         JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("Response", "test");
                 try
                 {
                     JSONObject main_object = response.getJSONObject("main");
@@ -113,8 +110,7 @@ public class WeatherAPIActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Response Error", "test");
-
+                Log.d("Response Error", error.toString());
             }
         }
         );
