@@ -1,7 +1,6 @@
 package com.example.sailinglayoutapp;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,26 +8,19 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -40,12 +32,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class CourseVariablesActivity extends AppCompatActivity {
 
-    private RadioGroup radioGroup_type, radioGroup_angle, radioGroup_reach, radioGroup_secondBeat;
+    private RadioGroup radioGroup_type, radioGroup_angle, radioGroup_reach, radioGroup_secondBeat, radioGroup_referencePoint;
     private Spinner spinner_shape;
     private EditText editText_wind, editText_distance;
-    private TextView textView_angle, textView_reach, textView_secondBeat;
+    private TextView textView_angle, textView_reach, textView_secondBeat, textView_referencePoint;
     BottomNavigationView bottomNavigation;
     Location currentLocation;
+    Location previousReferencePoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +95,14 @@ public class CourseVariablesActivity extends AppCompatActivity {
         radioGroup_angle = findViewById(R.id.radioGroup_angle);
         radioGroup_reach = findViewById(R.id.radioGroup_reach);
         radioGroup_secondBeat = findViewById(R.id.radioGroup_secondBeat);
+        radioGroup_referencePoint = findViewById(R.id.radioGroup_referencePoint);
         textView_angle = findViewById(R.id.textView_angle);
         textView_reach = findViewById(R.id.textView_reach);
         textView_secondBeat = findViewById(R.id.textView_secondBeat);
+        textView_referencePoint = findViewById(R.id.textView_referencePoint);
+
+        textView_referencePoint.setVisibility(View.GONE);
+        radioGroup_referencePoint.setVisibility(View.GONE);
 
         setSpinner();
 
@@ -124,7 +122,9 @@ public class CourseVariablesActivity extends AppCompatActivity {
             if(rb!= null) {rb.setChecked(true);}
             rb = (RadioButton) radioGroup_secondBeat.getChildAt(userInput.getInt("SECOND_BEAT"));
             if(rb != null) {rb.setChecked(true);}
-
+            radioGroup_referencePoint.setVisibility(View.VISIBLE);
+            textView_referencePoint.setVisibility(View.VISIBLE);
+            previousReferencePoint = userInput.getParcelable("LOCATION");
         }
 
         // Change what options are available based on the course triangle
@@ -265,6 +265,11 @@ public class CourseVariablesActivity extends AppCompatActivity {
                     completeForm = false;
                 }
         }
+        if (radioGroup_referencePoint.getVisibility() == View.VISIBLE &&
+                radioGroup_referencePoint.getCheckedRadioButtonId() == -1) {
+            errorText = errorText + "Please select reference point parameter\n";
+            completeForm = false;
+        }
         // Create a bundle containing the inputted variables, to attach to the intent for future use
         if (completeForm) {
             Bundle userInput = new Bundle();
@@ -285,8 +290,14 @@ public class CourseVariablesActivity extends AppCompatActivity {
             selectedRBID = radioGroup_secondBeat.getCheckedRadioButtonId();
             rb = findViewById(selectedRBID);
             userInput.putInt("SECOND_BEAT", radioGroup_secondBeat.indexOfChild(rb));
+            selectedRBID = radioGroup_referencePoint.getCheckedRadioButtonId();
+            rb = findViewById(selectedRBID);
+            if (rb == findViewById(R.id.radioButton_yes)) {
+                userInput.putParcelable("LOCATION", previousReferencePoint);
+            }
             return userInput;
         } else {
+            errorText = errorText.trim();
             Context context = getApplicationContext();
             int duration = Toast.LENGTH_LONG;
             Toast toast = Toast.makeText(context, errorText, duration);

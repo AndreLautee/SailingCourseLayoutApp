@@ -87,6 +87,8 @@ public class NavigationMap extends AppCompatActivity {
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
             radioButtons.get(i).setText("Mark " + (i+1));
         }
+        radioGroup.check(radioButtons.get(courseSize-1).getId());
+
         layoutCourseLayout.removeView(radioGroup);
         layoutCourseLayout.addView(radioGroup);
 

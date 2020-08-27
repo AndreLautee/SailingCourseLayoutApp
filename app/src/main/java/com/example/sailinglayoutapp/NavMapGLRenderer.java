@@ -145,7 +145,7 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         double ratio_x;
         double ratio_y;
 
-        float length = 0.1f;
+        float length = 0.15f;
 
         x = 0.7f;
         y = 0.7f;
@@ -180,10 +180,10 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         float XmidBase = (float) (-Math.sin(bearingDirection)*length) + x;
         float YmidBase = (float) (-Math.cos(bearingDirection)*length) + y;
 
-        float x2 = (float) (Math.sin(bearingDirection + (Math.PI/2))*(length/2)) + XmidBase;
-        float y2 = (float) (Math.cos(bearingDirection + (Math.PI/2))*(length/2)) + YmidBase;
-        float x3 = (float) (Math.sin(bearingDirection - (Math.PI/2))*(length/2)) + XmidBase;
-        float y3 = (float) (Math.cos(bearingDirection - (Math.PI/2))*(length/2)) + YmidBase;
+        float x2 = (float) (Math.sin(bearingDirection + (Math.PI/2))*(length/3)) + XmidBase;
+        float y2 = (float) (Math.cos(bearingDirection + (Math.PI/2))*(length/3)) + YmidBase;
+        float x3 = (float) (Math.sin(bearingDirection - (Math.PI/2))*(length/3)) + XmidBase;
+        float y3 = (float) (Math.cos(bearingDirection - (Math.PI/2))*(length/3)) + YmidBase;
 
         triangle = new Triangle(new float[] {x,y,0.0f,x2,y2,0.0f,x3,y3,0.0f});
 /*

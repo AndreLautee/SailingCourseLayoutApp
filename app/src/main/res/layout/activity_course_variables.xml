@@ -200,6 +200,44 @@
                 </RadioGroup>
 
                 <TextView
+                    android:id="@+id/textView_secondBeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/second_beat_length"
+                    android:textColor="@color/colorDarkBlue"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup_secondBeat"
+                    android:layout_width="190dp"
+                    android:layout_height="42dp"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    >
+
+                    <RadioButton
+                        android:id="@+id/radioButton11"
+                        android:layout_width="84dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorDarkBlue"
+                        android:textStyle="bold"
+                        android:text="@string/equal" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorDarkBlue"
+                        android:textStyle="bold"
+                        android:text="@string/unequal" />
+                </RadioGroup>
+
+                <TextView
                     android:id="@+id/textView_reach"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -238,18 +276,18 @@
                 </RadioGroup>
 
                 <TextView
-                    android:id="@+id/textView_secondBeat"
+                    android:id="@+id/textView_referencePoint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="@string/second_beat_length"
+                    android:text="@string/reference_point"
                     android:textColor="@color/colorDarkBlue"
                     android:textStyle="bold"
                     android:layout_gravity="center"
                     />
 
                 <RadioGroup
-                    android:id="@+id/radioGroup_secondBeat"
+                    android:id="@+id/radioGroup_referencePoint"
                     android:layout_width="190dp"
                     android:layout_height="42dp"
                     android:orientation="horizontal"
@@ -257,22 +295,22 @@
                     >
 
                     <RadioButton
-                        android:id="@+id/radioButton11"
-                        android:layout_width="84dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@color/colorDarkBlue"
-                        android:textStyle="bold"
-                        android:text="@string/equal" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton12"
+                        android:id="@+id/radioButton_yes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textColor="@color/colorDarkBlue"
                         android:textStyle="bold"
-                        android:text="@string/unequal" />
+                        android:text="@string/yes" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorDarkBlue"
+                        android:textStyle="bold"
+                        android:text="@string/no" />
                 </RadioGroup>
 
                 <Button

@@ -15,6 +15,9 @@
     <string name="portboard">Portboard</string>
     <string name="nautical_miles">Nautical Miles</string>
     <string name="title_activity_navigation_a_p_i">NavigationAPIActivity</string>
+    <string name="reference_point">Keep previous reference point?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string name="hello_world">Hello Square World!</string>
 
