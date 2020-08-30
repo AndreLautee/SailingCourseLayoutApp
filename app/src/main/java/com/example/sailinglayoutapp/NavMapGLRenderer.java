@@ -1,8 +1,10 @@
 package com.example.sailinglayoutapp;
 
+import android.graphics.PointF;
 import android.location.Location;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLU;
 import android.opengl.Matrix;
 import android.util.Log;
 
@@ -16,7 +18,6 @@ import javax.microedition.khronos.opengles.GL10;
 public class NavMapGLRenderer implements GLSurfaceView.Renderer {
 
     private ArrayList<Location> coordinates;
-    NavMap navMap;
     List<Circle> circles;
     List<Circle> cursors;
     Triangle triangle;
@@ -56,6 +57,10 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     private final float[] vPMatrix = new float[16];
     private final float[] projectionMatrix = new float[16];
     private final float[] viewMatrix = new float[16];
+    private final float[] rotationMatrix = new float[16];
+    private final float[] scaleMatrix = new float[16];
+    private final float[] translationMatrix = new float[16];
+    private final float[] intermediateMatrix = new float[16];
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
@@ -78,13 +83,62 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         // Calculate the projection and view transformation
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
+        float[] scratch = new float[16];
+
+        // Create a rotation
+        Matrix.setRotateM(rotationMatrix, 0, mAngle, 0, 0, -1.0f);
+
+        //Matrix.multiplyMM(scratch, 0, vPMatrix, 0, rotationMatrix, 0);
+
+        // Create a scale
+        Matrix.setIdentityM(scaleMatrix,0);
+        Matrix.scaleM(scaleMatrix, 0, mScale, mScale, mScale);
+
+        // Create a translation
+        Matrix.setIdentityM(translationMatrix,0);
+        Matrix.translateM(translationMatrix, 0, mOffsetX, mOffsetY, 0);
+
+        float[] intermediateMatrix = new float[16];
+        float[] modelMatrix = new float[16];
+        // Model = scale * rotation * translation
+        Matrix.multiplyMM(intermediateMatrix, 0, scaleMatrix, 0, rotationMatrix, 0);
+        Matrix.multiplyMM(modelMatrix,0,intermediateMatrix,0,translationMatrix,0);
+        // Combine the model matrix with the projection and camera view
+        // Note that the vPMatrix factor *must be first* in order
+        // for the matrix multiplication product to be correct.
+        Matrix.multiplyMM(scratch, 0, vPMatrix, 0,modelMatrix,0);
+
         for (int i=0; i < circles.size(); i++) {
-            circles.get(i).draw(vPMatrix);
+            circles.get(i).draw(scratch);
         }
       /*  for (int i=0; i < cursors.size(); i++) {
             cursors.get(i).draw(vPMatrix);
         }*/
-        triangle.draw(vPMatrix);
+        triangle.draw(scratch);
+    }
+
+    public volatile float mAngle;
+
+    public float getAngle() {
+        return mAngle;
+    }
+
+    public void setAngle(float angle) {
+        mAngle = angle;
+    }
+
+    public float mScale;
+    public void setScale(float scale) {
+        mScale = scale;
+    }
+
+    public float mOffsetX;
+    public float mOffsetY;
+    public void setOffsetX(float offsetX) {
+        mOffsetX += offsetX;
+    }
+    public void setOffsetY(float offsetY) {
+        mOffsetY += offsetY;
     }
 
     public void createMap() {

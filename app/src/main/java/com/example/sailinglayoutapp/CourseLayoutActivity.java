@@ -84,7 +84,6 @@ public class CourseLayoutActivity extends AppCompatActivity {
         Location previousRefPoint = extras.getParcelable("LOCATION");
 
         if (previousRefPoint == null) {
-            Log.d("TEST", "test");
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationServicesEnabled(this);
 
@@ -143,37 +142,6 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        /*
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        assert extras != null;
-        variables = setVariableArray(extras);
-
-
-        LinearLayout layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_courseLayout);
-
-        Button button_navigate = new Button(this);
-        Button button_back = new Button(this);
-        button_navigate.setText("Navigate");
-        button_back.setText("Back");
-
-        layoutCourseLayout.addView(button_navigate);
-        layoutCourseLayout.addView(button_back);
-
-        RelativeLayout layoutGL = (RelativeLayout) findViewById(R.id.layout_GL);
-
-        gLView = new LayoutGLSurfaceView(this, variables);
-
-        layoutGL.addView(gLView);
-
-        button_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= getIntent();
-                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
-                startActivity(intent);
-            }
-        });*/
     }
 
     public void setDisplay(Bundle extras) {

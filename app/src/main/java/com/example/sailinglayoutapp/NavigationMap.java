@@ -121,9 +121,6 @@ public class NavigationMap extends AppCompatActivity {
                 layoutCourseLayout.removeView(textView_bearing);
                 layoutCourseLayout.addView(textView_bearing);
 
-                gLView = new NavMapGLSurfaceView(NavigationMap.this, course.getCoords(), locations, selectedMark, bearingDirection);
-
-                layoutGL.addView(gLView);
             }
         });
 
@@ -248,5 +245,17 @@ public class NavigationMap extends AppCompatActivity {
             AlertDialog alert = dialog.create();
             alert.show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gLView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        gLView.onPause();
     }
 }

@@ -50,9 +50,9 @@ class Triangle {
         // set the buffer to read the first coordinate
         vertexBuffer.position(0);
 
-        int vertexShader = LayoutGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
+        int vertexShader = NavMapGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
                 vertexShaderCode);
-        int fragmentShader = LayoutGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
+        int fragmentShader = NavMapGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
                 fragmentShaderCode);
 
         // create empty OpenGL ES Program
