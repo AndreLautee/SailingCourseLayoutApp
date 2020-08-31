@@ -115,7 +115,6 @@ public class MarkerCoordCalculations implements Parcelable {
                 double bearingToMarkC = courseVariablesObject.getBearing() + (7*Math.PI)/4;
                 // Calculate distance to mark B from mark C
                 double distanceToMarkC = Math.sqrt(Math.pow(courseVariablesObject.getDistance(),2)/2);
-
                 if(!coords.add(getCoordinates(coords.get(0).getLatitude(),coords.get(0).getLongitude(),
                         distanceToMarkC,bearingToMarkC))) {
                     //Return false if cannot add coordinate

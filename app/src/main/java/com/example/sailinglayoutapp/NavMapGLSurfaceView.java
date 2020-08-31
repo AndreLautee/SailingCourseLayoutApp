@@ -33,21 +33,58 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
     private final NavMapGLRenderer renderer;
     float mScaleFactor;
-    float mAngle;
+    float mPrevAngle, mAngle, mDeltaAngle;
     ScaleGestureDetector mScaleDetector;
+    RotationGestureDetector mRotationDetector;
+    private ArrayList<Location> locations;
+    private double bearingDirection;
+    private int selectedMark;
 
-    public NavMapGLSurfaceView(Context context, ArrayList<Location> coords, ArrayList<Location> locations, int selectedMark, double bearing) {
+    public ArrayList<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(ArrayList<Location> lcts) {
+        this.locations = lcts;
+        renderer.setLocations(locations);
+    }
+
+
+    public double getBearing() {
+        return bearingDirection;
+    }
+
+    public void setBearing(double bearing) {
+        this.bearingDirection = bearing;
+        renderer.setBearingDirection(bearingDirection);
+    }
+
+    public int getSelectedMark() {
+        return selectedMark;
+    }
+
+    public void setSelectedMark(int selectedM) {
+        this.selectedMark = selectedM;
+        renderer.setSelectedMark(selectedMark);
+    }
+
+    public NavMapGLSurfaceView(Context context, ArrayList<Location> coords, ArrayList<Location> lcts, int selectedM, double bearing) {
         super(context);
 
         // Create an OpenGL ES 3.0 context
         setEGLContextClientVersion(2);
 
+        locations = lcts;
+        bearingDirection = bearing;
+        selectedMark = selectedM;
+
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        mRotationDetector = new RotationGestureDetector(new RotateListener());
 
-        renderer = new NavMapGLRenderer(coords, locations, selectedMark, bearing);
-
+        renderer = new NavMapGLRenderer(coords, locations, selectedMark, bearingDirection);
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(renderer);
+        mPrevAngle = 0;
         // Initialise scale to 1
         mScaleFactor = 1f;
         renderer.setScale(mScaleFactor);
@@ -62,44 +99,29 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        // MotionEvent reports input details from the touch screen
-        // and other input controls. In this case, you are only
-        // interested in events where the touch position changed.
 
         mScaleDetector.onTouchEvent(e);
+        mRotationDetector.onTouchEvent(e);
         float x = e.getX();
         float y = e.getY();
 
         switch (e.getActionMasked()) {
 
-
-            case MotionEvent.ACTION_MOVE:
-
+              case MotionEvent.ACTION_MOVE:
 
                 float dx = x - previousX;
-                float dy = y - previousY;
+                float dy = (y - previousY) * -1;
 
-                if(!mScaleDetector.isInProgress()) {
-                    renderer.setOffsetX(dx * 0.001f);
-                    renderer.setOffsetY(dy * 0.001f);
+                if(!(mScaleDetector.isInProgress() || mRotationDetector.isInProgress())) {
+                    Log.d("test", "SCROLL");
+                    renderer.setOffsetX(dx * 0.0015f);
+                    renderer.setOffsetY(dy * 0.0015f);
                 }
 
-/*
-                // reverse direction of rotation above the mid-line
-                if (y > getHeight() / 2) {
-                    dx = dx * -1 ;
-                }
-
-                // reverse direction of rotation to left of the mid-line
-                if (x < getWidth() / 2) {
-                    dy = dy * -1 ;
-                }
-                renderer.setAngle(
-                        renderer.getAngle() +
-                                ((dx + dy)*TOUCH_SCALE_FACTOR));
-                */
                 requestRender();
                 break;
+            case MotionEvent.ACTION_UP:
+
         }
 
         previousX = x;
@@ -123,7 +145,19 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
             requestRender();
             return true;
         }
+    }
 
+    private class RotateListener implements RotationGestureDetector.OnRotationGestureListener {
+
+        @Override
+        public boolean OnRotation(RotationGestureDetector rotationDetector) {
+            mDeltaAngle = rotationDetector.getAngle();
+            mAngle = mDeltaAngle + mPrevAngle;
+            mPrevAngle = mAngle;
+            renderer.setAngle(mAngle);
+            requestRender();
+            return true;
+        }
     }
 
 

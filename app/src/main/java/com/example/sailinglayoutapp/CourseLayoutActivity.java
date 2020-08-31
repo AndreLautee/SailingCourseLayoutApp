@@ -110,8 +110,8 @@ public class CourseLayoutActivity extends AppCompatActivity {
             markerCoordCalculations = new MarkerCoordCalculations(location, cvObject);
             intent.putExtra("LOCATION", location);
             courseSize = markerCoordCalculations.getCoords().size();
-            textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLatitude()));
-            textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLongitude()));
+            textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
+            textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
             setDisplay(extras);
         } else {
             textView_lat.setText("Could not get coords");
@@ -425,6 +425,12 @@ public class CourseLayoutActivity extends AppCompatActivity {
         return result;
     }
 
+    public String decimalDeg2degMins(double decDegree) {
+        int d = (int) decDegree;
+        double m = (decDegree - d) * 60;
+        return "" + d + "°" + String.format("%.3f",m) + "'";
+    }
+
     public void locationServicesEnabled(Context context) {
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
@@ -480,8 +486,8 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 r2.setChecked(false);
                 r3.setChecked(false);
                 r4.setChecked(false);
-                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLatitude()));
-                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLongitude()));
+                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
+                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
             }
             if (r2.getId() == v.getId()) {
                 r1.setChecked(false);
@@ -493,8 +499,8 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 } else {
                     i = 2;
                 }
-                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLatitude()));
-                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLongitude()));
+                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLatitude()));
+                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLongitude()));
             }
             if (r3.getId() == v.getId()) {
                 r1.setChecked(false);
@@ -506,15 +512,15 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 } else {
                     i = 3;
                 }
-                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLatitude()));
-                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLongitude()));
+                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLatitude()));
+                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLongitude()));
             }
             if (r4.getId() == v.getId()) {
                 r1.setChecked(false);
                 r2.setChecked(false);
                 r3.setChecked(false);
-                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(0).getLatitude()));
-                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(0).getLongitude()));
+                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(0).getLatitude()));
+                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(0).getLongitude()));
             }
         }
     };

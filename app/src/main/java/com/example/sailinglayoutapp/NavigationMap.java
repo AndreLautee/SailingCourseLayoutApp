@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 public class NavigationMap extends AppCompatActivity {
 
-    GLSurfaceView gLView;
+    NavMapGLSurfaceView gLView;
     MarkerCoordCalculations course;
     int courseSize;
     ArrayList<Location> locations;
@@ -101,26 +101,24 @@ public class NavigationMap extends AppCompatActivity {
                     selectedMark = checkedId;
                 }
 
+                double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
+                double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
+
                 // Display updated distance to newly selected mark
-                String distText = "Distance to selected mark: " + distanceBetweenPoints(
-                        course.getCoords().get(selectedMark).getLatitude(),
-                        course.getCoords().get(selectedMark).getLongitude(),
-                        locations.get(locations.size() - 1).getLatitude(),
-                        locations.get(locations.size() - 1).getLongitude());
+                String distText = "Distance to selected mark: " + distBetweenPoints + "Nm";
                 textView_distance.setText(distText);
                 layoutCourseLayout.removeView(textView_distance);
                 layoutCourseLayout.addView(textView_distance);
 
                 // Display updated bearing to newly selected mark
-                String bearingText = "Bearing to selected mark: " + bearingBetweenPoints(
-                        locations.get(locations.size() - 1).getLatitude(),
-                        locations.get(locations.size() - 1).getLongitude(),
-                        course.getCoords().get(selectedMark).getLatitude(),
-                        course.getCoords().get(selectedMark).getLongitude());
+                String bearingText = "Bearing to selected mark: " + bearingBetweenPoints + "°";
                 textView_bearing.setText(bearingText);
                 layoutCourseLayout.removeView(textView_bearing);
                 layoutCourseLayout.addView(textView_bearing);
 
+                gLView.setSelectedMark(selectedMark);
+                layoutGL.removeView(gLView);
+                layoutGL.addView(gLView);
             }
         });
 
@@ -141,37 +139,30 @@ public class NavigationMap extends AppCompatActivity {
             locations.add(location);
 
             if (locations.size() == 2) {
-                bearingDirection = bearingBetweenPoints(
-                        locations.get(0).getLatitude(),
-                        locations.get(0).getLongitude(),
-                        locations.get(1).getLatitude(),
-                        locations.get(1).getLongitude());
+                bearingDirection = locations.get(0).bearingTo(locations.get(1));
             }
 
-            double distBetweenPoints = distanceBetweenPoints(course.getCoords().get(selectedMark).getLatitude(),
-                    course.getCoords().get(selectedMark).getLongitude(),
-                    locations.get(locations.size() - 1).getLatitude(),
-                    locations.get(locations.size() - 1).getLongitude());
-            double bearingBetweenPoints = bearingBetweenPoints(
-                    locations.get(locations.size() - 1).getLatitude(),
-                    locations.get(locations.size() - 1).getLongitude(),
-                    course.getCoords().get(selectedMark).getLatitude(),
-                    course.getCoords().get(selectedMark).getLongitude());
+            double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
+
+            double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
 
             // Display new distance to selected mark
-            String distText = "Distance to selected mark: " + distBetweenPoints;
+            String distText = "Distance to selected mark: " + distBetweenPoints + "Nm";
             textView_distance.setText(distText);
             layoutCourseLayout.removeView(textView_distance);
             layoutCourseLayout.addView(textView_distance);
 
             // Display updated bearing to newly selected mark
-            String bearingText = "Bearing to selected mark: " + bearingBetweenPoints;
+            String bearingText = "Bearing to selected mark: " + bearingBetweenPoints + "°";
             textView_bearing.setText(bearingText);
             layoutCourseLayout.removeView(textView_bearing);
             layoutCourseLayout.addView(textView_bearing);
 
             // Display new glview with new location
-            gLView = new NavMapGLSurfaceView(NavigationMap.this, course.getCoords(), locations,selectedMark, bearingDirection);
+
+            gLView.setLocations(locations);
+            gLView.setBearing(bearingDirection);
+            layoutGL.removeView(gLView);
             layoutGL.addView(gLView);
         }
 
@@ -215,6 +206,7 @@ public class NavigationMap extends AppCompatActivity {
         return DoubleRounder.round(result,2);
     }
 
+    private double met2nm(float met) { return DoubleRounder.round(met / 1852,2);}
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
