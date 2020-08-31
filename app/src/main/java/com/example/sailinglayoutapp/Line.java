@@ -6,11 +6,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-class NavMap {
+public class Line {
     private final String vertexShaderCode =
-            "attribute vec4 vPosition;" +
+
+            "uniform mat4 uMVPMatrix;" +
+                    "attribute vec4 vPosition;" +
                     "void main() {" +
-                    "  gl_Position = vPosition;" +
+                    "  gl_Position = uMVPMatrix * vPosition;" +
                     "}";
 
     private final String fragmentShaderCode =
@@ -20,6 +22,7 @@ class NavMap {
                     "  gl_FragColor = vColor;" +
                     "}";
 
+    private int vPMatrixHandle;
     private FloatBuffer vertexBuffer;
     private final int mProgram;
 
@@ -28,10 +31,11 @@ class NavMap {
     static float[] shapeCoords;
 
     // Set color with red, green, blue and alpha (opacity) values
-    float[] color = { 0.0f, 0.0f, 0.0f, 1.0f };
+    float[] color = { 1.0f, 0.0f, 0.0f, 1.0f };
 
-    public NavMap() {
-        vertexCount = shapeCoords.length/COORDS_PER_VERTEX;
+    public Line(float[] shapeCo) {
+        shapeCoords = shapeCo;
+        vertexCount = shapeCo.length/COORDS_PER_VERTEX;
         // initialize vertex byte buffer for triangle coordinates
         ByteBuffer bb = ByteBuffer.allocateDirect(
                 // (number of coordinate values * 4 bytes per float)
@@ -46,9 +50,9 @@ class NavMap {
         // set the buffer to read the first coordinate
         vertexBuffer.position(0);
 
-        int vertexShader = LayoutGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
+        int vertexShader = NavMapGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
                 vertexShaderCode);
-        int fragmentShader = LayoutGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
+        int fragmentShader = NavMapGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
                 fragmentShaderCode);
 
         // create empty OpenGL ES Program
@@ -70,7 +74,7 @@ class NavMap {
     private int vertexCount;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
-    public void draw() {
+    public void draw(float[] mvpMatrix) {
         // Add program to OpenGL ES environment
         GLES20.glUseProgram(mProgram);
 
@@ -91,9 +95,15 @@ class NavMap {
         // Set color for drawing the triangle
         GLES20.glUniform4fv(colorHandle, 1, color, 0);
         // Set width of line
-        GLES20.glLineWidth(10);
-        // Draw the triangle by using lines
-        GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, vertexCount);
+        GLES20.glLineWidth(8);
+        // get handle to triangle's transformation matrix
+        vPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
+
+        // Pass the projection and view transformation to the shader
+        GLES20.glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0);
+
+        // Draw the triangle
+        GLES20.glDrawArrays(GLES20.GL_LINES, 0, vertexCount);
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(positionHandle);

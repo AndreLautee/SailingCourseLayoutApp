@@ -36,4 +36,7 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.1'
 
     compile 'org.decimal4j:decimal4j:1.0.3'
+    compile 'com.dinuscxj:multitouchgesturedetector:1.0.0'
+
+
 }

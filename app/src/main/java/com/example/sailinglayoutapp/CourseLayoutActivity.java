@@ -6,31 +6,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -40,7 +32,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
     RadioButton r1, r2, r3, r4;
     RelativeLayout rl;
     DrawView drawView;
-    Location currentLocation;
+    Location location;
     CourseVariablesObject cvObject;
     MarkerCoordCalculations markerCoordCalculations;
     TextView textView_lat, textView_lon;
@@ -89,31 +81,70 @@ public class CourseLayoutActivity extends AppCompatActivity {
 
         cvObject = setCourseVariablesObject(extras);
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationServicesEnabled(this);
+        Location previousRefPoint = extras.getParcelable("LOCATION");
 
-        currentLocation = null;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Check Permissions Now
-            final int REQUEST_LOCATION = 2;
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION);
+        if (previousRefPoint == null) {
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationServicesEnabled(this);
+
+            location = null;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                // Check Permissions Now
+                final int REQUEST_LOCATION = 2;
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_LOCATION);
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        } else {
+            location = previousRefPoint;
         }
-        currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+
 
         textView_lat = findViewById(R.id.textView_lat);
         textView_lon = findViewById(R.id.textView_lon);
-        if (currentLocation != null) {
-            markerCoordCalculations = new MarkerCoordCalculations(currentLocation, cvObject);
+        if (location != null) {
+            markerCoordCalculations = new MarkerCoordCalculations(location, cvObject);
+            intent.putExtra("LOCATION", location);
             courseSize = markerCoordCalculations.getCoords().size();
-            textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLatitude()));
-            textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLongitude()));
+            textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
+            textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
+            setDisplay(extras);
         } else {
             textView_lat.setText("Could not get coords");
+            textView_lon.setText("Could not get coords");
+            // Display an error
         }
 
+
+
+        Button button_back = findViewById(R.id.button_back);
+        Button button_navigation = findViewById(R.id.button_navigation);
+
+        button_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        button_navigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                intent.putExtra("COURSE", markerCoordCalculations);
+                intent.setClass(getApplicationContext(),NavigationMap.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void setDisplay(Bundle extras) {
         r1 = findViewById(R.id.radioButton_layout_1);
         r1.setChecked(true);
         RelativeLayout.LayoutParams r1_layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -334,59 +365,6 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     break;
                 }
         }
-
-        Button button_back = findViewById(R.id.button_back);
-        Button button_navigation = findViewById(R.id.button_navigation);
-
-        button_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getIntent();
-                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        button_navigation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getIntent();
-                intent.putExtra("COURSE", markerCoordCalculations);
-                intent.setClass(getApplicationContext(),NavigationMap.class);
-                startActivity(intent);
-            }
-        });
-        /*
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        assert extras != null;
-        variables = setVariableArray(extras);
-
-
-        LinearLayout layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_courseLayout);
-
-        Button button_navigate = new Button(this);
-        Button button_back = new Button(this);
-        button_navigate.setText("Navigate");
-        button_back.setText("Back");
-
-        layoutCourseLayout.addView(button_navigate);
-        layoutCourseLayout.addView(button_back);
-
-        RelativeLayout layoutGL = (RelativeLayout) findViewById(R.id.layout_GL);
-
-        gLView = new LayoutGLSurfaceView(this, variables);
-
-        layoutGL.addView(gLView);
-
-        button_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= getIntent();
-                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
-                startActivity(intent);
-            }
-        });*/
     }
 
     // Extract variables from bundle to create an object
@@ -447,6 +425,12 @@ public class CourseLayoutActivity extends AppCompatActivity {
         return result;
     }
 
+    public String decimalDeg2degMins(double decDegree) {
+        int d = (int) decDegree;
+        double m = (decDegree - d) * 60;
+        return "" + d + "°" + String.format("%.3f",m) + "'";
+    }
+
     public void locationServicesEnabled(Context context) {
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
@@ -471,6 +455,29 @@ public class CourseLayoutActivity extends AppCompatActivity {
         }
     }
 
+    LocationListener locationListener = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
     View.OnClickListener radioButton_listener = new View.OnClickListener() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         @Override
@@ -479,8 +486,8 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 r2.setChecked(false);
                 r3.setChecked(false);
                 r4.setChecked(false);
-                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLatitude()));
-                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(1).getLongitude()));
+                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
+                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
             }
             if (r2.getId() == v.getId()) {
                 r1.setChecked(false);
@@ -492,8 +499,8 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 } else {
                     i = 2;
                 }
-                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLatitude()));
-                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLongitude()));
+                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLatitude()));
+                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLongitude()));
             }
             if (r3.getId() == v.getId()) {
                 r1.setChecked(false);
@@ -505,15 +512,15 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 } else {
                     i = 3;
                 }
-                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLatitude()));
-                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(i).getLongitude()));
+                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLatitude()));
+                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLongitude()));
             }
             if (r4.getId() == v.getId()) {
                 r1.setChecked(false);
                 r2.setChecked(false);
                 r3.setChecked(false);
-                textView_lat.setText("Latitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(0).getLatitude()));
-                textView_lon.setText("Longitude: " + String.format("%.5f",markerCoordCalculations.getCoords().get(0).getLongitude()));
+                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(0).getLatitude()));
+                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(0).getLongitude()));
             }
         }
     };

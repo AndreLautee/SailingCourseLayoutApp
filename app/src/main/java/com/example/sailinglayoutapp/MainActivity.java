@@ -24,11 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
         Start=findViewById(R.id.Start);
         bottomNavigation = findViewById(R.id.bottom_navigation);
-
-
-
-
-
     }
 
 
