@@ -1,15 +1,13 @@
 package com.example.sailinglayoutapp;
 
-import android.graphics.PointF;
+
 import android.location.Location;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
 import android.opengl.Matrix;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -71,7 +69,6 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
 
         return shader;
     }
-
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.6f, 0.8f, 1.0f, 1.0f);
@@ -81,7 +78,6 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         //arrow = new Triangle(new float[]{0.80f,0.95f,0.0f,0.75f,0.85f,0.0f,0.85f,0.85f,0.0f});
         //northSouth = new Line(new float[]{0.80f,0.9f,0.0f,0.80f,0.6f,0.0f});
         //eastWest = new Line(new float[]{0.65f,0.75f,0.0f,0.95f,0.75f,0.0f});
-
     }
 
     // vPMatrix is an abbreviation for "Model View Projection Matrix"

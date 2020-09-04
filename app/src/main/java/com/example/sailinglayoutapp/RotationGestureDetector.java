@@ -1,7 +1,14 @@
 package com.example.sailinglayoutapp;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.res.Resources;
+import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ImageView;
 
 public class RotationGestureDetector {
     private static final int INVALID_POINTER_ID = -1;

@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -55,10 +56,9 @@ public class NavigationMap extends AppCompatActivity {
         courseSize = course.getCoords().size();
 
         locations = new ArrayList<>();
-        textView_distance = new TextView(this);
-        textView_bearing = new TextView(this);
-        radioGroup = new RadioGroup(this);
-        radioGroup.setOrientation(RadioGroup.HORIZONTAL);
+        textView_distance = findViewById(R.id.text_NavMapDist);
+        textView_bearing = findViewById(R.id.text_NavMapBear);
+        radioGroup = findViewById(R.id.rgNavMap);
         radioButtons = new ArrayList<>();
         bearingDirection = 0;
 
@@ -83,9 +83,6 @@ public class NavigationMap extends AppCompatActivity {
         }
         radioGroup.check(radioButtons.get(courseSize-1).getId());
 
-        layoutCourseLayout.removeView(radioGroup);
-        layoutCourseLayout.addView(radioGroup);
-
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -99,16 +96,12 @@ public class NavigationMap extends AppCompatActivity {
                 double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
 
                 // Display updated distance to newly selected mark
-                String distText = "Distance to selected mark: " + distBetweenPoints + "Nm";
+                String distText = distBetweenPoints + " Nm";
                 textView_distance.setText(distText);
-                layoutCourseLayout.removeView(textView_distance);
-                layoutCourseLayout.addView(textView_distance);
 
                 // Display updated bearing to newly selected mark
-                String bearingText = "Bearing to selected mark: " + bearingBetweenPoints + "°";
+                String bearingText = bearingBetweenPoints + "°";
                 textView_bearing.setText(bearingText);
-                layoutCourseLayout.removeView(textView_bearing);
-                layoutCourseLayout.addView(textView_bearing);
 
                 gLView.setSelectedMark(selectedMark);
                 layoutGL.removeView(gLView);
@@ -141,23 +134,22 @@ public class NavigationMap extends AppCompatActivity {
             double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
 
             // Display new distance to selected mark
-            String distText = "Distance to selected mark: " + distBetweenPoints + "Nm";
+            String distText = distBetweenPoints + " Nm";
             textView_distance.setText(distText);
-            layoutCourseLayout.removeView(textView_distance);
-            layoutCourseLayout.addView(textView_distance);
+
 
             // Display updated bearing to newly selected mark
-            String bearingText = "Bearing to selected mark: " + bearingBetweenPoints + "°";
+            String bearingText = bearingBetweenPoints + "°";
             textView_bearing.setText(bearingText);
-            layoutCourseLayout.removeView(textView_bearing);
-            layoutCourseLayout.addView(textView_bearing);
 
             // Display new glview with new location
 
             gLView.setLocations(locations);
             gLView.setBearing(bearingDirection);
+
             layoutGL.removeView(gLView);
             layoutGL.addView(gLView);
+
         }
 
         @Override

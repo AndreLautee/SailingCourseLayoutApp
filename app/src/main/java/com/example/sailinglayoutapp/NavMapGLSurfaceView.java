@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.location.Location;
@@ -17,8 +18,13 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -39,6 +45,7 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
     private ArrayList<Location> locations;
     private double bearingDirection;
     private int selectedMark;
+    private ImageView img_compass;
 
     public ArrayList<Location> getLocations() {
         return locations;
@@ -77,6 +84,11 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
         locations = lcts;
         bearingDirection = bearing;
         selectedMark = selectedM;
+
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.activity_navigation_map, (ViewGroup) findViewById(R.id.rl_navigationMap));
+        img_compass = v.findViewById(R.id.img_NavMapCompass);
 
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         mRotationDetector = new RotationGestureDetector(new RotateListener());
