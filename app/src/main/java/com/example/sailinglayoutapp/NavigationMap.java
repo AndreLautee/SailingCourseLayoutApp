@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import org.decimal4j.util.DoubleRounder;
 import org.w3c.dom.Text;
@@ -65,18 +66,11 @@ public class NavigationMap extends AppCompatActivity {
         layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationServicesEnabled(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Check Permissions Now
-            final int REQUEST_LOCATION = 2;
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION);
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
 
-        locations.add(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+        if(checkLocationPermission()) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
+            locations.add(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+        }
 
         // Set number of radio buttons to number of marks
 
@@ -249,5 +243,45 @@ public class NavigationMap extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         gLView.onPause();
+    }
+
+    final int REQUEST_LOCATION = 2;
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setMessage("GPS not enabled. Please allow location services and then return")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(NavigationMap.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
 }
