@@ -12,6 +12,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,6 +46,7 @@ public class NavigationMap extends AppCompatActivity {
     ArrayList<RadioButton> radioButtons;
     int selectedMark;
     double bearingDirection;
+    ImageView img_compass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class NavigationMap extends AppCompatActivity {
         radioGroup = findViewById(R.id.rgNavMap);
         radioButtons = new ArrayList<>();
         bearingDirection = 0;
+        img_compass = findViewById(R.id.img_NavMapCompass);
 
         layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_navigationMap);
         layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
@@ -80,6 +83,7 @@ public class NavigationMap extends AppCompatActivity {
             radioGroup.removeView(radioButtons.get(i));
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
             radioButtons.get(i).setText("Mark " + (i+1));
+            radioButtons.get(i).setTextSize(20);
         }
         radioGroup.check(radioButtons.get(courseSize-1).getId());
 
@@ -95,6 +99,9 @@ public class NavigationMap extends AppCompatActivity {
                 double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
                 double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
 
+                if (bearingBetweenPoints < 0) {
+                    bearingBetweenPoints = 360 + bearingBetweenPoints;
+                }
                 // Display updated distance to newly selected mark
                 String distText = distBetweenPoints + " Nm";
                 textView_distance.setText(distText);
@@ -113,7 +120,26 @@ public class NavigationMap extends AppCompatActivity {
 
         layoutGL.addView(gLView);
 
+        gLView.setOnTouchListener(rotationListener);
+
+        img_compass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gLView.getmAngle() != 0) {
+                    img_compass.setRotation(0);
+                    gLView.setmAngle(0);
+                }
+            }
+        });
     }
+
+    View.OnTouchListener rotationListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            img_compass.setRotation(gLView.getmAngle());
+            return false;
+        }
+    };
 
     LocationListener locationListener = new LocationListener() {
 
@@ -133,6 +159,9 @@ public class NavigationMap extends AppCompatActivity {
 
             double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
 
+            if (bearingBetweenPoints < 0) {
+                bearingBetweenPoints = 360 + bearingBetweenPoints;
+            }
             // Display new distance to selected mark
             String distText = distBetweenPoints + " Nm";
             textView_distance.setText(distText);
@@ -168,61 +197,12 @@ public class NavigationMap extends AppCompatActivity {
         }
     };
 
-    public double distanceBetweenPoints(double lat1, double lon1, double lat2, double lon2) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        dist = dist * 0.8684; // convert to nautical miles
-
-        return DoubleRounder.round(dist,2);
-    }
-
-    public double bearingBetweenPoints(double lat1, double lon1, double lat2, double lon2){
-        double longDiff = deg2rad(lon2) - deg2rad(lon1);
-        double latitude1 = deg2rad(lat1);
-        double latitude2 = deg2rad(lat2);
-        double y= Math.sin(longDiff)*Math.cos(latitude2);
-        double x=Math.cos(latitude1)*Math.sin(latitude2)-Math.sin(latitude1)*Math.cos(latitude2)*Math.cos(longDiff);
-        double rad = Math.atan2(y,x);
-        double result = (rad2deg(rad)+360) % 360;
-
-
-        return DoubleRounder.round(result,2);
-    }
-
     private double met2nm(float met) { return DoubleRounder.round(met / 1852,2);}
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
-
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
-    }
-
-    public void locationServicesEnabled(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
-
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch (Exception ex) { }
-        if ( !gps_enabled ){
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setMessage("GPS not enabled");
-            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //this will navigate user to the device location settings screen
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-                }
-            });
-            AlertDialog alert = dialog.create();
-            alert.show();
-        }
     }
 
     @Override

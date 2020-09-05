@@ -39,16 +39,26 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
     private final NavMapGLRenderer renderer;
     float mScaleFactor;
-    float mPrevAngle, mAngle, mDeltaAngle;
+    private float mPrevAngle, mAngle, mDeltaAngle;
     ScaleGestureDetector mScaleDetector;
     RotationGestureDetector mRotationDetector;
     private ArrayList<Location> locations;
     private double bearingDirection;
     private int selectedMark;
-    private ImageView img_compass;
 
     public ArrayList<Location> getLocations() {
         return locations;
+    }
+
+    public float getmAngle() {
+        return mAngle;
+    }
+
+    public void setmAngle(float angle) {
+        mAngle = angle;
+        mPrevAngle = mAngle;
+        renderer.setAngle(mAngle);
+        requestRender();
     }
 
     public void setLocations(ArrayList<Location> lcts) {
@@ -85,11 +95,6 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
         bearingDirection = bearing;
         selectedMark = selectedM;
 
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.activity_navigation_map, (ViewGroup) findViewById(R.id.rl_navigationMap));
-        img_compass = v.findViewById(R.id.img_NavMapCompass);
-
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         mRotationDetector = new RotationGestureDetector(new RotateListener());
 
@@ -114,6 +119,7 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
         mScaleDetector.onTouchEvent(e);
         mRotationDetector.onTouchEvent(e);
+
         float x = e.getX();
         float y = e.getY();
 
@@ -121,6 +127,9 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
               case MotionEvent.ACTION_MOVE:
 
+                  if(mRotationDetector.isInProgress()) {
+
+                  }
                 float dx = x - previousX;
                 float dy = (y - previousY) * -1;
 
