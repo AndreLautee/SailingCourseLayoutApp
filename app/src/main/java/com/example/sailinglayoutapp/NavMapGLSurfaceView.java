@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.location.Location;
@@ -17,8 +18,13 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -33,7 +39,7 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
     private final NavMapGLRenderer renderer;
     float mScaleFactor;
-    float mPrevAngle, mAngle, mDeltaAngle;
+    private float mPrevAngle, mAngle, mDeltaAngle;
     ScaleGestureDetector mScaleDetector;
     RotationGestureDetector mRotationDetector;
     private ArrayList<Location> locations;
@@ -42,6 +48,17 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
     public ArrayList<Location> getLocations() {
         return locations;
+    }
+
+    public float getmAngle() {
+        return mAngle;
+    }
+
+    public void setmAngle(float angle) {
+        mAngle = angle;
+        mPrevAngle = mAngle;
+        renderer.setAngle(mAngle);
+        requestRender();
     }
 
     public void setLocations(ArrayList<Location> lcts) {
@@ -102,6 +119,7 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
         mScaleDetector.onTouchEvent(e);
         mRotationDetector.onTouchEvent(e);
+
         float x = e.getX();
         float y = e.getY();
 
@@ -109,6 +127,9 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
               case MotionEvent.ACTION_MOVE:
 
+                  if(mRotationDetector.isInProgress()) {
+
+                  }
                 float dx = x - previousX;
                 float dy = (y - previousY) * -1;
 

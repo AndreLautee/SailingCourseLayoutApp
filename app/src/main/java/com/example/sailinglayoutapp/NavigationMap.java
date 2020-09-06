@@ -12,18 +12,24 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.decimal4j.util.DoubleRounder;
 import org.w3c.dom.Text;
@@ -44,23 +50,62 @@ public class NavigationMap extends AppCompatActivity {
     ArrayList<RadioButton> radioButtons;
     int selectedMark;
     double bearingDirection;
+    ImageView img_compass;
+    BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_map);
 
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+
+        //set selected page
+        bottomNavigation.setSelectedItemId(R.id.nav_map);
+
+        //perform ItemSelectedListener
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent = getIntent();
+                switch (item.getItemId()){
+                    case R.id.nav_variables:
+                        intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.nav_layout:
+                        intent.setClass(getApplicationContext(),CourseLayoutActivity.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.nav_compass:
+                        intent.setClass(getApplicationContext(),NavigationMap.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.nav_map:
+                        return true;
+                    case R.id.nav_home:
+                        startActivity(new Intent(getApplicationContext(),
+                                MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                return false;
+            }
+        });
+
         Intent intent = getIntent();
         course = intent.getParcelableExtra("COURSE");
         courseSize = course.getCoords().size();
 
+
         locations = new ArrayList<>();
-        textView_distance = new TextView(this);
-        textView_bearing = new TextView(this);
-        radioGroup = new RadioGroup(this);
-        radioGroup.setOrientation(RadioGroup.HORIZONTAL);
+        textView_distance = findViewById(R.id.text_NavMapDist);
+        textView_bearing = findViewById(R.id.text_NavMapBear);
+        radioGroup = findViewById(R.id.rgNavMap);
         radioButtons = new ArrayList<>();
-        bearingDirection = 0;
+        float courseBearing = (float) - rad2deg(course.getCourseVariablesObject().getBearing());
+        bearingDirection = -courseBearing;
+        img_compass = findViewById(R.id.img_NavMapCompass);
 
         layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_navigationMap);
         layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
@@ -80,11 +125,9 @@ public class NavigationMap extends AppCompatActivity {
             radioGroup.removeView(radioButtons.get(i));
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
             radioButtons.get(i).setText("Mark " + (i+1));
+            radioButtons.get(i).setTextSize(20);
         }
         radioGroup.check(radioButtons.get(courseSize-1).getId());
-
-        layoutCourseLayout.removeView(radioGroup);
-        layoutCourseLayout.addView(radioGroup);
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -95,69 +138,53 @@ public class NavigationMap extends AppCompatActivity {
                     selectedMark = checkedId;
                 }
 
-                double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
-                double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
-
-                // Display updated distance to newly selected mark
-                String distText = "Distance to selected mark: " + distBetweenPoints + "Nm";
-                textView_distance.setText(distText);
-                layoutCourseLayout.removeView(textView_distance);
-                layoutCourseLayout.addView(textView_distance);
-
-                // Display updated bearing to newly selected mark
-                String bearingText = "Bearing to selected mark: " + bearingBetweenPoints + "°";
-                textView_bearing.setText(bearingText);
-                layoutCourseLayout.removeView(textView_bearing);
-                layoutCourseLayout.addView(textView_bearing);
-
-                gLView.setSelectedMark(selectedMark);
-                layoutGL.removeView(gLView);
-                layoutGL.addView(gLView);
+                setTexts();
             }
         });
 
         gLView = new NavMapGLSurfaceView(this, course.getCoords(), locations, selectedMark, bearingDirection);
 
+        img_compass.setRotation(courseBearing);
+        gLView.setmAngle(courseBearing);
+
         layoutGL.addView(gLView);
 
+        gLView.setOnTouchListener(rotationListener);
+
+        img_compass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gLView.getmAngle() != 0) {
+                    img_compass.setRotation(0);
+                    gLView.setmAngle(0);
+                }
+            }
+        });
     }
+
+    View.OnTouchListener rotationListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            img_compass.setRotation(gLView.getmAngle());
+            return false;
+        }
+    };
 
     LocationListener locationListener = new LocationListener() {
 
         @Override
         public void onLocationChanged(Location location) {
-            RelativeLayout layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
             if (locations.size() >= 2) {
                 locations.remove(0);
-            }
-            locations.add(location);
-
-            if (locations.size() == 2) {
+                locations.add(location);
                 bearingDirection = locations.get(0).bearingTo(locations.get(1));
+            } else {
+                locations.add(location);
             }
 
-            double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
 
-            double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
+            setTexts();
 
-            // Display new distance to selected mark
-            String distText = "Distance to selected mark: " + distBetweenPoints + "Nm";
-            textView_distance.setText(distText);
-            layoutCourseLayout.removeView(textView_distance);
-            layoutCourseLayout.addView(textView_distance);
-
-            // Display updated bearing to newly selected mark
-            String bearingText = "Bearing to selected mark: " + bearingBetweenPoints + "°";
-            textView_bearing.setText(bearingText);
-            layoutCourseLayout.removeView(textView_bearing);
-            layoutCourseLayout.addView(textView_bearing);
-
-            // Display new glview with new location
-
-            gLView.setLocations(locations);
-            gLView.setBearing(bearingDirection);
-            layoutGL.removeView(gLView);
-            layoutGL.addView(gLView);
         }
 
         @Override
@@ -176,17 +203,44 @@ public class NavigationMap extends AppCompatActivity {
         }
     };
 
-    public double distanceBetweenPoints(double lat1, double lon1, double lat2, double lon2) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        dist = dist * 0.8684; // convert to nautical miles
+    public void setTexts() {
+        double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
 
-        return DoubleRounder.round(dist,2);
+        double bearingBetweenPoints = bearingBetweenPoints(locations.get(locations.size()-1).getLatitude(),locations.get(locations.size()-1).getLongitude(),
+                course.getCoords().get(selectedMark).getLatitude(),course.getCoords().get(selectedMark).getLongitude());
+
+        String bearingString = decimalDeg2degMins(bearingBetweenPoints);
+        // Display new distance to selected mark
+        String distText = distBetweenPoints + " Nm";
+        textView_distance.setText(distText);
+
+
+        // Display updated bearing to newly selected mark
+        String bearingText = "" + bearingString;
+        textView_bearing.setText(bearingText);
+
+        // Display new glview with new location
+
+        gLView.setLocations(locations);
+        gLView.setBearing(bearingDirection);
+        gLView.setSelectedMark(selectedMark);
+
+        layoutGL.removeView(gLView);
+        layoutGL.addView(gLView);
     }
 
+    private double met2nm(float met) { return DoubleRounder.round(met / 1852,2);}
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
+    public String decimalDeg2degMins(double decDegree) {
+        int d = (int) decDegree;
+        double m = (decDegree - d) * 60;
+        return "" + d + "°" + String.format("%.3f",m) + "'";
+    }
     public double bearingBetweenPoints(double lat1, double lon1, double lat2, double lon2){
         double longDiff = deg2rad(lon2) - deg2rad(lon1);
         double latitude1 = deg2rad(lat1);
@@ -197,40 +251,7 @@ public class NavigationMap extends AppCompatActivity {
         double result = (rad2deg(rad)+360) % 360;
 
 
-        return DoubleRounder.round(result,2);
-    }
-
-    private double met2nm(float met) { return DoubleRounder.round(met / 1852,2);}
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
-    }
-
-    public void locationServicesEnabled(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
-
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch (Exception ex) { }
-        if ( !gps_enabled ){
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setMessage("GPS not enabled");
-            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //this will navigate user to the device location settings screen
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-                }
-            });
-            AlertDialog alert = dialog.create();
-            alert.show();
-        }
+        return result;
     }
 
     @Override
