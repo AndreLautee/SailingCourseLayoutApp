@@ -55,7 +55,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
         //set selected page
-        bottomNavigation.setSelectedItemId(R.id.nav_variables);
+        bottomNavigation.setSelectedItemId(R.id.nav_layout);
 
         //perform ItemSelectedListener
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -78,6 +78,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         intent.putExtra("COURSE", markerCoordCalculations);
                         intent.setClass(getApplicationContext(),NavigationMap.class);
                         startActivity(intent);
+                        return true;
+                    case R.id.nav_home:
+                        startActivity(new Intent(getApplicationContext(),
+                                MainActivity.class));
+                        overridePendingTransition(0,0);
                         return true;
                 }
                 return false;

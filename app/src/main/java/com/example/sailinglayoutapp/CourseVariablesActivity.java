@@ -77,8 +77,6 @@ public class CourseVariablesActivity extends AppCompatActivity {
                     case R.id.nav_map:
                         toast.show();
                         return true;
-                }
-                switch (item.getItemId()){
                     case R.id.nav_home:
                         startActivity(new Intent(getApplicationContext(),
                                 MainActivity.class));
@@ -172,7 +170,19 @@ public class CourseVariablesActivity extends AppCompatActivity {
                     case "Windward-Leeward":
                         radioGroup_type.setVisibility(View.GONE);
                         radioGroup_type.clearCheck();
-                    default:
+                        radioGroup_angle.setVisibility(View.GONE);
+                        radioGroup_angle.clearCheck();
+                        radioGroup_reach.setVisibility(View.GONE);
+                        radioGroup_reach.clearCheck();
+                        radioGroup_secondBeat.setVisibility(View.GONE);
+                        radioGroup_secondBeat.clearCheck();
+                        textView_angle.setVisibility(View.GONE);
+                        textView_reach.setVisibility(View.GONE);
+                        textView_secondBeat.setVisibility(View.GONE);
+                        break;
+                    case "Optimist":
+                        radioGroup_type.setVisibility(View.VISIBLE);
+                        if(userInput == null) {radioGroup_type.clearCheck();}
                         radioGroup_angle.setVisibility(View.GONE);
                         radioGroup_angle.clearCheck();
                         radioGroup_reach.setVisibility(View.GONE);

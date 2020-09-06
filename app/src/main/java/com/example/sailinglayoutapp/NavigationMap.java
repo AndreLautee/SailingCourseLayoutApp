@@ -12,6 +12,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -22,10 +23,13 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.decimal4j.util.DoubleRounder;
 import org.w3c.dom.Text;
@@ -47,22 +51,60 @@ public class NavigationMap extends AppCompatActivity {
     int selectedMark;
     double bearingDirection;
     ImageView img_compass;
+    BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_map);
 
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+
+        //set selected page
+        bottomNavigation.setSelectedItemId(R.id.nav_map);
+
+        //perform ItemSelectedListener
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent = getIntent();
+                switch (item.getItemId()){
+                    case R.id.nav_variables:
+                        intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.nav_layout:
+                        intent.setClass(getApplicationContext(),CourseLayoutActivity.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.nav_compass:
+                        intent.setClass(getApplicationContext(),NavigationMap.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.nav_map:
+                        return true;
+                    case R.id.nav_home:
+                        startActivity(new Intent(getApplicationContext(),
+                                MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                return false;
+            }
+        });
+
         Intent intent = getIntent();
         course = intent.getParcelableExtra("COURSE");
         courseSize = course.getCoords().size();
+
 
         locations = new ArrayList<>();
         textView_distance = findViewById(R.id.text_NavMapDist);
         textView_bearing = findViewById(R.id.text_NavMapBear);
         radioGroup = findViewById(R.id.rgNavMap);
         radioButtons = new ArrayList<>();
-        bearingDirection = 0;
+        float courseBearing = (float) - rad2deg(course.getCourseVariablesObject().getBearing());
+        bearingDirection = -courseBearing;
         img_compass = findViewById(R.id.img_NavMapCompass);
 
         layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_navigationMap);
@@ -96,27 +138,14 @@ public class NavigationMap extends AppCompatActivity {
                     selectedMark = checkedId;
                 }
 
-                double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
-                double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
-
-                if (bearingBetweenPoints < 0) {
-                    bearingBetweenPoints = 360 + bearingBetweenPoints;
-                }
-                // Display updated distance to newly selected mark
-                String distText = distBetweenPoints + " Nm";
-                textView_distance.setText(distText);
-
-                // Display updated bearing to newly selected mark
-                String bearingText = bearingBetweenPoints + "°";
-                textView_bearing.setText(bearingText);
-
-                gLView.setSelectedMark(selectedMark);
-                layoutGL.removeView(gLView);
-                layoutGL.addView(gLView);
+                setTexts();
             }
         });
 
         gLView = new NavMapGLSurfaceView(this, course.getCoords(), locations, selectedMark, bearingDirection);
+
+        img_compass.setRotation(courseBearing);
+        gLView.setmAngle(courseBearing);
 
         layoutGL.addView(gLView);
 
@@ -145,39 +174,16 @@ public class NavigationMap extends AppCompatActivity {
 
         @Override
         public void onLocationChanged(Location location) {
-            RelativeLayout layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
             if (locations.size() >= 2) {
                 locations.remove(0);
-            }
-            locations.add(location);
-
-            if (locations.size() == 2) {
+                locations.add(location);
                 bearingDirection = locations.get(0).bearingTo(locations.get(1));
+            } else {
+                locations.add(location);
             }
 
-            double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
 
-            double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
-
-            if (bearingBetweenPoints < 0) {
-                bearingBetweenPoints = 360 + bearingBetweenPoints;
-            }
-            // Display new distance to selected mark
-            String distText = distBetweenPoints + " Nm";
-            textView_distance.setText(distText);
-
-
-            // Display updated bearing to newly selected mark
-            String bearingText = bearingBetweenPoints + "°";
-            textView_bearing.setText(bearingText);
-
-            // Display new glview with new location
-
-            gLView.setLocations(locations);
-            gLView.setBearing(bearingDirection);
-
-            layoutGL.removeView(gLView);
-            layoutGL.addView(gLView);
+            setTexts();
 
         }
 
@@ -197,12 +203,55 @@ public class NavigationMap extends AppCompatActivity {
         }
     };
 
+    public void setTexts() {
+        double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
+
+        double bearingBetweenPoints = bearingBetweenPoints(locations.get(locations.size()-1).getLatitude(),locations.get(locations.size()-1).getLongitude(),
+                course.getCoords().get(selectedMark).getLatitude(),course.getCoords().get(selectedMark).getLongitude());
+
+        String bearingString = decimalDeg2degMins(bearingBetweenPoints);
+        // Display new distance to selected mark
+        String distText = distBetweenPoints + " Nm";
+        textView_distance.setText(distText);
+
+
+        // Display updated bearing to newly selected mark
+        String bearingText = "" + bearingString;
+        textView_bearing.setText(bearingText);
+
+        // Display new glview with new location
+
+        gLView.setLocations(locations);
+        gLView.setBearing(bearingDirection);
+        gLView.setSelectedMark(selectedMark);
+
+        layoutGL.removeView(gLView);
+        layoutGL.addView(gLView);
+    }
+
     private double met2nm(float met) { return DoubleRounder.round(met / 1852,2);}
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
+    }
+    public String decimalDeg2degMins(double decDegree) {
+        int d = (int) decDegree;
+        double m = (decDegree - d) * 60;
+        return "" + d + "°" + String.format("%.3f",m) + "'";
+    }
+    public double bearingBetweenPoints(double lat1, double lon1, double lat2, double lon2){
+        double longDiff = deg2rad(lon2) - deg2rad(lon1);
+        double latitude1 = deg2rad(lat1);
+        double latitude2 = deg2rad(lat2);
+        double y= Math.sin(longDiff)*Math.cos(latitude2);
+        double x=Math.cos(latitude1)*Math.sin(latitude2)-Math.sin(latitude1)*Math.cos(latitude2)*Math.cos(longDiff);
+        double rad = Math.atan2(y,x);
+        double result = (rad2deg(rad)+360) % 360;
+
+
+        return result;
     }
 
     @Override
