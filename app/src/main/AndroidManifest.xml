@@ -37,14 +37,6 @@
         <activity android:name=".NavigationCompassActivity"/>
 
 
-
-
-        <service
-            android:name=".NavigationService"
-            android:enabled="true"
-            android:exported="true"
-            android:foregroundServiceType="location" />
-
     </application>
 
     <uses-feature

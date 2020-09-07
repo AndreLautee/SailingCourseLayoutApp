@@ -310,7 +310,6 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
             y = 0;
         }
 
-        Log.d("bearing", ""+bearingDirection);
         float XmidBase = (float) (-Math.sin(bearingDirection)*length) + x;
         float YmidBase = (float) (-Math.cos(bearingDirection)*length) + y;
 
@@ -382,7 +381,7 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
             if (i == selectedMark) {
                 circles.add(new Circle(x,y,-1, 0.05f));
             } else {
-                circles.add(new Circle(x,y,-1,0.03f));
+                circles.add(new Circle(x,y,0,0.03f));
             }
         }
     }
