@@ -56,6 +56,7 @@ public class WeatherAPIActivity extends AppCompatActivity {
         double lon = location.getLongitude();
 
         String url = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=imperial&appid=57df42a409e4c7c20a3221979d61174d";;
+
         if(!isOnline())
         {
             Context context = this;
