@@ -64,8 +64,7 @@ public class WeatherAPIActivity extends AppCompatActivity {
 
         if(!isOnline())
         {
-            Context context = this;
-            AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
             alertDialog.setTitle("Info");
             alertDialog.setMessage("Internet not available!");
@@ -140,9 +139,8 @@ public class WeatherAPIActivity extends AppCompatActivity {
 }
 
     public boolean isOnline(){
-        Context context = this;
         ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager)this.getSystemService(this.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
