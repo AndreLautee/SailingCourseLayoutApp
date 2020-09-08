@@ -64,7 +64,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_compass:
                         intent.putExtra("COURSE", markerCoordCalculations);
-                        //intent.setClass(getApplicationContext(),NavigationCompass.class);
+                        intent.setClass(getApplicationContext(),NavigationCompassActivity.class);
                         startActivity(intent);
                         return true;
                     case R.id.nav_map:
