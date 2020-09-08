@@ -56,7 +56,19 @@ public class WeatherAPIActivity extends AppCompatActivity {
         double lon = location.getLongitude();
 
         String url = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=imperial&appid=57df42a409e4c7c20a3221979d61174d";;
+        if(!isOnline())
+        {
+            Context context = this;
+            AlertDialog alertDialog = new AlertDialog.Builder(context).create();
 
+            alertDialog.setTitle("Info");
+            alertDialog.setMessage("Internet not available!");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+
+            alertDialog.show();
+        }
+        else
+        {
         JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -118,5 +130,17 @@ public class WeatherAPIActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jor);
 
+    }
+}
+
+    public boolean isOnline(){
+        Context context = this;
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 }
