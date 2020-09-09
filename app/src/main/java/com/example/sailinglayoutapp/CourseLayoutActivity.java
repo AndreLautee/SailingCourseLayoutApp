@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -38,6 +39,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
     TextView textView_lat, textView_lon;
     int courseSize;
     BottomNavigationView bottomNavigation;
+    private LocationManager locationManager;
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
@@ -45,10 +47,15 @@ public class CourseLayoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_layout);
 
+        r1 = findViewById(R.id.radioButton_layout_1);
+        r2 = findViewById(R.id.radioButton_layout_2);
+        r3 = findViewById(R.id.radioButton_layout_3);
+        r4 = findViewById(R.id.radioButton_layout_4);
+
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
         //set selected page
-        bottomNavigation.setSelectedItemId(R.id.nav_variables);
+        bottomNavigation.setSelectedItemId(R.id.nav_layout);
 
         //perform ItemSelectedListener
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -72,6 +79,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         intent.setClass(getApplicationContext(),NavigationMap.class);
                         startActivity(intent);
                         return true;
+                    case R.id.nav_home:
+                        startActivity(new Intent(getApplicationContext(),
+                                MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
                 }
                 return false;
             }
@@ -82,22 +94,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
         cvObject = setCourseVariablesObject(extras);
 
         Location previousRefPoint = extras.getParcelable("LOCATION");
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (previousRefPoint == null) {
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationServicesEnabled(this);
 
             location = null;
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // Check Permissions Now
-                final int REQUEST_LOCATION = 2;
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        REQUEST_LOCATION);
+            if(checkLocationPermission()) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
         } else {
             location = previousRefPoint;
         }
@@ -116,6 +122,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
         } else {
             textView_lat.setText("Could not get coords");
             textView_lon.setText("Could not get coords");
+
+            r1.setVisibility(View.INVISIBLE);
+            r2.setVisibility(View.INVISIBLE);
+            r3.setVisibility(View.INVISIBLE);
+            r4.setVisibility(View.INVISIBLE);
             // Display an error
         }
 
@@ -136,29 +147,39 @@ public class CourseLayoutActivity extends AppCompatActivity {
         button_navigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = getIntent();
-                intent.putExtra("COURSE", markerCoordCalculations);
-                intent.setClass(getApplicationContext(),NavigationMap.class);
-                startActivity(intent);
+                if (markerCoordCalculations != null) {
+                    Intent intent = getIntent();
+                    intent.putExtra("COURSE", markerCoordCalculations);
+                    intent.setClass(getApplicationContext(),NavigationMap.class);
+                    startActivity(intent);
+                } else {
+                    new AlertDialog.Builder(CourseLayoutActivity.this)
+                            .setMessage("GPS not enabled. Location needed to proceed.")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .create()
+                            .show();
+                }
+
             }
         });
     }
 
     public void setDisplay(Bundle extras) {
-        r1 = findViewById(R.id.radioButton_layout_1);
         r1.setChecked(true);
         RelativeLayout.LayoutParams r1_layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         r1.setOnClickListener(radioButton_listener);
 
-        r2 = findViewById(R.id.radioButton_layout_2);
         RelativeLayout.LayoutParams r2_layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         r2.setOnClickListener(radioButton_listener);
 
-        r3 = findViewById(R.id.radioButton_layout_3);
         RelativeLayout.LayoutParams r3_layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         r3.setOnClickListener(radioButton_listener);
 
-        r4 = findViewById(R.id.radioButton_layout_4);
         RelativeLayout.LayoutParams r4_layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         r4.setOnClickListener(radioButton_listener);
 
@@ -431,30 +452,6 @@ public class CourseLayoutActivity extends AppCompatActivity {
         return "" + d + "°" + String.format("%.3f",m) + "'";
     }
 
-    public void locationServicesEnabled(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
-
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch (Exception ex) { }
-        if ( !gps_enabled ){
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setMessage("GPS not enabled");
-            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //this will navigate user to the device location settings screen
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-                }
-            });
-            AlertDialog alert = dialog.create();
-            alert.show();
-        }
-    }
-
     LocationListener locationListener = new LocationListener() {
 
         @Override
@@ -477,6 +474,47 @@ public class CourseLayoutActivity extends AppCompatActivity {
 
         }
     };
+
+    final int REQUEST_LOCATION = 2;
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setMessage("GPS not enabled. Please allow location services and then return")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(CourseLayoutActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     View.OnClickListener radioButton_listener = new View.OnClickListener() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})

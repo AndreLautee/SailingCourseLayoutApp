@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -69,6 +70,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         courseSize = course.getCoords().size();
 
         locations = new ArrayList<>();
+
         textView_distance = findViewById(R.id.text_NavCompDist);
         textView_bearing = findViewById(R.id.text_NavCompBear);
         radioGroup = findViewById(R.id.rgNavCompass);
@@ -82,6 +84,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
             locations.add(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
         }
+
 
         // Set number of radio buttons to number of marks
 
@@ -106,7 +109,6 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
                 setTexts();
             }
-
 
 
 
@@ -140,7 +142,6 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
 
 
-
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
 
@@ -156,6 +157,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
         }
     };
+
 
     public void setTexts() {
         double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
@@ -199,7 +201,6 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
         return result;
     }
-
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -307,6 +308,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         start();
     }
 
+
     final int REQUEST_LOCATION = 2;
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
@@ -345,4 +347,5 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             return true;
         }
     }
+
 }

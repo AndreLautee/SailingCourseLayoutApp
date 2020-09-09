@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -76,8 +77,6 @@ public class CourseVariablesActivity extends AppCompatActivity {
                     case R.id.nav_map:
                         toast.show();
                         return true;
-                }
-                switch (item.getItemId()){
                     case R.id.nav_home:
                         startActivity(new Intent(getApplicationContext(),
                                 MainActivity.class));
@@ -171,7 +170,19 @@ public class CourseVariablesActivity extends AppCompatActivity {
                     case "Windward-Leeward":
                         radioGroup_type.setVisibility(View.GONE);
                         radioGroup_type.clearCheck();
-                    default:
+                        radioGroup_angle.setVisibility(View.GONE);
+                        radioGroup_angle.clearCheck();
+                        radioGroup_reach.setVisibility(View.GONE);
+                        radioGroup_reach.clearCheck();
+                        radioGroup_secondBeat.setVisibility(View.GONE);
+                        radioGroup_secondBeat.clearCheck();
+                        textView_angle.setVisibility(View.GONE);
+                        textView_reach.setVisibility(View.GONE);
+                        textView_secondBeat.setVisibility(View.GONE);
+                        break;
+                    case "Optimist":
+                        radioGroup_type.setVisibility(View.VISIBLE);
+                        if(userInput == null) {radioGroup_type.clearCheck();}
                         radioGroup_angle.setVisibility(View.GONE);
                         radioGroup_angle.clearCheck();
                         radioGroup_reach.setVisibility(View.GONE);
@@ -191,26 +202,42 @@ public class CourseVariablesActivity extends AppCompatActivity {
             }
         });
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationServicesEnabled(this);
-
+        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         currentLocation = null;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Check Permissions Now
-            final int REQUEST_LOCATION = 2;
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION);
+
+        if(checkLocationPermission()) {
+            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
-        currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
         final Button button_weather = findViewById(R.id.button_weather);
         button_weather.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), WeatherAPIActivity.class);
-                intent.putExtra("location", currentLocation);
-                startActivity(intent);
+
+                if (currentLocation == null) {
+                    if(checkLocationPermission()) {
+                        currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    } else {
+                        new AlertDialog.Builder(CourseVariablesActivity.this)
+                                .setMessage("GPS not enabled. Location needed to see weather data.")
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //Prompt the user once explanation has been shown
+                                        ActivityCompat.requestPermissions(CourseVariablesActivity.this,
+                                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                REQUEST_LOCATION);
+                                    }
+                                })
+                                .create()
+                                .show();
+                    }
+                } else {
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), WeatherAPIActivity.class);
+                    intent.putExtra("location", currentLocation);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -312,27 +339,43 @@ public class CourseVariablesActivity extends AppCompatActivity {
         spinner_shape.setAdapter(adapter);
     }
 
-    public void locationServicesEnabled(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
+    final int REQUEST_LOCATION = 2;
 
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch (Exception ex) { }
-        if ( !gps_enabled ){
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setMessage("GPS not enabled");
-            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //this will navigate user to the device location settings screen
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-                }
-            });
-            AlertDialog alert = dialog.create();
-            alert.show();
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setMessage("GPS not enabled")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(CourseVariablesActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
         }
     }
 

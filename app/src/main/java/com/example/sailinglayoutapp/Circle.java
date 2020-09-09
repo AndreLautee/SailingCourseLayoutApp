@@ -47,20 +47,8 @@ public class Circle {
             case -1:
                 color = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
                 break;
-            case 1:
-                color = new float[]{1.0f, 0.0f, 0.0f, 1.0f};
-                break;
-            case 2:
-                color = new float[]{0.9f, 0.1f, 0.2f, 1.0f};
-                break;
-            case 3:
-                color = new float[]{0.8f, 0.2f, 0.4f, 1.0f};
-                break;
-            case 4:
-                color = new float[]{0.7f, 0.3f, 0.6f, 1.0f};
-                break;
-            case 5:
-                color = new float[]{0.6f, 0.4f, 0.8f, 1.0f};
+            case 0:
+                color = new float[]{0.4f, 0.4f, 0.4f, 1.0f};
                 break;
         }
 

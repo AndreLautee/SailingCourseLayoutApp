@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sailinglayoutapp">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
     <application
@@ -16,7 +17,7 @@
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,26 +25,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity2" />
+        <activity android:name=".MainActivity2" android:screenOrientation="portrait"/>
 
-        <activity android:name=".CourseVariablesActivity" />
+        <activity android:name=".CourseVariablesActivity" android:screenOrientation="portrait"/>
 
-        <activity android:name=".CourseLayoutActivity" />
+        <activity android:name=".CourseLayoutActivity" android:screenOrientation="portrait"/>
 
-        <activity android:name=".WeatherAPIActivity" />
+        <activity android:name=".WeatherAPIActivity" android:screenOrientation="portrait"/>
 
-        <activity android:name=".NavigationMap" />
+        <activity android:name=".NavigationMap" android:screenOrientation="portrait"/>
 
-        <activity android:name=".NavigationCompassActivity" />
-
-
+        <activity android:name=".NavigationCompassActivity" android:screenOrientation="portrait"/>
 
 
-        <service
-            android:name=".NavigationService"
-            android:enabled="true"
-            android:exported="true"
-            android:foregroundServiceType="location" />
 
     </application>
 
