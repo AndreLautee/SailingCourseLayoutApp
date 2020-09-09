@@ -38,6 +38,7 @@
         <activity android:name=".NavigationCompassActivity" android:screenOrientation="portrait"/>
 
 
+
     </application>
 
     <uses-feature

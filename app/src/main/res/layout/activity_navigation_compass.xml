@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_navigationCompass"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -18,17 +29,42 @@
         android:textColor="#000"
         android:textSize="40sp"
         android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="75dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:translationZ="2dp"
+        android:textSize="20sp"
+        android:id="@+id/text_NavCompDist" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_NavCompDist"
+        android:layout_centerHorizontal="true"
+        android:translationZ="2dp"
+        android:textSize="20sp"
+        android:id="@+id/text_NavCompBear" />
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_NavCompBear"
+        android:layout_above="@+id/rgNavCompass"
         android:src="@drawable/compass"
-        android:layout_below="@+id/txt"
         android:id="@+id/img_compass"/>
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:translationZ="2dp"
         android:id="@+id/rgNavCompass"
         android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
         />
 </RelativeLayout>
+
+</LinearLayout>
+

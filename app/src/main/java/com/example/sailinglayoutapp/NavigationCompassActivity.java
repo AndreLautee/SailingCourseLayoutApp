@@ -2,6 +2,8 @@ package com.example.sailinglayoutapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -51,7 +53,6 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     ArrayList<Location> locations;
     TextView textView_distance, textView_bearing;
     LinearLayout layoutCourseLayout;
-    RelativeLayout layoutGL;
     RadioGroup radioGroup;
     ArrayList<RadioButton> radioButtons;
     int selectedMark;
@@ -69,25 +70,21 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         courseSize = course.getCoords().size();
 
         locations = new ArrayList<>();
-        textView_distance = new TextView(this);
-        textView_bearing = new TextView(this);
+
+        textView_distance = findViewById(R.id.text_NavCompDist);
+        textView_bearing = findViewById(R.id.text_NavCompBear);
         radioGroup = findViewById(R.id.rgNavCompass);
         radioButtons = new ArrayList<>();
-        bearingDirection = 0;
+        float courseBearing = (float) - rad2deg(course.getCourseVariablesObject().getBearing());
+        bearingDirection = -courseBearing;
+        layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_navigationCompass);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationServicesEnabled(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Check Permissions Now
-            final int REQUEST_LOCATION = 2;
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION);
+        if(checkLocationPermission()) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
+            locations.add(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
 
-        locations.add(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
 
         // Set number of radio buttons to number of marks
 
@@ -97,6 +94,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             radioGroup.removeView(radioButtons.get(i));
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
             radioButtons.get(i).setText("Mark " + (i+1));
+            radioButtons.get(i).setTextSize(20);
         }
         radioGroup.check(radioButtons.get(courseSize-1).getId());
 
@@ -109,22 +107,9 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
                     selectedMark = checkedId;
                 }
 
-                double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
-                double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
-
-                // Display updated distance to newly selected mark
-                String distText = "Distance to selected mark: " + distBetweenPoints + "Nm";
-                textView_distance.setText(distText);
-                layoutCourseLayout.removeView(textView_distance);
-                layoutCourseLayout.addView(textView_distance);
-
-                // Display updated bearing to newly selected mark
-                String bearingText = "Bearing to selected mark: " + bearingBetweenPoints + "°";
-                textView_bearing.setText(bearingText);
-                layoutCourseLayout.removeView(textView_bearing);
-                layoutCourseLayout.addView(textView_bearing);
-
+                setTexts();
             }
+
 
 
         });
@@ -141,35 +126,21 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     LocationListener locationListener = new LocationListener() {
 
         @Override
-        public void onLocationChanged(Location location) {
-            RelativeLayout layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
-            if (locations.size() >= 2) {
-                locations.remove(0);
+            public void onLocationChanged(Location location) {
+                if (locations.size() >= 2) {
+                    locations.remove(0);
+                    locations.add(location);
+                    bearingDirection = locations.get(0).bearingTo(locations.get(1));
+                } else {
+                    locations.add(location);
+                }
+
+
+                setTexts();
+
             }
-            locations.add(location);
-
-            if (locations.size() == 2) {
-                bearingDirection = locations.get(0).bearingTo(locations.get(1));
-            }
-
-            double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
-
-            double bearingBetweenPoints = DoubleRounder.round(locations.get(locations.size()-1).bearingTo(course.getCoords().get(selectedMark)),2);
-
-            // Display new distance to selected mark
-            String distText = "Distance to selected mark: " + distBetweenPoints + "Nm";
-            textView_distance.setText(distText);
-            layoutCourseLayout.removeView(textView_distance);
-            layoutCourseLayout.addView(textView_distance);
-
-            // Display updated bearing to newly selected mark
-            String bearingText = "Bearing to selected mark: " + bearingBetweenPoints + "°";
-            textView_bearing.setText(bearingText);
-            layoutCourseLayout.removeView(textView_bearing);
-            layoutCourseLayout.addView(textView_bearing);
 
 
-        }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -188,29 +159,47 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     };
 
 
+    public void setTexts() {
+        double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
+
+        double bearingBetweenPoints = bearingBetweenPoints(locations.get(locations.size()-1).getLatitude(),locations.get(locations.size()-1).getLongitude(),
+                course.getCoords().get(selectedMark).getLatitude(),course.getCoords().get(selectedMark).getLongitude());
+
+        String bearingString = decimalDeg2degMins(bearingBetweenPoints);
+        // Display new distance to selected mark
+        String distText = distBetweenPoints + " Nm";
+        textView_distance.setText(distText);
+
+
+        // Display updated bearing to newly selected mark
+        String bearingText = "" + bearingString;
+        textView_bearing.setText(bearingText);
+
+    }
+
     private double met2nm(float met) { return DoubleRounder.round(met / 1852,2);}
-    public void locationServicesEnabled(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
+    public String decimalDeg2degMins(double decDegree) {
+        int d = (int) decDegree;
+        double m = (decDegree - d) * 60;
+        return "" + d + "°" + String.format("%.3f",m) + "'";
+    }
+    public double bearingBetweenPoints(double lat1, double lon1, double lat2, double lon2){
+        double longDiff = deg2rad(lon2) - deg2rad(lon1);
+        double latitude1 = deg2rad(lat1);
+        double latitude2 = deg2rad(lat2);
+        double y= Math.sin(longDiff)*Math.cos(latitude2);
+        double x=Math.cos(latitude1)*Math.sin(latitude2)-Math.sin(latitude1)*Math.cos(latitude2)*Math.cos(longDiff);
+        double rad = Math.atan2(y,x);
+        double result = (rad2deg(rad)+360) % 360;
 
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch (Exception ex) { }
-        if ( !gps_enabled ){
-            androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(this);
-            dialog.setMessage("GPS not enabled");
-            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //this will navigate user to the device location settings screen
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-                }
-            });
-            androidx.appcompat.app.AlertDialog alert = dialog.create();
-            alert.show();
-        }
+        return result;
     }
 
     @Override
@@ -318,4 +307,45 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         super.onResume();
         start();
     }
+
+
+    final int REQUEST_LOCATION = 2;
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setMessage("GPS not enabled. Please allow location services and then return")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(NavigationCompassActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }
