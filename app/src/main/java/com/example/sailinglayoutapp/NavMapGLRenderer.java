@@ -72,13 +72,10 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     }
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        GLES20.glClearColor(0.6f, 0.8f, 1.0f, 1.0f);
-        circles = new ArrayList<>();
-        //cursors = new ArrayList<>();
+        GLES20.glClearColor(0.384314f, 0.9372549f, 1.0f, 1.0f);
+
         createMap();
-        //arrow = new Triangle(new float[]{0.80f,0.95f,0.0f,0.75f,0.85f,0.0f,0.85f,0.85f,0.0f});
-        //northSouth = new Line(new float[]{0.80f,0.9f,0.0f,0.80f,0.6f,0.0f});
-        //eastWest = new Line(new float[]{0.65f,0.75f,0.0f,0.95f,0.75f,0.0f});
+
     }
 
     // vPMatrix is an abbreviation for "Model View Projection Matrix"
@@ -139,13 +136,9 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         for (int i=0; i < circles.size(); i++) {
             circles.get(i).draw(scratch);
         }
-      /*  for (int i=0; i < cursors.size(); i++) {
-            cursors.get(i).draw(vPMatrix);
-        }*/
+
         triangle.draw(scratch);
-        //arrow.draw(compassMatrix);
-        //northSouth.draw(compassMatrix);
-        //eastWest.draw(compassMatrix);
+
     }
 
     public volatile float mAngle;
@@ -172,14 +165,28 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         mOffsetY += offsetY;
     }
 
-    public void createMap() {
-        double centre_x = 0;
-        double centre_y = 0;
 
-        double leftmost_coord = coordinates.get(0).getLongitude();
-        double rightmost_coord = coordinates.get(0).getLongitude();
-        double upmost_coord = coordinates.get(0).getLatitude();
-        double downmost_coord = coordinates.get(0).getLatitude();
+    double centre_x = 0;
+    double centre_y = 0;
+    float x;
+    float y;
+    double ratio_x;
+    double ratio_y;
+    int j;
+
+    double leftmost_coord;
+    double rightmost_coord;
+    double upmost_coord;
+    double downmost_coord;
+
+    double max_xy_dispersion;
+
+    public void createMap() {
+
+        leftmost_coord = coordinates.get(0).getLongitude();
+        rightmost_coord = coordinates.get(0).getLongitude();
+        upmost_coord = coordinates.get(0).getLatitude();
+        downmost_coord = coordinates.get(0).getLatitude();
 
         double xTotal = 0;
         double yTotal = 0;
@@ -208,12 +215,12 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
 
 
         // Find max dispersion from centre so a ratio can be determined
-        double max_xy_dispersion = 0;
-
+        max_xy_dispersion = 0;
         max_xy_dispersion = Math.sqrt(Math.pow(coordinates.get(0).getLongitude() - coordinates.get(1).getLongitude(),2)
                 + Math.pow(coordinates.get(0).getLatitude() - coordinates.get(1).getLatitude(),2));
 
-
+        // For trapezoid or optimist courses the max dispersion may not be dispersion between marks 1 and 4
+        // Check for this
         if (coordinates.size() == 4) {
             if (max_xy_dispersion < (Math.sqrt(Math.pow(coordinates.get(3).getLongitude() - coordinates.get(1).getLongitude(),2)
                     + Math.pow(coordinates.get(3).getLatitude() - coordinates.get(1).getLatitude(),2)))) {
@@ -224,39 +231,17 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         // Dispersion is from centre of screen so divide length by 2
         max_xy_dispersion = max_xy_dispersion/2;
 
+        positionTriangle();
+        positionCircles();
+    }
 
-
-
-
-/*
-        Log.d("max dispersion", String.valueOf(max_xy_dispersion));
-        //Log.d("course distance", String.valueOf(course_distance));
-        Log.d("topLeft x", String.valueOf(topLeft_x));
-        Log.d("centre x", String.valueOf(centre_x));
-        Log.d("coord 0 x", String.valueOf(coordinates.get(0).getLongitude()));
-        Log.d("coord 1 x", String.valueOf(coordinates.get(1).getLongitude()));
-        //Log.d("coord 2 x", String.valueOf(coordinates.get(2).getLongitude()));
-        //Log.d("coord 3 x", String.valueOf(coordinates.get(3).getLongitude()));
-        Log.d("topLeft y", String.valueOf(topLeft_y));
-        Log.d("centre y", String.valueOf(centre_y));
-        Log.d("coord 0 y", String.valueOf(coordinates.get(0).getLatitude()));
-        Log.d("coord 1 y", String.valueOf(coordinates.get(1).getLatitude()));
-        //Log.d("coord 2 y", String.valueOf(coordinates.get(2).getLatitude()));
-        //Log.d("coord 3 y", String.valueOf(coordinates.get(3).getLatitude()));
-        Log.d("number of coords", String.valueOf(coordinates.size()));
-*/
-
-        float x;
-        float y;
-        double ratio_x;
-        double ratio_y;
-
+    double prevRatioX = 1;
+    double prevRatioY = 1;
+    public void positionTriangle() {
         float length = 0.15f;
-
         x = 0.7f;
         y = 0.7f;
 
-        int j;
         if (locations.size() == 1) {
             j = 0;
         } else {
@@ -266,31 +251,25 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         ratio_x = Math.abs((locations.get(j).getLongitude() - centre_x) / max_xy_dispersion);
         ratio_y = Math.abs((locations.get(j).getLatitude() - centre_y) / max_xy_dispersion);
 
-        // Change left and right most coord if user moves outside perimeter
+        // Scale the map so that the user is always visible
+        // even when they go outside the perimeters
         if (ratio_x > 1) {
-            if (leftmost_coord > locations.get(j).getLongitude()) {
-                leftmost_coord = locations.get(j).getLongitude();
-            }
-            if (rightmost_coord < locations.get(j).getLongitude()) {
-                rightmost_coord = locations.get(j).getLongitude();
-            }
-            max_xy_dispersion = (rightmost_coord - leftmost_coord)/2;
-            ratio_x = Math.abs((locations.get(j).getLongitude() - centre_x) / max_xy_dispersion);
-            ratio_y = Math.abs((locations.get(j).getLatitude() - centre_y) / max_xy_dispersion);
+            mScale *= (prevRatioX/ratio_x);
+            prevRatioX = ratio_x;
         }
 
-        // Change up and down most coord if user moves outside perimeter
         if (ratio_y > 1) {
-            if (upmost_coord < locations.get(j).getLatitude()) {
-                upmost_coord = locations.get(j).getLatitude();
-            }
-            if (downmost_coord > locations.get(j).getLatitude()) {
-                downmost_coord = locations.get(j).getLatitude();
-            }
-            max_xy_dispersion = (upmost_coord - downmost_coord)/2;
-            ratio_x = Math.abs((locations.get(j).getLongitude() - centre_x) / max_xy_dispersion);
-            ratio_y = Math.abs((locations.get(j).getLatitude() - centre_y) / max_xy_dispersion);
+            mScale *= (prevRatioY/ratio_y);
+            prevRatioY = ratio_y;
         }
+
+        // Make sure scale is 1 when user is within perimeters
+        if (ratio_x <= 1 && ratio_y <= 1) {
+            mScale = 1;
+        }
+
+        // Don't let the object get too small or too large.
+        mScale = Math.max(0.2f, Math.min(mScale, 5.0f));
 
         // Find x ratio to draw user location
         if (locations.get(j).getLongitude() - centre_x < 0) {
@@ -320,42 +299,15 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
 
         // Draw user location
         triangle = new Triangle(new float[] {x,y,0.0f,x2,y2,0.0f,x3,y3,0.0f});
-/*
-        for (int j = 0; j < locations.size(); j++) {
-            x = 0.7f;
-            y = 0.7f;
+    }
 
-            ratio_x = Math.abs((locations.get(j).getLongitude() - centre_x) / max_xy_dispersion);
-
-            ratio_y = Math.abs((locations.get(j).getLatitude() - centre_y) / max_xy_dispersion);
-
-            if (locations.get(j).getLongitude() - centre_x < 0) {
-                x = (float) -(x * ratio_x);
-            } else if (locations.get(j).getLongitude() - centre_x > 0) {
-                x = (float) (x * ratio_x);
-            } else {
-                x = 0;
-            }
-
-            if (locations.get(j).getLatitude() - centre_y < 0) {
-                y = (float) -(y * ratio_y);
-            } else if (locations.get(j).getLatitude() - centre_y > 0) {
-                y = (float) (y * ratio_y);
-            } else {
-                y = 0;
-            }
-
-            cursors.add(new Circle(x,y,locations.size()-j, 0.03f));
-        }
-*/
-
+    public void positionCircles() {
+        circles = new ArrayList<>();
 
         for (int i = 0; i < coordinates.size(); i++) {
             x = 0.7f;
             y = 0.7f;
 
-            Log.d("Lat"+i,": "+coordinates.get(i).getLatitude());
-            Log.d("Lon"+i,": "+coordinates.get(i).getLongitude());
             ratio_x = Math.abs((coordinates.get(i).getLongitude() - centre_x) / max_xy_dispersion);
 
             ratio_y = Math.abs((coordinates.get(i).getLatitude() - centre_y) / max_xy_dispersion);
@@ -368,7 +320,6 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
             } else {
                 x = 0;
             }
-
 
             if (coordinates.get(i).getLatitude() - centre_y < 0) {
                 y = (float) -(y * ratio_y);
@@ -385,6 +336,7 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
             }
         }
     }
+
 
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);

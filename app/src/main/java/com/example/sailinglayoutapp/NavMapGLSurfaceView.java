@@ -109,6 +109,11 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
+    public void redraw() {
+        renderer.createMap();
+        requestRender();
+    }
+
     private final float TOUCH_SCALE_FACTOR = 90.0f / 320; // rate of rotation
     private float previousX;
     private float previousY;
@@ -134,7 +139,6 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
                 float dy = (y - previousY) * -1;
 
                 if(!(mScaleDetector.isInProgress() || mRotationDetector.isInProgress())) {
-                    Log.d("test", "SCROLL");
                     renderer.setOffsetX(dx * 0.0015f);
                     renderer.setOffsetY(dy * 0.0015f);
                 }
