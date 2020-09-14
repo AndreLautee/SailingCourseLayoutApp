@@ -14,41 +14,68 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         >
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
             android:translationZ="2dp"
-            android:textSize="20sp"
-            android:id="@+id/text_NavMapDist" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_NavMapDist"
-            android:layout_centerHorizontal="true"
-            android:translationZ="2dp"
-            android:textSize="20sp"
-            android:id="@+id/text_NavMapBear" />
+            android:layout_alignParentEnd="true">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/compass_navmap"
             android:id="@+id/img_NavMapCompass"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             android:translationZ="2dp"
-            android:maxHeight="140dp"
-            android:maxWidth="140dp"
+            android:maxHeight="106dp"
+            android:maxWidth="106dp"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:clickable="true"
-             />
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:translationZ="2dp"
+            android:text="DISTANCE"
+            android:textSize="10dp"
+            android:fontFamily="@font/roboto_medium"
+            android:id="@+id/text_NavMapDist_Label"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:translationZ="2dp"
+            android:textSize="16dp"
+            android:fontFamily="@font/roboto"
+            android:id="@+id/text_NavMapDist" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:translationZ="2dp"
+                android:text="BEARING"
+                android:textSize="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:id="@+id/text_NavMapBear_Label"
+                />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:translationZ="2dp"
+            android:textSize="16dp"
+            android:fontFamily="@font/roboto"
+            android:id="@+id/text_NavMapBear" />
+        </LinearLayout>
+
         <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,15 +89,5 @@
 
 
     </RelativeLayout>
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:background="@color/colorMenu"
-        app:itemIconTint="@color/colorWhite"
-        app:itemTextColor="@color/colorWhite"
-        app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/bottom_navigation_menu" />
+
 </LinearLayout>

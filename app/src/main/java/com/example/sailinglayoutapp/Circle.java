@@ -45,10 +45,10 @@ public class Circle {
         radius = r;
         switch(clr) {
             case -1:
-                color = new float[]{0.0f, 0.0f, 0.0f, 1.0f};
+                color = new float[]{0.39215686f, 0.84705882f, 0.79607843f, 1.0f};
                 break;
             case 0:
-                color = new float[]{0.4f, 0.4f, 0.4f, 1.0f};
+                color = new float[]{0.03921569f, 0.18039216f, 0.16470588f, 0.6f};
                 break;
         }
 
