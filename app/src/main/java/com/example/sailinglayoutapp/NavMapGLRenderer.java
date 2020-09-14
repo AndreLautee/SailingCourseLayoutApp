@@ -219,6 +219,14 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         max_xy_dispersion = Math.sqrt(Math.pow(coordinates.get(0).getLongitude() - coordinates.get(1).getLongitude(),2)
                 + Math.pow(coordinates.get(0).getLatitude() - coordinates.get(1).getLatitude(),2));
 
+        //For triangle course the max dispersion may not be the dispersion between marks 1 and 3
+        if (coordinates.size() == 3) {
+            if (max_xy_dispersion < (Math.sqrt(Math.pow(coordinates.get(2).getLongitude() - coordinates.get(1).getLongitude(),2)
+                    + Math.pow(coordinates.get(2).getLatitude() - coordinates.get(1).getLatitude(),2)))) {
+                max_xy_dispersion = Math.sqrt(Math.pow(coordinates.get(2).getLongitude() - coordinates.get(1).getLongitude(),2)
+                        + Math.pow(coordinates.get(2).getLatitude() - coordinates.get(1).getLatitude(),2));
+            }
+        }
         // For trapezoid or optimist courses the max dispersion may not be dispersion between marks 1 and 4
         // Check for this
         if (coordinates.size() == 4) {
@@ -239,8 +247,8 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     double prevRatioY = 1;
     public void positionTriangle() {
         float length = 0.15f;
-        x = 0.9f;
-        y = 0.9f;
+        x = 0.75f;
+        y = 0.75f;
 
         if (locations.size() == 1) {
             j = 0;
@@ -305,8 +313,8 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         circles = new ArrayList<>();
 
         for (int i = 0; i < coordinates.size(); i++) {
-            x = 0.9f;
-            y = 0.9f;
+            x = 0.75f;
+            y = 0.75f;
 
             ratio_x = Math.abs((coordinates.get(i).getLongitude() - centre_x) / max_xy_dispersion);
 
