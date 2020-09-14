@@ -113,7 +113,9 @@ public class CourseLayoutActivity extends AppCompatActivity {
         textView_lat = findViewById(R.id.textView_lat);
         textView_lon = findViewById(R.id.textView_lon);
         if (location != null) {
-            markerCoordCalculations = new MarkerCoordCalculations(location, cvObject);
+            cvObject.setLat(location.getLatitude());
+            cvObject.setLon(location.getLongitude());
+            markerCoordCalculations = new MarkerCoordCalculations(cvObject);
             intent.putExtra("LOCATION", location);
             courseSize = markerCoordCalculations.getCoords().size();
             textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
