@@ -239,8 +239,8 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     double prevRatioY = 1;
     public void positionTriangle() {
         float length = 0.15f;
-        x = 0.7f;
-        y = 0.7f;
+        x = 0.9f;
+        y = 0.9f;
 
         if (locations.size() == 1) {
             j = 0;
@@ -292,21 +292,21 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         float XmidBase = (float) (-Math.sin(bearingDirection)*length) + x;
         float YmidBase = (float) (-Math.cos(bearingDirection)*length) + y;
 
-        float x2 = (float) (Math.sin(bearingDirection + (Math.PI/2))*(length/3)) + XmidBase;
-        float y2 = (float) (Math.cos(bearingDirection + (Math.PI/2))*(length/3)) + YmidBase;
-        float x3 = (float) (Math.sin(bearingDirection - (Math.PI/2))*(length/3)) + XmidBase;
-        float y3 = (float) (Math.cos(bearingDirection - (Math.PI/2))*(length/3)) + YmidBase;
+        float x2 = (float) (Math.sin(bearingDirection + ((2*Math.PI)/3))*(length/2)) + XmidBase;
+        float y2 = (float) (Math.cos(bearingDirection + ((2*Math.PI)/3))*(length/2)) + YmidBase;
+        float x4 = (float) (Math.sin(bearingDirection - ((2*Math.PI)/3))*(length/2)) + XmidBase;
+        float y4 = (float) (Math.cos(bearingDirection - ((2*Math.PI)/3))*(length/2)) + YmidBase;
 
         // Draw user location
-        triangle = new Triangle(new float[] {x,y,0.0f,x2,y2,0.0f,x3,y3,0.0f});
+        triangle = new Triangle(new float[] {x,y,0.0f,x2,y2,0.0f,XmidBase, YmidBase, 0.0f,x4,y4,0.0f});
     }
 
     public void positionCircles() {
         circles = new ArrayList<>();
 
         for (int i = 0; i < coordinates.size(); i++) {
-            x = 0.7f;
-            y = 0.7f;
+            x = 0.9f;
+            y = 0.9f;
 
             ratio_x = Math.abs((coordinates.get(i).getLongitude() - centre_x) / max_xy_dispersion);
 
@@ -330,7 +330,8 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
             }
 
             if (i == selectedMark) {
-                circles.add(new Circle(x,y,-1, 0.05f));
+                circles.add(new Circle(x,y,0, 0.05f));
+                circles.add(new Circle(x,y,-1,0.03f));
             } else {
                 circles.add(new Circle(x,y,0,0.03f));
             }

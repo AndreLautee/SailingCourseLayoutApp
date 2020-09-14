@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -27,11 +29,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -55,48 +59,12 @@ public class NavigationMap extends AppCompatActivity {
     int selectedMark;
     double bearingDirection;
     ImageView img_compass;
-    BottomNavigationView bottomNavigation;
 
-    @SuppressLint({"ResourceAsColor", "RestrictedApi"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_map);
 
-        bottomNavigation = findViewById(R.id.bottom_navigation);
-
-        //set selected page
-        bottomNavigation.setSelectedItemId(R.id.nav_map);
-
-        //perform ItemSelectedListener
-        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Intent intent = getIntent();
-                switch (item.getItemId()){
-                    case R.id.nav_variables:
-                        intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.nav_layout:
-                        intent.setClass(getApplicationContext(),CourseLayoutActivity.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.nav_compass:
-                        intent.setClass(getApplicationContext(),NavigationMap.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.nav_map:
-                        return true;
-                    case R.id.nav_home:
-                        startActivity(new Intent(getApplicationContext(),
-                                MainActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                }
-                return false;
-            }
-        });
 
         Intent intent = getIntent();
         course = intent.getParcelableExtra("COURSE");
@@ -124,13 +92,15 @@ public class NavigationMap extends AppCompatActivity {
 
         // Set number of radio buttons to number of marks
 
+        Typeface font = ResourcesCompat.getFont(this, R.font.roboto_medium);
         for(int i = 0; i < courseSize; i++){
             radioButtons.add(new AppCompatRadioButton(this));
             radioButtons.get(i).setId(i+1);
             radioGroup.removeView(radioButtons.get(i));
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
-            radioButtons.get(i).setText("Mark " + (i+1));
-            radioButtons.get(i).setTextSize(20);
+            radioButtons.get(i).setText("MARK " + (i+1));
+            radioButtons.get(i).setTextSize(14);
+            radioButtons.get(i).setTypeface(font);
         }
         radioGroup.check(radioButtons.get(courseSize-1).getId());
 
