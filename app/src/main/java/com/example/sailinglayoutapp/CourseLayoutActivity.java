@@ -36,10 +36,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
     Location location;
     CourseVariablesObject cvObject;
     MarkerCoordCalculations markerCoordCalculations;
-    TextView textView_lat, textView_lon;
+    TextView textView_lat, textView_lon, markID;
     int courseSize;
     BottomNavigationView bottomNavigation;
     private LocationManager locationManager;
+    int selectedMark;
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
@@ -52,42 +53,6 @@ public class CourseLayoutActivity extends AppCompatActivity {
         r3 = findViewById(R.id.radioButton_layout_3);
         r4 = findViewById(R.id.radioButton_layout_4);
 
-        bottomNavigation = findViewById(R.id.bottom_navigation);
-
-        //set selected page
-        bottomNavigation.setSelectedItemId(R.id.nav_layout);
-
-        //perform ItemSelectedListener
-        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Intent intent = getIntent();
-                switch (item.getItemId()){
-                    case R.id.nav_variables:
-                        intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.nav_layout:
-                        return true;
-                    case R.id.nav_compass:
-                        intent.putExtra("COURSE", markerCoordCalculations);
-                        intent.setClass(getApplicationContext(),NavigationCompassActivity.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.nav_map:
-                        intent.putExtra("COURSE", markerCoordCalculations);
-                        intent.setClass(getApplicationContext(),NavigationMap.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.nav_home:
-                        startActivity(new Intent(getApplicationContext(),
-                                MainActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                }
-                return false;
-            }
-        });
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
@@ -110,16 +75,19 @@ public class CourseLayoutActivity extends AppCompatActivity {
 
 
 
-        textView_lat = findViewById(R.id.textView_lat);
-        textView_lon = findViewById(R.id.textView_lon);
+        textView_lat = findViewById(R.id.courseLayout_lat);
+        textView_lon = findViewById(R.id.courseLayout_lon);
+        markID = findViewById(R.id.courseLayout_markID);
         if (location != null) {
             cvObject.setLat(location.getLatitude());
             cvObject.setLon(location.getLongitude());
             markerCoordCalculations = new MarkerCoordCalculations(cvObject);
             intent.putExtra("LOCATION", location);
             courseSize = markerCoordCalculations.getCoords().size();
-            textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
-            textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
+            textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
+            textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
+            markID.setText("MARK 1");
+            selectedMark = 1;
             setDisplay(extras);
         } else {
             textView_lat.setText("Could not get coords");
@@ -131,8 +99,6 @@ public class CourseLayoutActivity extends AppCompatActivity {
             r4.setVisibility(View.INVISIBLE);
             // Display an error
         }
-
-
 
         Button button_back = findViewById(R.id.button_back);
         Button button_navigation = findViewById(R.id.button_navigation);
@@ -152,6 +118,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 if (markerCoordCalculations != null) {
                     Intent intent = getIntent();
                     intent.putExtra("COURSE", markerCoordCalculations);
+                    intent.putExtra("SELECTED_MARK", selectedMark);
                     intent.setClass(getApplicationContext(),NavigationMap.class);
                     startActivity(intent);
                 } else {
@@ -169,6 +136,10 @@ public class CourseLayoutActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+
     }
 
     public void setDisplay(Bundle extras) {
@@ -197,10 +168,10 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 r3.setVisibility(View.INVISIBLE);
                 r4.setVisibility(View.INVISIBLE); // Only two points needed so make r3 and r4 invisible
 
-                r1_layoutParams.setMargins(width/2, height/5, 0,0);
+                r1_layoutParams.setMargins((width/2)-70, (3*height)/20, 0,0);
                 r1.setLayoutParams(r1_layoutParams);
 
-                r2_layoutParams.setMargins(width/2, (3*height)/5, 0,0);
+                r2_layoutParams.setMargins((width/2)-70, (11*height)/20, 0,0);
                 r2.setLayoutParams(r2_layoutParams);
 
                 drawView = new DrawView(this, r1, r2, width);
@@ -210,13 +181,13 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 r4.setVisibility(View.INVISIBLE); // only three points needed so make r4 invisible
                 if (extras.getInt("TYPE") == 0) { // starboard
 
-                    r1_layoutParams.setMargins(width/6, height/5,0,0);
+                    r1_layoutParams.setMargins(width/6, (3*height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                    r2_layoutParams.setMargins((4*width)/6, (2*height)/5, 0,0);
+                    r2_layoutParams.setMargins((4*width)/6, (7*height)/20, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                    r3_layoutParams.setMargins(width/6,(3*height)/5, 0, 0);
+                    r3_layoutParams.setMargins(width/6,(11*height)/20, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
                     drawView = new DrawView(this, r1, r2, width);
@@ -228,13 +199,13 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     break;
                 } else if (extras.getInt("TYPE") == 1) { // portboard
 
-                    r1_layoutParams.setMargins((4*width)/6, height/5,0,0);
+                    r1_layoutParams.setMargins((4*width)/6, (3*height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                    r2_layoutParams.setMargins(width/6, (2*height)/5, 0,0);
+                    r2_layoutParams.setMargins(width/6, (7*height)/20, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                    r3_layoutParams.setMargins((4*width)/6, (3*height)/5, 0, 0);
+                    r3_layoutParams.setMargins((4*width)/6, (11*height)/20, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
                     drawView = new DrawView(this, r1, r2, width);
@@ -249,16 +220,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 if (extras.getInt("TYPE") == 0) { // if starboard
                     if (extras.getInt("SECOND_BEAT") == 0) { // if equal length second beat
 
-                        r1_layoutParams.setMargins(width/6, (3*height)/20,0,0);
+                        r1_layoutParams.setMargins(width/6, (2*height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins((4*width)/6, (5*height)/20, 0,0);
+                        r2_layoutParams.setMargins((4*width)/6, (4*height)/20, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins((4*width)/6, (13*height)/20, 0, 0);
+                        r3_layoutParams.setMargins((4*width)/6, (12*height)/20, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins(width/6, (11*height)/20, 0, 0);
+                        r4_layoutParams.setMargins(width/6, (10*height)/20, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
                         drawView = new DrawView(this, r1, r2, width);
@@ -272,16 +243,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         break;
                     } else if (extras.getInt("SECOND_BEAT") == 1) { // if unequal length second beat
 
-                        r1_layoutParams.setMargins(width/6, height/5,0,0);
+                        r1_layoutParams.setMargins(width/6, (3*height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins((4*width)/6, (3*height)/10, 0,0);
+                        r2_layoutParams.setMargins((4*width)/6, (5*height)/20, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins((4*width)/6, (5*height)/10, 0, 0);
+                        r3_layoutParams.setMargins((4*width)/6, (9*height)/20, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins(width/6, (3*height)/5, 0, 0);
+                        r4_layoutParams.setMargins(width/6, (11*height)/20, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
                         drawView = new DrawView(this, r1, r2, width);
@@ -320,16 +291,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         break;
                     } else if (extras.getInt("SECOND_BEAT") == 1) { // if unequal length second beat
 
-                        r1_layoutParams.setMargins((4*width)/6, height/5,0,0);
+                        r1_layoutParams.setMargins((4*width)/6, (3*height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins(width/6, (3*height)/10, 0,0);
+                        r2_layoutParams.setMargins(width/6, (5*height)/20, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins(width/6, (5*height)/10, 0, 0);
+                        r3_layoutParams.setMargins(width/6, (9*height)/20, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins((4*width)/6, (3*height)/5, 0, 0);
+                        r4_layoutParams.setMargins((4*width)/6, (11*height)/20, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
                         drawView = new DrawView(this, r1, r2, width);
@@ -346,16 +317,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
             case 3: // optimist
                 if (extras.getInt("TYPE") == 0) { // if starboard
 
-                    r1_layoutParams.setMargins(width/8, height/5,0,0);
+                    r1_layoutParams.setMargins(width/8, (3*height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                    r2_layoutParams.setMargins((6*width)/8, (6*height)/20, 0,0);
+                    r2_layoutParams.setMargins((6*width)/8, (5*height)/20, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                    r3_layoutParams.setMargins((6*width)/8, (13*height)/20, 0, 0);
+                    r3_layoutParams.setMargins((6*width)/8, (12*height)/20, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
-                    r4_layoutParams.setMargins(width/8, (11*height)/20, 0, 0);
+                    r4_layoutParams.setMargins(width/8, (10*height)/20, 0, 0);
                     r4.setLayoutParams(r4_layoutParams);
 
                     drawView = new DrawView(this, r1, r2, width);
@@ -367,16 +338,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     break;
                 } else if (extras.getInt("TYPE") == 1) { // if portboard
 
-                    r1_layoutParams.setMargins((6*width)/8, height/5,0,0);
+                    r1_layoutParams.setMargins((6*width)/8, (3*height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                    r2_layoutParams.setMargins(width/8, (6*height)/20, 0,0);
+                    r2_layoutParams.setMargins(width/8, (5*height)/20, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                    r3_layoutParams.setMargins(width/8, (13*height)/20, 0, 0);
+                    r3_layoutParams.setMargins(width/8, (12*height)/20, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
-                    r4_layoutParams.setMargins((6*width)/8, (11*height)/20, 0, 0);
+                    r4_layoutParams.setMargins((6*width)/8, (10*height)/20, 0, 0);
                     r4.setLayoutParams(r4_layoutParams);
 
                     drawView = new DrawView(this, r1, r2, width);
@@ -526,8 +497,10 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 r2.setChecked(false);
                 r3.setChecked(false);
                 r4.setChecked(false);
-                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
-                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
+                textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
+                textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
+                markID.setText("MARK 1");
+                selectedMark = 1;
             }
             if (r2.getId() == v.getId()) {
                 r1.setChecked(false);
@@ -539,8 +512,10 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 } else {
                     i = 2;
                 }
-                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLatitude()));
-                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLongitude()));
+                textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLatitude()));
+                textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLongitude()));
+                markID.setText("MARK 2");
+                selectedMark = 2;
             }
             if (r3.getId() == v.getId()) {
                 r1.setChecked(false);
@@ -552,15 +527,19 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 } else {
                     i = 3;
                 }
-                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLatitude()));
-                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLongitude()));
+                textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLatitude()));
+                textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLongitude()));
+                markID.setText("MARK 3");
+                selectedMark = 3;
             }
             if (r4.getId() == v.getId()) {
                 r1.setChecked(false);
                 r2.setChecked(false);
                 r3.setChecked(false);
-                textView_lat.setText("Latitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(0).getLatitude()));
-                textView_lon.setText("Longitude: " + decimalDeg2degMins(markerCoordCalculations.getCoords().get(0).getLongitude()));
+                textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(0).getLatitude()));
+                textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(0).getLongitude()));
+                markID.setText("MARK 4");
+                selectedMark = 4;
             }
         }
     };
