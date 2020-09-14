@@ -5,17 +5,31 @@ import android.os.Parcelable;
 
 public class CourseVariablesObject implements Parcelable {
 
+    private String type;
+    private double lat;
+    private double lon;
     private String shape;
     private double bearing;
     private double distance;
     private int angle;
-    private String type;
     private double reach;
     private String secondBeat;
 
     CourseVariablesObject() {}
 
-    CourseVariablesObject(String type, String shape, double bearing, double distance, int angle, double reach, String secondBeat) {
+    public CourseVariablesObject(String type, double lat, double lon, String shape, double bearing, double distance, int angle, double reach, String secondBeat) {
+        this.type = type;
+        this.lat = lat;
+        this.lon = lon;
+        this.shape = shape;
+        this.bearing = getBearingsInRadians(bearing);
+        this.distance = distance;
+        this.angle = angle;
+        this.reach = reach;
+        this.secondBeat = secondBeat;
+    }
+
+    public CourseVariablesObject(String type, String shape, double bearing, double distance, int angle, double reach, String secondBeat) {
         this.type = type;
         this.shape = shape;
         this.bearing = getBearingsInRadians(bearing);
@@ -27,6 +41,8 @@ public class CourseVariablesObject implements Parcelable {
 
     protected CourseVariablesObject(Parcel in) {
         type = in.readString();
+        lat = in.readDouble();
+        lon = in.readDouble();
         shape = in.readString();
         bearing = in.readDouble();
         distance = in.readDouble();
@@ -46,6 +62,14 @@ public class CourseVariablesObject implements Parcelable {
             return new CourseVariablesObject[size];
         }
     };
+
+    double getLat() {return lat;}
+
+    public void setLat(double latitude) {this.lat = latitude;}
+
+    double getLon() {return lon;}
+
+    public void setLon(double longitude) {this.lon = longitude;}
 
     String getShape() {
         return shape;
@@ -111,6 +135,8 @@ public class CourseVariablesObject implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(type);
+        dest.writeDouble(lat);
+        dest.writeDouble(lon);
         dest.writeString(shape);
         dest.writeDouble(bearing);
         dest.writeDouble(distance);

@@ -14,12 +14,16 @@ public class MarkerCoordCalculations implements Parcelable {
     private ArrayList<Location> coords;
     private CourseVariablesObject courseVariablesObject;
 
-    MarkerCoordCalculations(Location userCoord, CourseVariablesObject cV) {
+    MarkerCoordCalculations(CourseVariablesObject cV) {
+        this.courseVariablesObject = cV;
+
         coords = new ArrayList<>();
         // Coordinates of user are the coords for starting mark
         // coords[0] is starting mark
-        this.coords.add(userCoord);
-        this.courseVariablesObject = cV;
+        Location userLocation = new Location(LocationManager.GPS_PROVIDER);
+        userLocation.setLatitude(courseVariablesObject.getLat());
+        userLocation.setLongitude(courseVariablesObject.getLon());
+        this.coords.add(userLocation);
 
         if(!createShape(courseVariablesObject.getShape())) {
             coords = null;
