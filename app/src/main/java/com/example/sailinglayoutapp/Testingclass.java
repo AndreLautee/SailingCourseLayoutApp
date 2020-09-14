@@ -9,51 +9,27 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class Testingclass extends AppCompatActivity {
     TextView Start;
     private int Request_code = 1;
-    BottomNavigationView bottomNavigation;
+    private BottomSheetBehavior bottomsheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.testing2);
 
-        Start = findViewById(R.id.Start);
-        bottomNavigation = findViewById(R.id.bottom_navigation);
+        LinearLayout trapezoid=findViewById(R.id.bottom_sheet_trapezoid);
+        bottomsheet = BottomSheetBehavior.from(trapezoid);
 
-        //set selected page
-        bottomNavigation.setSelectedItemId(R.id.nav_layout);
+        BottomSheetBehavior.from(trapezoid).setHideable(false);
 
-        //perform ItemSelectedListener
-        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.nav_variables:
-                        startActivity(new Intent(getApplicationContext(),
-                                CourseVariablesActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                }
-                switch (item.getItemId()){
-                    case R.id.nav_compass:
-                        startActivity(new Intent(getApplicationContext(),
-                                MainActivity2.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                }
-                switch (item.getItemId()){
-                    case R.id.nav_layout:
-                        return true;
-                }
-                return false;
-            }
-        });
 
 
     }

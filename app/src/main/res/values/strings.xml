@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SailingLayoutApp</string>
     <string name="wind_direction">Wind Direction</string>
-    <string name="angle">Angle</string>
+    <string name="angle">Corner Angles</string>
     <string name="degrees">°</string>
     <string name="reach_length">Reach Length</string>
     <string name="calculate">Calculate</string>
@@ -18,6 +18,7 @@
     <string name="reference_point">Keep previous reference point?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="course_orientation">Course Orientation</string>
 
     <string name="hello_world">Hello Square World!</string>
 

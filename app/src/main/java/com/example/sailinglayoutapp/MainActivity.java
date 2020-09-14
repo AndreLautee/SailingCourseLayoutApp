@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Navi_onclick(View view) {
+        Intent intent=new Intent();
+        intent.setClass(getApplicationContext(),Testingclass.class);
+        startActivityForResult(intent,Request_code);
 
     }
 
