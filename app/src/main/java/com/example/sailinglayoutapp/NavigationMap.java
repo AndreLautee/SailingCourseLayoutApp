@@ -77,6 +77,8 @@ public class NavigationMap extends AppCompatActivity {
         course = intent.getParcelableExtra("COURSE");
         courseSize = course.getCoords().size();
 
+        selectedMark = intent.getIntExtra("SELECTED_MARK",0);
+
 
         locations = new ArrayList<>();
         textView_distance = findViewById(R.id.text_NavMapDist);
@@ -109,7 +111,11 @@ public class NavigationMap extends AppCompatActivity {
             radioButtons.get(i).setTextSize(14);
             radioButtons.get(i).setTypeface(font);
         }
-        radioGroup.check(radioButtons.get(courseSize-1).getId());
+        radioGroup.check(selectedMark);
+        if (selectedMark == courseSize) {
+            selectedMark = 0;
+        }
+
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
