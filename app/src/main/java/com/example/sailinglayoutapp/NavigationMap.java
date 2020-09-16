@@ -55,9 +55,11 @@ public class NavigationMap extends AppCompatActivity {
         setContentView(R.layout.activity_navigation_map);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Course Navigation");
-        actionBar.setDisplayHomeAsUpEnabled(false);
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("Course Navigation");
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
 
         Intent intent = getIntent();
         course = intent.getParcelableExtra("COURSE");
@@ -96,6 +98,8 @@ public class NavigationMap extends AppCompatActivity {
             radioButtons.get(i).setText("MARK " + (i+1));
             radioButtons.get(i).setTextSize(14);
             radioButtons.get(i).setTypeface(font);
+            radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
+            radioButtons.get(i).setPadding(7,0,20,0);
         }
         radioGroup.check(selectedMark);
         if (selectedMark == courseSize) {

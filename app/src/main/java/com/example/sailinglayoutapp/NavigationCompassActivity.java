@@ -69,9 +69,12 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         setContentView(R.layout.activity_navigation_compass);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Navigation Compass");
-        actionBar.setDisplayHomeAsUpEnabled(false);
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("Navigation Compass");
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+
 
         Intent intent = getIntent();
         course = intent.getParcelableExtra("COURSE");
@@ -103,6 +106,8 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
             radioButtons.get(i).setText("Mark " + (i+1));
             radioButtons.get(i).setTextSize(20);
+            radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
+            radioButtons.get(i).setPadding(7,0,20,0);
         }
         radioGroup.check(radioButtons.get(courseSize-1).getId());
 

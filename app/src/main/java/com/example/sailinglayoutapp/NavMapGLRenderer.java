@@ -72,7 +72,7 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     }
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        GLES20.glClearColor(0.384314f, 0.9372549f, 1.0f, 1.0f);
+        GLES20.glClearColor(0.92941176f, 0.96078431f, 1.0f, 1.0f);
 
         createMap();
 
@@ -338,10 +338,10 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
             }
 
             if (i == selectedMark) {
-                circles.add(new Circle(x,y,0, 0.05f));
-                circles.add(new Circle(x,y,-1,0.03f));
+                circles.add(new Circle(x,y,1, 0.06f));
+                circles.add(new Circle(x,y,-1,0.04f));
             } else {
-                circles.add(new Circle(x,y,0,0.03f));
+                circles.add(new Circle(x,y,0,0.04f));
             }
         }
     }

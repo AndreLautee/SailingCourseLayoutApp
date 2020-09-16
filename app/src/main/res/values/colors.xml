@@ -10,6 +10,7 @@
     <color name="colorSecondaryLight">#64D8CB</color>
     <color name="colorOnSecondary">#0A2E2A</color>
     <color name="colorOnSecondaryDefault">#600A2E2A</color>
+    <color name="colorRadioBorder">#3852C7B8</color>
     <color name="colorSurface">#E0F7FA</color>
     <color name="colorLayoutLine">#148C8040</color>
 

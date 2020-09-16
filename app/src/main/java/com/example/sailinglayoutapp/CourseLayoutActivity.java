@@ -50,9 +50,12 @@ public class CourseLayoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_layout);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Course Layout");
-        actionBar.setDisplayHomeAsUpEnabled(false);
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("Course Layout");
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+
 
         r1 = findViewById(R.id.radioButton_layout_1);
         r2 = findViewById(R.id.radioButton_layout_2);
