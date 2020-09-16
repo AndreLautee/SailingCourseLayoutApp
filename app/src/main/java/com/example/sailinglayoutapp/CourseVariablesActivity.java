@@ -49,9 +49,12 @@ public class CourseVariablesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_variables);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Course Variables");
-        actionBar.setDisplayHomeAsUpEnabled(false);
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("Course Variables");
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
 

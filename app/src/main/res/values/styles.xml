@@ -33,6 +33,11 @@
         <item name="tint">@color/colorOnPrimary</item>
     </style>
 
+    <style name="RadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="colorControlNormal">@color/colorOnSecondary</item>
+        <item name="colorControlActivated">@color/colorSecondaryLight</item>
+    </style>
+
     <declare-styleable name="LayoutGLSurfaceView">
 
     </declare-styleable>

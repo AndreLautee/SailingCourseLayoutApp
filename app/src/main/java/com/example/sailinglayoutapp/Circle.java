@@ -33,7 +33,7 @@ public class Circle {
     private int points = 360;
 
     int vertexCount = 100;
-    float radius = 0.03f;
+    float radius;
     float center_x;
     float center_y;
     float center_z = 0.0f;
@@ -45,17 +45,23 @@ public class Circle {
         radius = r;
         switch(clr) {
             case -1:
+                // Selected mark inner circle
                 color = new float[]{0.39215686f, 0.84705882f, 0.79607843f, 1.0f};
                 break;
             case 0:
-                color = new float[]{0.03921569f, 0.18039216f, 0.16470588f, 0.6f};
+                // Unselected mark circle
+                color = new float[]{0.67843137f, 0.70588235f, 0.68235294f, 1.0f};
+                break;
+            case 1:
+                // Selected mark outer circle
+                color = new float[]{0.87058824f, 0.94117647f, 1.0f, 1.0f};
                 break;
         }
 
         center_x = cntr_x;
         center_y = cntr_y;
         // Create a buffer for vertex data
-        float buffer[] = new float[vertexCount*3]; // (x,y) for each vertex
+        float[] buffer = new float[vertexCount*3]; // (x,y) for each vertex
         int idx = 0;
 
 // Center vertex for triangle fan
