@@ -8,8 +8,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -45,6 +47,12 @@ public class CourseVariablesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_variables);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("Course Variables");
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
 
@@ -234,7 +242,7 @@ public class CourseVariablesActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), WeatherAPIActivity.class);
-                    intent.putExtra("location", currentLocation);
+                    intent.putExtra("LOCATION", currentLocation);
                     startActivity(intent);
                 }
 
@@ -255,6 +263,43 @@ public class CourseVariablesActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.btn_home:
+                // User chose the "Menu" item, show the app menu UI...
+                intent = new Intent();
+                intent.setClass(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_variables:
+                intent = new Intent();
+                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_weather:
+                intent = new Intent();
+                intent.putExtra("LOCATION", currentLocation);
+                intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     public Bundle passBundle(){

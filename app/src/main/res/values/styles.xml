@@ -1,11 +1,36 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    @<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionBarStyle">@style/ActionBar</item>
+        <item name="actionBarPopupTheme">@style/PopUpTheme</item>
+        <item name="actionOverflowButtonStyle">@style/OverflowButton</item>
+    </style>
+
+    <style name="ActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="titleTextStyle">@style/ActionBarTitle</item>
+        <item name="background">@color/colorPrimary</item>
+    </style>
+    <style name="ActionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="PopUpTheme" parent="Widget.AppCompat.ActionBar">
+        <item name="android:colorBackground">@color/colorPrimary</item>
+        <item name="android:itemTextAppearance">@style/PopUpTextAppearance</item>
+    </style>
+    <style name="PopUpTextAppearance">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="OverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="tint">@color/colorOnPrimary</item>
     </style>
 
     <declare-styleable name="LayoutGLSurfaceView">

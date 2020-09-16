@@ -10,9 +10,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -47,6 +48,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_layout);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("Course Layout");
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
         r1 = findViewById(R.id.radioButton_layout_1);
         r2 = findViewById(R.id.radioButton_layout_2);
@@ -140,6 +146,45 @@ public class CourseLayoutActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.btn_home:
+                // User chose the "Menu" item, show the app menu UI...
+                intent = new Intent();
+                intent.putExtra("COURSE_VARIABLES", cvObject);
+                intent.setClass(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_variables:
+                intent = new Intent();
+                intent.putExtra("COURSE_VARIABLES", cvObject);
+                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_weather:
+                intent = new Intent();
+                intent.putExtra("LOCATION", location);
+                intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     public void setDisplay(Bundle extras) {
