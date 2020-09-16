@@ -25,10 +25,10 @@ public class Testingclass extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.testing2);
 
-        LinearLayout trapezoid=findViewById(R.id.bottom_sheet_trapezoid);
-        bottomsheet = BottomSheetBehavior.from(trapezoid);
+        LinearLayout windward=findViewById(R.id.bottom_sheet_windward);
+        bottomsheet = BottomSheetBehavior.from(windward);
 
-        BottomSheetBehavior.from(trapezoid).setHideable(false);
+        BottomSheetBehavior.from(windward).setHideable(false);
 
 
 

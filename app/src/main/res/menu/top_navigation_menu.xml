@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_layout"
+        android:icon="@drawable/layouticon"
+        android:title="Layout"
+        />
+    <item
+        android:id="@+id/nav_compass"
+        android:icon="@drawable/compass_icon"
+        android:title="Compass"
+        />
+
+    <item
+        android:id="@+id/nav_navigation"
+        android:icon="@drawable/navi_icon"
+        android:title="Navigation"/>
+
+
+
+</menu>
