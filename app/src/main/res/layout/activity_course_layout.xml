@@ -97,7 +97,8 @@
         android:text="Coordinates"
         android:layout_gravity="center"
         android:textSize="20dp"
-        android:fontFamily="@font/roboto_medium" />
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/colorOnPrimaryDefault"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

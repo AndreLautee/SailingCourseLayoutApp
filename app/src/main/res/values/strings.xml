@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SailingLayoutApp</string>
+    <string name="app_name">Sailing Course Layout</string>
     <string name="wind_direction">Wind Direction</string>
     <string name="angle">Angle</string>
     <string name="degrees">°</string>

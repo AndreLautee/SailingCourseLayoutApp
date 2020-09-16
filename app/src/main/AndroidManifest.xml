@@ -33,7 +33,7 @@
 
         <activity android:name=".WeatherAPIActivity" android:screenOrientation="portrait"/>
 
-        <activity android:name=".NavigationMap" android:screenOrientation="portrait"/>
+        <activity android:name=".NavigationMap" android:screenOrientation="portrait" android:parentActivityName=".CourseVariablesActivity"/>
 
         <activity android:name=".NavigationCompassActivity" android:screenOrientation="portrait"/>
 
