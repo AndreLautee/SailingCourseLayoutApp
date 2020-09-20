@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        Start=findViewById(R.id.Start);
+        Start=findViewById(R.id.btn);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
         ActionBar actionBar = getSupportActionBar();
@@ -65,13 +65,4 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent,Request_code);
     }
 
-    public void Navi_onclick(View view) {
-        Intent intent=new Intent();
-        intent.setClass(getApplicationContext(),Testingclass.class);
-        startActivityForResult(intent,Request_code);
-
-    }
-
-    public void Setting_onclick(View view) {
-    }
 }
