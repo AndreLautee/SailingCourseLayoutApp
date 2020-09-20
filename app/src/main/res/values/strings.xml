@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SailingLayoutApp</string>
+    <string name="app_name">Sailing Course Layout</string>
     <string name="wind_direction">Wind Direction</string>
     <string name="angle">Corner Angles</string>
     <string name="degrees">°</string>
@@ -40,6 +40,10 @@
         <item>60°, 120°</item>
         <item>70°, 110°</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mark_1">MARK 1</string>
+    <string name="mark_2">MARK 2</string>
+    <string name="mark_3">MARK 3</string>
+    <string name="mark_4">MARK 4</string>
+    <string name="back">Back</string>
 </resources>

@@ -55,7 +55,7 @@ public class WeatherAPIActivity extends AppCompatActivity {
     {
 
         Intent gpsIntent = getIntent();
-        Location location = gpsIntent.getParcelableExtra("location");
+        Location location = gpsIntent.getParcelableExtra("LOCATION");
 
         double lat = location.getLatitude();
         double lon = location.getLongitude();

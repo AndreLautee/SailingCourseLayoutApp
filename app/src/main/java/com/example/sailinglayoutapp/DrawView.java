@@ -16,8 +16,8 @@ public class DrawView extends View {
         super(context);
         this.startView = startView;
         this.endView = endView;
-        paint.setColor(Color.BLACK);
-        paint.setStrokeWidth(8);
+        paint.setColor(getResources().getColor(R.color.colorLayoutLine));
+        paint.setStrokeWidth(45);
         buffer = (int) (0.04027778 * width);
     }
 

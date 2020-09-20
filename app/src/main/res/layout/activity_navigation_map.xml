@@ -20,40 +20,41 @@
             android:orientation="vertical"
             android:translationZ="2dp"
             android:layout_alignParentEnd="true">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/compass_navmap"
-            android:id="@+id/img_NavMapCompass"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:translationZ="2dp"
-            android:maxHeight="106dp"
-            android:maxWidth="106dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:clickable="true"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:translationZ="2dp"
-            android:text="DISTANCE"
-            android:textSize="10dp"
-            android:fontFamily="@font/roboto_medium"
-            android:id="@+id/text_NavMapDist_Label"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:translationZ="2dp"
-            android:textSize="16dp"
-            android:fontFamily="@font/roboto"
-            android:id="@+id/text_NavMapDist" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/compass_navmap"
+                android:id="@+id/img_NavMapCompass"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:translationZ="2dp"
+                android:maxHeight="120dp"
+                android:maxWidth="120dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:translationZ="2dp"
+                android:text="DISTANCE"
+                android:textSize="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:id="@+id/text_NavMapDist_Label"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:translationZ="2dp"
+                android:textSize="16dp"
+                android:textColor="@color/colorBlack"
+                android:fontFamily="@font/roboto"
+                android:id="@+id/text_NavMapDist" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,14 +67,15 @@
                 android:fontFamily="@font/roboto_medium"
                 android:id="@+id/text_NavMapBear_Label"
                 />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:translationZ="2dp"
-            android:textSize="16dp"
-            android:fontFamily="@font/roboto"
-            android:id="@+id/text_NavMapBear" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:translationZ="2dp"
+                android:textSize="16dp"
+                android:textColor="@color/colorBlack"
+                android:fontFamily="@font/roboto"
+                android:id="@+id/text_NavMapBear" />
         </LinearLayout>
 
         <RadioGroup

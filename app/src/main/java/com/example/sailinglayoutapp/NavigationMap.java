@@ -1,35 +1,28 @@
 package com.example.sailinglayoutapp;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.opengl.GLSurfaceView;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRadioButton;
@@ -37,12 +30,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import org.decimal4j.util.DoubleRounder;
-import org.w3c.dom.Text;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class NavigationMap extends AppCompatActivity {
@@ -65,10 +54,18 @@ public class NavigationMap extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_map);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("Course Navigation");
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
 
         Intent intent = getIntent();
         course = intent.getParcelableExtra("COURSE");
         courseSize = course.getCoords().size();
+
+        selectedMark = intent.getIntExtra("SELECTED_MARK",0);
 
 
         locations = new ArrayList<>();
@@ -101,8 +98,14 @@ public class NavigationMap extends AppCompatActivity {
             radioButtons.get(i).setText("MARK " + (i+1));
             radioButtons.get(i).setTextSize(14);
             radioButtons.get(i).setTypeface(font);
+            radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
+            radioButtons.get(i).setPadding(7,0,20,0);
         }
-        radioGroup.check(radioButtons.get(courseSize-1).getId());
+        radioGroup.check(selectedMark);
+        if (selectedMark == courseSize) {
+            selectedMark = 0;
+        }
+
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -178,6 +181,47 @@ public class NavigationMap extends AppCompatActivity {
         }
     };
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.btn_home:
+                // User chose the "Menu" item, show the app menu UI...
+                intent = new Intent();
+                intent.putExtra("COURSE_VARIABLES", course.getCourseVariablesObject());
+                intent.setClass(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_variables:
+                intent = getIntent();
+                intent.putExtra("COURSE_VARIABLES", course.getCourseVariablesObject());
+                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_weather:
+                intent = getIntent();
+                intent.putExtra("LOCATION",locations.get(locations.size() - 1));
+                intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
     public void setTexts() {
         double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
 
@@ -190,7 +234,7 @@ public class NavigationMap extends AppCompatActivity {
 
 
         // Display updated bearing to newly selected mark
-        String bearingText = DoubleRounder.round(bearingBetweenPoints, 2) + "°";
+        String bearingText = Math.round(bearingBetweenPoints) + "°";
         textView_bearing.setText(bearingText);
 
         // Display new glview with new location
@@ -283,4 +327,6 @@ public class NavigationMap extends AppCompatActivity {
             return true;
         }
     }
+
+
 }

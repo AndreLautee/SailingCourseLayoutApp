@@ -1,5 +1,7 @@
 package com.example.sailinglayoutapp;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -19,13 +21,14 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.decimal4j.util.DoubleRounder;
@@ -36,6 +39,7 @@ import java.util.ArrayList;
 public class NavigationCompassActivity extends AppCompatActivity implements SensorEventListener {
 
     ImageView compass_img;
+    ImageView arrow;
     TextView txt_compass;
     int degrees;
     private SensorManager mSensorManager;
@@ -64,6 +68,14 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_compass);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("Navigation Compass");
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+
 
         Intent intent = getIntent();
         course = intent.getParcelableExtra("COURSE");
@@ -94,7 +106,9 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             radioGroup.removeView(radioButtons.get(i));
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
             radioButtons.get(i).setText("Mark " + (i+1));
-            radioButtons.get(i).setTextSize(20);
+            radioButtons.get(i).setTextSize(14);
+            radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
+            radioButtons.get(i).setPadding(7,0,20,0);
         }
         radioGroup.check(radioButtons.get(courseSize-1).getId());
 
@@ -117,7 +131,8 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         compass_img = (ImageView) findViewById(R.id.img_compass);
-        txt_compass = (TextView) findViewById(R.id.txt);
+        arrow = (ImageView) findViewById(R.id.img_arrow);
+        txt_compass = (TextView) findViewById(R.id.text_NavCompHead);
 
         start();
     }
@@ -126,19 +141,20 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     LocationListener locationListener = new LocationListener() {
 
         @Override
-            public void onLocationChanged(Location location) {
-                if (locations.size() >= 2) {
-                    locations.remove(0);
-                    locations.add(location);
-                    bearingDirection = locations.get(0).bearingTo(locations.get(1));
-                } else {
-                    locations.add(location);
-                }
-
-
-                setTexts();
-
+        public void onLocationChanged(Location location) {
+            if (locations.size() >= 2) {
+                locations.remove(0);
+                locations.add(location);
+                bearingDirection = locations.get(0).bearingTo(locations.get(1));
+            } else {
+                locations.add(location);
             }
+
+
+
+            setTexts();
+
+        }
 
 
 
@@ -158,22 +174,62 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         }
     };
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.btn_home:
+                // User chose the "Menu" item, show the app menu UI...
+                intent = new Intent();
+                intent.putExtra("COURSE_VARIABLES", course.getCourseVariablesObject());
+                intent.setClass(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_variables:
+                intent = getIntent();
+                intent.putExtra("COURSE_VARIABLES", course.getCourseVariablesObject());
+                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_weather:
+                intent = getIntent();
+                intent.putExtra("LOCATION",locations.get(locations.size() - 1));
+                intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 
     public void setTexts() {
         double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
 
         double bearingBetweenPoints = bearingBetweenPoints(locations.get(locations.size()-1).getLatitude(),locations.get(locations.size()-1).getLongitude(),
                 course.getCoords().get(selectedMark).getLatitude(),course.getCoords().get(selectedMark).getLongitude());
-
-        String bearingString = decimalDeg2degMins(bearingBetweenPoints);
+        bearingBetweenPoints = Math.round(bearingBetweenPoints);
         // Display new distance to selected mark
         String distText = distBetweenPoints + " Nm";
         textView_distance.setText(distText);
 
 
         // Display updated bearing to newly selected mark
-        String bearingText = "" + bearingString;
+        String bearingText = bearingBetweenPoints + "°";
         textView_bearing.setText(bearingText);
+
 
     }
 
@@ -225,6 +281,12 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
         degrees = Math.round(degrees);
         compass_img.setRotation(-degrees);
+
+        double bearingBetweenPoints = bearingBetweenPoints(locations.get(locations.size()-1).getLatitude(),locations.get(locations.size()-1).getLongitude(),
+                course.getCoords().get(selectedMark).getLatitude(),course.getCoords().get(selectedMark).getLongitude());
+        bearingBetweenPoints = Math.round(bearingBetweenPoints);
+        arrow.setRotation((float) -(degrees-bearingBetweenPoints));
+
 
         String where = "NW";
 

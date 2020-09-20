@@ -3,14 +3,16 @@
     <color name="colorPrimary">#00BCD4</color>
     <color name="colorPrimaryDark">#0097A7</color>
     <color name="colorPrimaryLight">#62EFFF</color>
+    <color name="colorOnPrimary">#001B1F</color>
+    <color name="colorOnPrimaryDefault">#60001B1F</color>
     <color name="colorSecondary">#52C7B8</color>
     <color name="colorSecondaryDark">#00766C</color>
     <color name="colorSecondaryLight">#64D8CB</color>
+    <color name="colorOnSecondary">#0A2E2A</color>
+    <color name="colorOnSecondaryDefault">#600A2E2A</color>
+    <color name="colorRadioBorder">#3852C7B8</color>
     <color name="colorSurface">#E0F7FA</color>
-    <color name="colorInputText">#0C3732CC</color>
-    <color name="colorAssistiveText">#0C3732B3</color>
-    <color name="colorLabel">#001B1F99</color>
-
+    <color name="colorLayoutLine">#148C8040</color>
 
     <color name="colorAccent">#00766C</color>
     <color name="colorLightBlue">#BAD0F6</color>
@@ -18,6 +20,58 @@
     <color name="colorDarkBlue">#3E58A4</color>
     <color name="colorMenu">#B2D2EA</color>
     <color name="colorButton">#4A95F2</color>
-    <color name="colorGrey">#D3D3D3</color>
-    <color name="colorTopMenu">#00DCB4</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorGray">#607D8B</color>
+    <color name="dot_inactive">#00766c</color>
+
+
+    <array name="array_dot_active">
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+</array>
+
+
+    <array name="array_dot_inactive">
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+</array>
+
 </resources>
