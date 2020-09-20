@@ -106,7 +106,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             radioGroup.removeView(radioButtons.get(i));
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
             radioButtons.get(i).setText("Mark " + (i+1));
-            radioButtons.get(i).setTextSize(20);
+            radioButtons.get(i).setTextSize(14);
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
             radioButtons.get(i).setPadding(7,0,20,0);
         }
@@ -132,7 +132,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         compass_img = (ImageView) findViewById(R.id.img_compass);
         arrow = (ImageView) findViewById(R.id.img_arrow);
-        txt_compass = (TextView) findViewById(R.id.txt);
+        txt_compass = (TextView) findViewById(R.id.text_NavCompHead);
 
         start();
     }
@@ -141,19 +141,20 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     LocationListener locationListener = new LocationListener() {
 
         @Override
-            public void onLocationChanged(Location location) {
-                if (locations.size() >= 2) {
-                    locations.remove(0);
-                    locations.add(location);
-                    bearingDirection = locations.get(0).bearingTo(locations.get(1));
-                } else {
-                    locations.add(location);
-                }
-
-
-                setTexts();
-
+        public void onLocationChanged(Location location) {
+            if (locations.size() >= 2) {
+                locations.remove(0);
+                locations.add(location);
+                bearingDirection = locations.get(0).bearingTo(locations.get(1));
+            } else {
+                locations.add(location);
             }
+
+
+
+            setTexts();
+
+        }
 
 
 
@@ -219,16 +220,16 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
         double bearingBetweenPoints = bearingBetweenPoints(locations.get(locations.size()-1).getLatitude(),locations.get(locations.size()-1).getLongitude(),
                 course.getCoords().get(selectedMark).getLatitude(),course.getCoords().get(selectedMark).getLongitude());
-
-        String bearingString = decimalDeg2degMins(bearingBetweenPoints);
+        bearingBetweenPoints = Math.round(bearingBetweenPoints);
         // Display new distance to selected mark
         String distText = distBetweenPoints + " Nm";
         textView_distance.setText(distText);
 
 
         // Display updated bearing to newly selected mark
-        String bearingText = "" + bearingString;
+        String bearingText = bearingBetweenPoints + "°";
         textView_bearing.setText(bearingText);
+
 
     }
 
@@ -277,12 +278,15 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             SensorManager.getOrientation(rMat, orientation);
             degrees = (int) (Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0]) + 360) % 360;
         }
+
+        degrees = Math.round(degrees);
+        compass_img.setRotation(-degrees);
+
         double bearingBetweenPoints = bearingBetweenPoints(locations.get(locations.size()-1).getLatitude(),locations.get(locations.size()-1).getLongitude(),
                 course.getCoords().get(selectedMark).getLatitude(),course.getCoords().get(selectedMark).getLongitude());
         bearingBetweenPoints = Math.round(bearingBetweenPoints);
-        arrow.setRotation((float) -bearingBetweenPoints);
-        degrees = Math.round(degrees);
-        compass_img.setRotation(-degrees);
+        arrow.setRotation((float) -(degrees-bearingBetweenPoints));
+
 
         String where = "NW";
 
