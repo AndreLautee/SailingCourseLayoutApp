@@ -234,7 +234,7 @@ public class NavigationMap extends AppCompatActivity {
 
 
         // Display updated bearing to newly selected mark
-        String bearingText = DoubleRounder.round(bearingBetweenPoints, 2) + "°";
+        String bearingText = Math.round(bearingBetweenPoints) + "°";
         textView_bearing.setText(bearingText);
 
         // Display new glview with new location
