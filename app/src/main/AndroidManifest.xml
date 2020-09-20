@@ -42,6 +42,8 @@
         <activity
             android:name=".NavigationCompassActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".CourseVariablesBackdropActivity"
+            android:screenOrientation="portrait" />
 
         <activity android:name=".Testingclass" android:screenOrientation="portrait"/>
 

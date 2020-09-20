@@ -24,28 +24,6 @@
             android:padding="10dp"
             android:id="@+id/LinearLayout1">
 
-            <View
-                android:layout_width="30dp"
-                android:layout_height="5dp"
-                android:layout_gravity="center"
-                android:background="@color/colorAccent"
-                />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Advance Variables"
-                android:textSize="20sp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                />
-            <View
-                android:id="@+id/divider1"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="?android:attr/listDivider"
-                android:layout_marginTop="10dp"/>
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -64,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="25dp"
-                    android:text="Windward-Leeward Layout\n No editable property"
+                    android:text="WINDWARD-LEEWARD\nNo editable property"
                     android:textSize="15sp"/>
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="24dp"
@@ -91,8 +69,9 @@
                 android:layout_marginTop="5dp"/>
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/img_calculate"
                 android:layout_width="154.5dp"
-                android:layout_height="48dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:src="@drawable/calculate_button" />

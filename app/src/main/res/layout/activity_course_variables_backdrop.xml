@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--This the interface sitting behind the backdrop and shown when it is collapsed-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="75dp"
+            android:layout_gravity="start"
+            android:gravity="center"
+            android:layout_marginStart="30dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    >
+                    <EditText
+                        android:id="@+id/editText_lat"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Latitude (°)"
+                        android:textSize="16dp"
+                        android:textColor="@color/colorOnPrimary"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/lon_logo" />
+                    <EditText
+                        android:id="@+id/editText_lon"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:hint="Longitude (°)"
+                        android:textSize="16dp"
+                        android:textColor="@color/colorOnPrimary"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="20dp"
+                android:id="@+id/locate_button">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/crosshair" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LOCATE"
+                    android:textColor="@color/colorOnPrimaryDefault"
+                    android:fontFamily="@font/roboto_medium" 
+                    android:textSize="14dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="start"
+            android:gravity="center"
+            android:layout_marginTop="80dp"
+            android:layout_marginStart="30dp">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/wind" />
+            <EditText
+                android:id="@+id/editText_wind"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="Wind Direction (°)"
+                android:textSize="16dp"
+                android:textColor="@color/colorOnPrimary"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="20dp"
+                android:id="@+id/weather_button">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/radar" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CONNECT"
+                    android:textColor="@color/colorOnPrimaryDefault"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="14dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="start"
+            android:gravity="center"
+            android:layout_marginTop="80dp"
+            android:layout_marginStart="30dp">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ruler" />
+            <EditText
+                android:id="@+id/editText_dist"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="Distance (Nm)"
+                android:textSize="16dp"
+                android:textColor="@color/colorOnPrimary"
+                />
+        </LinearLayout>
+        
+
+    </LinearLayout>
+    <!--This is the backdrop's content with a BottomSheetBehaviour applied to it-->
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:behavior_peekHeight="150dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:background="@drawable/backdrop_round_edges">
+
+        <!--This is the backdrop's header with a title and icon-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:id="@+id/topBar"
+            >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Advanced Variables"
+                    android:textColor="@color/colorOnSecondary"
+                    android:textSize="20dp"
+                    android:layout_margin="15dp"
+                    android:layout_gravity="center"
+                    android:gravity="start"/>
+
+                <ImageView
+                    android:id="@+id/filterIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="15dp"
+                    android:src="@drawable/frontlayerarrow"/>
+
+
+        </LinearLayout>
+
+        <!--And finally this is the body of the backdrop's content. You can add here whatever you need inside a view group (LinearLayout, RelativeLayout, SwipeRefreshLayout, ConstraintLayout, etc.)-->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ViewStub
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/layout_stub"
+                android:inflatedId="@+id/message_layout" />
+            <!--The content's body goes here-->
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
