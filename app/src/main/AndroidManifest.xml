@@ -43,6 +43,8 @@
             android:name=".NavigationCompassActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".Testingclass" android:screenOrientation="portrait"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -39,7 +40,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
     MarkerCoordCalculations markerCoordCalculations;
     TextView textView_lat, textView_lon, markID;
     int courseSize;
-    BottomNavigationView bottomNavigation;
+    BottomNavigationView topNavigation;
     private LocationManager locationManager;
     int selectedMark;
 
@@ -56,6 +57,47 @@ public class CourseLayoutActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
 
+        topNavigation = findViewById(R.id.courseLayout_top_navigation);
+
+
+        //set selected page
+        topNavigation.setSelectedItemId(R.id.topNav_layout);
+
+        //perform ItemSelectedListener
+        topNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+
+                switch (item.getItemId()){
+
+                    case R.id.topNav_layout:
+                        return true;
+                    case R.id.topNav_compass:
+                        if (markerCoordCalculations != null && cvObject != null) {
+                            Intent intent = getIntent();
+                            intent.putExtra("COURSE", markerCoordCalculations);
+                            intent.putExtra("SELECTED_MARK", selectedMark);
+                            intent.putExtra("COURSE_VARIABLES", cvObject);
+                            intent.setClass(getApplicationContext(),NavigationCompassActivity.class);
+                            startActivity(intent);
+                        } else { }
+                        return true;
+                    case R.id.topNav_navigation:
+                        if (markerCoordCalculations != null && cvObject != null) {
+                            Intent intent = getIntent();
+                            intent.putExtra("COURSE", markerCoordCalculations);
+                            intent.putExtra("SELECTED_MARK", selectedMark);
+                            intent.putExtra("COURSE_VARIABLES", cvObject);
+                            intent.setClass(getApplicationContext(),NavigationMap.class);
+                            startActivity(intent);
+                        } else { }
+                        return true;
+                }
+                return false;
+            }
+        });
+
 
         r1 = findViewById(R.id.radioButton_layout_1);
         r2 = findViewById(R.id.radioButton_layout_2);
@@ -65,7 +107,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
-        cvObject = setCourseVariablesObject(extras);
+        cvObject = intent.getParcelableExtra("COURSE_VARIABLES");
+        if (cvObject == null) {
+            cvObject = setCourseVariablesObject(extras);
+        }
+        selectedMark = intent.getIntExtra("SELECTED_MARK",1);
 
         Location previousRefPoint = extras.getParcelable("LOCATION");
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -96,7 +142,6 @@ public class CourseLayoutActivity extends AppCompatActivity {
             textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
             textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
             markID.setText("MARK 1");
-            selectedMark = 1;
             setDisplay(extras);
         } else {
             textView_lat.setText("Could not get coords");
@@ -108,44 +153,6 @@ public class CourseLayoutActivity extends AppCompatActivity {
             r4.setVisibility(View.INVISIBLE);
             // Display an error
         }
-
-        Button button_back = findViewById(R.id.button_back);
-        Button button_navigation = findViewById(R.id.button_navigation);
-
-        button_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getIntent();
-                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        button_navigation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (markerCoordCalculations != null) {
-                    Intent intent = getIntent();
-                    intent.putExtra("COURSE", markerCoordCalculations);
-                    intent.putExtra("SELECTED_MARK", selectedMark);
-                    intent.setClass(getApplicationContext(),NavigationMap.class);
-                    startActivity(intent);
-                } else {
-                    new AlertDialog.Builder(CourseLayoutActivity.this)
-                            .setMessage("GPS not enabled. Location needed to proceed.")
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            })
-                            .create()
-                            .show();
-                }
-
-            }
-        });
-
 
 
 
@@ -216,10 +223,10 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 r3.setVisibility(View.INVISIBLE);
                 r4.setVisibility(View.INVISIBLE); // Only two points needed so make r3 and r4 invisible
 
-                r1_layoutParams.setMargins((width/2)-70, (3*height)/20, 0,0);
+                r1_layoutParams.setMargins((width/2)-70, (1*height)/20, 0,0);
                 r1.setLayoutParams(r1_layoutParams);
 
-                r2_layoutParams.setMargins((width/2)-70, (11*height)/20, 0,0);
+                r2_layoutParams.setMargins((width/2)-70, (9*height)/20, 0,0);
                 r2.setLayoutParams(r2_layoutParams);
 
                 drawView = new DrawView(this, r1, r2, width);
@@ -229,13 +236,13 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 r4.setVisibility(View.INVISIBLE); // only three points needed so make r4 invisible
                 if (extras.getInt("TYPE") == 0) { // starboard
 
-                    r1_layoutParams.setMargins(width/6, (3*height)/20,0,0);
+                    r1_layoutParams.setMargins(width/6, (1*height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                    r2_layoutParams.setMargins((4*width)/6, (7*height)/20, 0,0);
+                    r2_layoutParams.setMargins((4*width)/6, (5*height)/20, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                    r3_layoutParams.setMargins(width/6,(11*height)/20, 0, 0);
+                    r3_layoutParams.setMargins(width/6,(9*height)/20, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
                     drawView = new DrawView(this, r1, r2, width);
@@ -247,13 +254,13 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     break;
                 } else if (extras.getInt("TYPE") == 1) { // portboard
 
-                    r1_layoutParams.setMargins((4*width)/6, (3*height)/20,0,0);
+                    r1_layoutParams.setMargins((4*width)/6, (1*height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                    r2_layoutParams.setMargins(width/6, (7*height)/20, 0,0);
+                    r2_layoutParams.setMargins(width/6, (5*height)/20, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                    r3_layoutParams.setMargins((4*width)/6, (11*height)/20, 0, 0);
+                    r3_layoutParams.setMargins((4*width)/6, (9*height)/20, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
                     drawView = new DrawView(this, r1, r2, width);
@@ -268,16 +275,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 if (extras.getInt("TYPE") == 0) { // if starboard
                     if (extras.getInt("SECOND_BEAT") == 0) { // if equal length second beat
 
-                        r1_layoutParams.setMargins(width/6, (2*height)/20,0,0);
+                        r1_layoutParams.setMargins(width/6, (1*height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins((4*width)/6, (4*height)/20, 0,0);
+                        r2_layoutParams.setMargins((4*width)/6, (3*height)/20, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins((4*width)/6, (12*height)/20, 0, 0);
+                        r3_layoutParams.setMargins((4*width)/6, (11*height)/20, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins(width/6, (10*height)/20, 0, 0);
+                        r4_layoutParams.setMargins(width/6, (9*height)/20, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
                         drawView = new DrawView(this, r1, r2, width);
@@ -291,16 +298,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         break;
                     } else if (extras.getInt("SECOND_BEAT") == 1) { // if unequal length second beat
 
-                        r1_layoutParams.setMargins(width/6, (3*height)/20,0,0);
+                        r1_layoutParams.setMargins(width/6, (1*height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins((4*width)/6, (5*height)/20, 0,0);
+                        r2_layoutParams.setMargins((4*width)/6, (3*height)/20, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins((4*width)/6, (9*height)/20, 0, 0);
+                        r3_layoutParams.setMargins((4*width)/6, (7*height)/20, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins(width/6, (11*height)/20, 0, 0);
+                        r4_layoutParams.setMargins(width/6, (9*height)/20, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
                         drawView = new DrawView(this, r1, r2, width);
@@ -316,16 +323,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 } else if (extras.getInt("TYPE") == 1) { // if portboard
                     if (extras.getInt("SECOND_BEAT") == 0) { // if equal length second beat
 
-                        r1_layoutParams.setMargins((4*width)/6, (3*height)/20,0,0);
+                        r1_layoutParams.setMargins((4*width)/6, (1*height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins(width/6, (5*height)/20, 0,0);
+                        r2_layoutParams.setMargins(width/6, (3*height)/20, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins(width/6, (13*height)/20, 0, 0);
+                        r3_layoutParams.setMargins(width/6, (11*height)/20, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins((4*width)/6, (11*height)/20, 0, 0);
+                        r4_layoutParams.setMargins((4*width)/6, (9*height)/20, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
                         drawView = new DrawView(this, r1, r2, width);
@@ -339,16 +346,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         break;
                     } else if (extras.getInt("SECOND_BEAT") == 1) { // if unequal length second beat
 
-                        r1_layoutParams.setMargins((4*width)/6, (3*height)/20,0,0);
+                        r1_layoutParams.setMargins((4*width)/6, (1*height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
-                        r2_layoutParams.setMargins(width/6, (5*height)/20, 0,0);
+                        r2_layoutParams.setMargins(width/6, (3*height)/20, 0,0);
                         r2.setLayoutParams(r2_layoutParams);
 
-                        r3_layoutParams.setMargins(width/6, (9*height)/20, 0, 0);
+                        r3_layoutParams.setMargins(width/6, (7*height)/20, 0, 0);
                         r3.setLayoutParams(r3_layoutParams);
 
-                        r4_layoutParams.setMargins((4*width)/6, (11*height)/20, 0, 0);
+                        r4_layoutParams.setMargins((4*width)/6, (9*height)/20, 0, 0);
                         r4.setLayoutParams(r4_layoutParams);
 
                         drawView = new DrawView(this, r1, r2, width);
@@ -365,16 +372,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
             case 3: // optimist
                 if (extras.getInt("TYPE") == 0) { // if starboard
 
-                    r1_layoutParams.setMargins(width/8, (3*height)/20,0,0);
+                    r1_layoutParams.setMargins(width/8, (1*height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                    r2_layoutParams.setMargins((6*width)/8, (5*height)/20, 0,0);
+                    r2_layoutParams.setMargins((6*width)/8, (3*height)/20, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                    r3_layoutParams.setMargins((6*width)/8, (12*height)/20, 0, 0);
+                    r3_layoutParams.setMargins((6*width)/8, (10*height)/20, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
-                    r4_layoutParams.setMargins(width/8, (10*height)/20, 0, 0);
+                    r4_layoutParams.setMargins(width/8, (8*height)/20, 0, 0);
                     r4.setLayoutParams(r4_layoutParams);
 
                     drawView = new DrawView(this, r1, r2, width);
@@ -386,16 +393,16 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     break;
                 } else if (extras.getInt("TYPE") == 1) { // if portboard
 
-                    r1_layoutParams.setMargins((6*width)/8, (3*height)/20,0,0);
+                    r1_layoutParams.setMargins((6*width)/8, (1*height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
-                    r2_layoutParams.setMargins(width/8, (5*height)/20, 0,0);
+                    r2_layoutParams.setMargins(width/8, (3*height)/20, 0,0);
                     r2.setLayoutParams(r2_layoutParams);
 
-                    r3_layoutParams.setMargins(width/8, (12*height)/20, 0, 0);
+                    r3_layoutParams.setMargins(width/8, (10*height)/20, 0, 0);
                     r3.setLayoutParams(r3_layoutParams);
 
-                    r4_layoutParams.setMargins((6*width)/8, (10*height)/20, 0, 0);
+                    r4_layoutParams.setMargins((6*width)/8, (8*height)/20, 0, 0);
                     r4.setLayoutParams(r4_layoutParams);
 
                     drawView = new DrawView(this, r1, r2, width);

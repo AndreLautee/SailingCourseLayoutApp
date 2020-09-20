@@ -1,5 +1,7 @@
 package com.example.sailinglayoutapp;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +9,11 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -36,16 +43,28 @@ public class WeatherAPIActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_api);
 
-        t1_temp = (TextView)findViewById(R.id.textView);
-        t2_city = (TextView)findViewById(R.id.textView3);
-        t3_description = (TextView)findViewById(R.id.textView4);
-        t4_date = (TextView)findViewById(R.id.textView2);
-        t5_wind = (TextView)findViewById(R.id.textView6);
-        t6_wind1 = (TextView)findViewById(R.id.textView11);
-        t7_humidity = (TextView)findViewById(R.id.textView12);
-        t8_pressure = (TextView)findViewById(R.id.textView13);
+        Button btnBack = findViewById(R.id.btn_weatherBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        t1_temp = (TextView)findViewById(R.id.text_weatherTemp);
+        t2_city = (TextView)findViewById(R.id.text_weatherName);
+        t3_description = (TextView)findViewById(R.id.text_weatherDesc);
+        t4_date = (TextView)findViewById(R.id.text_weatherDate);
+        t5_wind = (TextView)findViewById(R.id.text_weatherWindSp);
+        t6_wind1 = (TextView)findViewById(R.id.text_weatherWindDir);
+        t7_humidity = (TextView)findViewById(R.id.text_weatherHumidity);
+        t8_pressure = (TextView)findViewById(R.id.text_weatherPressure);
 
-
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("Weather");
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
 
 
         find_weather();
@@ -74,11 +93,13 @@ public class WeatherAPIActivity extends AppCompatActivity {
         }
         else
         {
-        JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+            JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try
                 {
+
                     JSONObject main_object = response.getJSONObject("main");
                     JSONObject wind_object = response.getJSONObject("wind");
                     JSONArray array = response.getJSONArray("weather");
@@ -91,8 +112,6 @@ public class WeatherAPIActivity extends AppCompatActivity {
                     String wind = String.valueOf(wind_object.getDouble("speed"));
                     String wind1 = String.valueOf(wind_object.getDouble("deg"));
 
-                    Log.d("wind", wind);
-                    Log.d("wind", wind1);
 
                     // t1_temp.setText(temp);
                     t2_city.setText(city);
@@ -103,9 +122,9 @@ public class WeatherAPIActivity extends AppCompatActivity {
                     t8_pressure.setText(pressure);
 
                     Calendar calendar = Calendar.getInstance();
-                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE-MM-DD");
+                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE d, MMMM");
                     String formatted_date = sdf.format(calendar.getTime());
-
+                    Log.d("date", calendar.getTime()+"");
                     t4_date.setText(formatted_date);
 
                     double temp_int = Double.parseDouble(temp);
@@ -146,5 +165,37 @@ public class WeatherAPIActivity extends AppCompatActivity {
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         return isConnected;
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.btn_home:
+                // User chose the "Menu" item, show the app menu UI...
+                intent = new Intent();
+                intent.setClass(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_variables:
+                intent = new Intent();
+                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_weather:
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 }
