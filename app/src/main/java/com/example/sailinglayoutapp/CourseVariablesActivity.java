@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,11 +32,21 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class CourseVariablesActivity extends AppCompatActivity {
+
+public class CourseVariablesActivity extends AppCompatActivity implements WeatherDialogFragment.WeatherDialogListener {
 
     private RadioGroup radioGroup_type, radioGroup_angle, radioGroup_reach, radioGroup_secondBeat, radioGroup_referencePoint;
     private Spinner spinner_shape;
@@ -243,10 +256,12 @@ public class CourseVariablesActivity extends AppCompatActivity {
                                 .show();
                     }
                 } else {
-                    Intent intent = new Intent();
+                    /*Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), WeatherAPIActivity.class);
                     intent.putExtra("LOCATION", currentLocation);
-                    startActivity(intent);
+                    startActivity(intent);*/
+                    showWeatherDialog();
+
                 }
 
             }
@@ -425,6 +440,70 @@ public class CourseVariablesActivity extends AppCompatActivity {
         } else {
             return true;
         }
+    }
+
+    public void showWeatherDialog() {
+        findWeather(currentLocation);
+    }
+    public void findWeather(Location location) {
+        double lat = location.getLatitude();
+        double lon = location.getLongitude();
+
+        String url = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=imperial&appid=57df42a409e4c7c20a3221979d61174d";
+
+
+        if(!isOnline())
+        {
+            DialogFragment dialog = new WeatherDialogFragment(-1);
+            dialog.show(getSupportFragmentManager(),null);
+        }
+        else
+        {
+            JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try
+                    {
+                        JSONObject wind_object = response.getJSONObject("wind");
+                        DialogFragment dialog = new WeatherDialogFragment(wind_object.getDouble("deg"));
+                        dialog.show(getSupportFragmentManager(),null);
+                    }catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    DialogFragment dialog = new WeatherDialogFragment(-1);
+                    dialog.show(getSupportFragmentManager(),null);
+                }
+            }
+            );
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            queue.add(jor);
+
+        }
+    }
+    public boolean isOnline(){
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(this.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
+    }
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, double wind) {
+        editText_wind.setText(""+wind);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
     }
 
   /*  public void openFragment(Fragment fragment) {
