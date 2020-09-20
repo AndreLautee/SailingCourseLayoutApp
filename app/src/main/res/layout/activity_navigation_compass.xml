@@ -9,12 +9,22 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navCompass_top_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:menu="@menu/top_navigation_menu"
+        app:itemIconTint="@color/top_nav_colour"
+        app:itemTextColor="@color/top_nav_colour"
+        />
     <RelativeLayout
         android:id="@+id/activity_compass"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         >
+
 
 
         <ImageView
@@ -54,7 +64,7 @@
         android:layout_gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="90dp"
         >
 
 
@@ -135,7 +145,7 @@
         android:id="@+id/rgNavCompass"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true"
 
         />
