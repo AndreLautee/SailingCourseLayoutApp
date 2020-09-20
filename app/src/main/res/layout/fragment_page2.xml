@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Page2">
+
+    <ImageView
+        android:id="@+id/epy2"
+        android:layout_height="390dp"
+        android:layout_width="match_parent"
+        android:src="@drawable/epy"
+        android:scaleType="fitXY"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_height="235dp"
+        android:layout_width="186dp"
+        android:src="@drawable/loca"
+        android:layout_marginEnd="114dp"
+        android:layout_marginStart="110dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:layout_height="70dp"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="-3dp"
+        android:layout_marginStart="3dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="272dp"
+        android:layout_alignParentTop="true"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size"
+        android:textColor="@color/colorOnPrimary"
+        android:textAlignment="center"
+        android:text="Sharing your location helps\n you to navigate to points \n in the course"
+        android:layout_marginBottom="345dp"/>
+
+
+</RelativeLayout>

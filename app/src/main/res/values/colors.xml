@@ -21,4 +21,57 @@
     <color name="colorMenu">#B2D2EA</color>
     <color name="colorButton">#4A95F2</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorGray">#607D8B</color>
+    <color name="dot_inactive">#00766c</color>
+
+
+    <array name="array_dot_active">
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+    <item>@color/colorPrimaryDark</item>
+
+</array>
+
+
+    <array name="array_dot_inactive">
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+    <item>@color/dot_inactive</item>
+
+</array>
+
 </resources>
