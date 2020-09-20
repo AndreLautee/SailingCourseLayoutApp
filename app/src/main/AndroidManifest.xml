@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sailinglayoutapp">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,52 +12,46 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".testViewPager"></activity>
+
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity2"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".CourseVariablesActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".CourseLayoutActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".WeatherAPIActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".NavigationMap"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".NavigationCompassActivity"
-            android:screenOrientation="portrait" />
+
+        <activity android:name=".MainActivity2" android:screenOrientation="portrait"/>
+
+        <activity android:name=".CourseVariablesActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".CourseLayoutActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".WeatherAPIActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".NavigationMap" android:screenOrientation="portrait" android:parentActivityName=".CourseVariablesActivity"/>
+
+        <activity android:name=".NavigationCompassActivity" android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+
     </application>
+
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
 
     <uses-feature android:name="android.hardware.type.watch" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>

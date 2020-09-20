@@ -1,6 +1,7 @@
 package com.example.sailinglayoutapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -24,12 +25,19 @@ public class MainActivity extends AppCompatActivity {
 
         Start=findViewById(R.id.Start);
         bottomNavigation = findViewById(R.id.bottom_navigation);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+
     }
 
 
     public void Start_onclick(View view) {
-        Intent intent=new Intent();
-        intent.setClass(getApplicationContext(),testViewPager.class);
+        Intent intent= getIntent();
+        intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
         startActivityForResult(intent,Request_code);
     }
 
