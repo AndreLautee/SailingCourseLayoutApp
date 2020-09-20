@@ -31,6 +31,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import org.decimal4j.util.DoubleRounder;
 
 import java.util.ArrayList;
@@ -53,6 +55,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     private boolean mLastMagnetometerSet = false;
 
     MarkerCoordCalculations course;
+    CourseVariablesObject cvObject;
     int courseSize;
     ArrayList<Location> locations;
     TextView textView_distance, textView_bearing;
@@ -61,6 +64,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     ArrayList<RadioButton> radioButtons;
     int selectedMark;
     double bearingDirection;
+    BottomNavigationView topNavigation;
 
 
 
@@ -76,9 +80,51 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
 
+        topNavigation = findViewById(R.id.navCompass_top_navigation);
+
+
+        //set selected page
+        topNavigation.setSelectedItemId(R.id.topNav_compass);
+
+        //perform ItemSelectedListener
+        topNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+
+                switch (item.getItemId()){
+
+                    case R.id.topNav_layout:
+                        if (course != null && cvObject != null) {
+                            Intent intent = getIntent();
+                            intent.putExtra("COURSE", course);
+                            intent.putExtra("SELECTED_MARK", selectedMark);
+                            intent.putExtra("COURSE_VARIABLES", cvObject);
+                            intent.setClass(getApplicationContext(),CourseLayoutActivity.class);
+                            startActivity(intent);
+                        } else { }
+                        return true;
+                    case R.id.topNav_compass:
+                        return true;
+                    case R.id.topNav_navigation:
+                        if (course != null && cvObject != null) {
+                            Intent intent = getIntent();
+                            intent.putExtra("COURSE", course);
+                            intent.putExtra("SELECTED_MARK", selectedMark);
+                            intent.putExtra("COURSE_VARIABLES", cvObject);
+                            intent.setClass(getApplicationContext(),NavigationMap.class);
+                            startActivity(intent);
+                        } else { }
+                        return true;
+                }
+                return false;
+            }
+        });
 
         Intent intent = getIntent();
         course = intent.getParcelableExtra("COURSE");
+        cvObject = intent.getParcelableExtra("COURSE_VARIABLES");
+        selectedMark = intent.getIntExtra("SELECTED_MARK",1);
         courseSize = course.getCoords().size();
 
         locations = new ArrayList<>();
@@ -110,7 +156,10 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
             radioButtons.get(i).setPadding(7,0,20,0);
         }
-        radioGroup.check(radioButtons.get(courseSize-1).getId());
+        radioGroup.check((int)selectedMark);
+        if (selectedMark == courseSize) {
+            selectedMark = 0;
+        }
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

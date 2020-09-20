@@ -30,6 +30,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import org.decimal4j.util.DoubleRounder;
 
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class NavigationMap extends AppCompatActivity {
 
     NavMapGLSurfaceView gLView;
     MarkerCoordCalculations course;
+    CourseVariablesObject cvObject;
     int courseSize;
     ArrayList<Location> locations;
     TextView textView_distance, textView_bearing;
@@ -48,6 +51,7 @@ public class NavigationMap extends AppCompatActivity {
     int selectedMark;
     double bearingDirection;
     ImageView img_compass;
+    BottomNavigationView topNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +65,50 @@ public class NavigationMap extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
 
+        topNavigation = findViewById(R.id.navMap_top_navigation);
+
+
+        //set selected page
+        topNavigation.setSelectedItemId(R.id.topNav_navigation);
+
+        //perform ItemSelectedListener
+        topNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+
+                switch (item.getItemId()){
+
+                    case R.id.topNav_layout:
+                        if (course != null && cvObject != null) {
+                            Intent intent = getIntent();
+                            intent.putExtra("COURSE", course);
+                            intent.putExtra("SELECTED_MARK", selectedMark);
+                            intent.putExtra("COURSE_VARIABLES", cvObject);
+                            intent.setClass(getApplicationContext(),CourseLayoutActivity.class);
+                            startActivity(intent);
+                        } else { }
+                        return true;
+                    case R.id.topNav_compass:
+                        if (course != null && cvObject != null) {
+                            Intent intent = getIntent();
+                            intent.putExtra("COURSE", course);
+                            intent.putExtra("SELECTED_MARK", selectedMark);
+                            intent.putExtra("COURSE_VARIABLES", cvObject);
+                            intent.setClass(getApplicationContext(),NavigationCompassActivity.class);
+                            startActivity(intent);
+                        } else { }
+                        return true;
+                    case R.id.topNav_navigation:
+                        return true;
+                }
+                return false;
+            }
+        });
+
         Intent intent = getIntent();
         course = intent.getParcelableExtra("COURSE");
+        cvObject = intent.getParcelableExtra("COURSE_VARIABLES");
         courseSize = course.getCoords().size();
 
         selectedMark = intent.getIntExtra("SELECTED_MARK",0);
@@ -101,7 +147,7 @@ public class NavigationMap extends AppCompatActivity {
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
             radioButtons.get(i).setPadding(7,0,20,0);
         }
-        radioGroup.check(selectedMark);
+        radioGroup.check((int)selectedMark);
         if (selectedMark == courseSize) {
             selectedMark = 0;
         }
