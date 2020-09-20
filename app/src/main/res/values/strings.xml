@@ -21,6 +21,12 @@
 
     <string name="hello_world">Hello Square World!</string>
 
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mark_1">MARK 1</string>
+    <string name="mark_2">MARK 2</string>
+    <string name="mark_3">MARK 3</string>
+    <string name="mark_4">MARK 4</string>
+    <string name="back">Back</string>
     <string-array name="course_shapes">
         <item>Windward-Leeward</item>
         <item>Triangle</item>
@@ -31,19 +37,8 @@
         <item>60°, 60°, 60°</item>
         <item>45°, 90°, 45°</item>
     </string-array>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
     <string-array name="trapezoid_angles">
         <item>60°, 120°</item>
         <item>70°, 110°</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="mark_1">MARK 1</string>
-    <string name="mark_2">MARK 2</string>
-    <string name="mark_3">MARK 3</string>
-    <string name="mark_4">MARK 4</string>
-    <string name="back">Back</string>
 </resources>
