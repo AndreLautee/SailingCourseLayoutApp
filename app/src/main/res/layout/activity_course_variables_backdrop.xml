@@ -31,11 +31,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_gravity="center"
+                    android:layout_marginTop="20dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_globe" />
                     >
                     <EditText
                         android:id="@+id/editText_lat"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
                         android:hint="Latitude (°)"
                         android:textSize="16dp"
                         android:textColor="@color/colorOnPrimary"
