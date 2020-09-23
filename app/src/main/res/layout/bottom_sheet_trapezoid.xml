@@ -25,56 +25,41 @@
         android:padding="10dp"
         android:id="@+id/LinearLayout1">
 
-    <View
-        android:layout_width="30dp"
-        android:layout_height="5dp"
-        android:layout_gravity="center"
-        android:background="@color/colorAccent"
-    />
-
-     <androidx.appcompat.widget.AppCompatTextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:text="Advance Variables"
-         android:textSize="20sp"
-         android:layout_marginStart="20dp"
-         android:layout_marginTop="10dp"
-         />
-        <View
-            android:id="@+id/divider1"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="?android:attr/listDivider"
-            android:layout_marginTop="10dp"/>
-
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@id/LinearLayout2"
             android:orientation="horizontal"
             >
-            <androidx.appcompat.widget.AppCompatImageView
+            <RelativeLayout
                 android:layout_width="68dp"
-                android:layout_height="66dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="68dp"
+                android:layout_gravity="center"
                 android:layout_marginStart="25dp"
-                android:src="@drawable/trapezoid_icon"/>
+                >
+                <Button
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/course_selection_button"
+                    android:clickable="false"/>
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_trapezoid"
+                    android:tint="@color/colorOnSecondary"
+                    android:translationZ="2dp"/>
+            </RelativeLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"
-                android:text="Trapezoid Layout\n Expand to edit\n trapezoid properties"
+                android:text="TRAPEZOID\nExpand to edit trapezoid properties"
                 android:textSize="15sp"/>
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/change_icon"
-                android:layout_gravity="center"
-                android:layout_marginStart="70dp"
-                />
-
 
         </LinearLayout>
 
@@ -114,18 +99,18 @@
             >
 
             <RadioButton
-                android:id="@+id/radioButton7"
+                android:id="@+id/rb_angle_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="45°, 90°, 45°" />
+                android:text="60°, 120°" />
 
             <RadioButton
-                android:id="@+id/radioButton8"
+                android:id="@+id/rb_angle_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="60°, 60°, 60°" />
+                android:text="70°, 110°" />
         </RadioGroup>
 
         <TextView
@@ -146,14 +131,14 @@
             android:layout_marginTop="10dp">
 
             <RadioButton
-                android:id="@+id/radioButton_starboard"
+                android:id="@+id/rb_starboard"
                 android:layout_width="115dp"
                 android:layout_height="wrap_content"
                 android:text="@string/starboard"
                 />
 
             <RadioButton
-                android:id="@+id/radioButton_portboard"
+                android:id="@+id/rb_portboard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/portboard" />
@@ -178,14 +163,14 @@
             >
 
             <RadioButton
-                android:id="@+id/radioButton11"
+                android:id="@+id/rb_2ndbeat_1"
                 android:layout_width="84dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/equal" />
 
             <RadioButton
-                android:id="@+id/radioButton12"
+                android:id="@+id/rb_2ndbeat_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -212,26 +197,33 @@
             >
 
             <RadioButton
-                android:id="@+id/radioButton9"
+                android:id="@+id/rb_reach_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/_1_2_beat_length" />
 
             <RadioButton
-                android:id="@+id/radioButton10"
+                android:id="@+id/rb_reach_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/_2_3_beat_length" />
         </RadioGroup>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="154.5dp"
-            android:layout_height="48dp"
+        <Button
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:layout_margin="30dp"
+            android:id="@+id/img_calculate"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/calculate_button" />
+            android:padding="15dp"
+            android:background="@drawable/home_start_button"
+            android:textSize="16dp"
+            android:text="CALCULATE"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorOnSecondary"
+            android:drawableLeft="@drawable/path" />
     </LinearLayout>
 
 

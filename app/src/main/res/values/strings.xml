@@ -19,6 +19,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="course_orientation">Course Orientation</string>
+    <string name="coordinate_format">[+-]DDD.DDDDDD</string>
+    <string name="wind_dir_helper">0° - 360°</string>
+    <string name="length_unit">Nm</string>
+    <string name="length_format">0.00Nm</string>
 
     <string name="hello_world">Hello Square World!</string>
 

@@ -9,8 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CourseSelectionActivity"></activity>
-        <activity android:name=".WelcomeActivity" />
+
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
@@ -42,6 +41,15 @@
         <activity
             android:name=".NavigationCompassActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".CourseVariablesBackdropActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CourseSelectionActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".WelcomeActivity"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".Testingclass" android:screenOrientation="portrait"/>
 

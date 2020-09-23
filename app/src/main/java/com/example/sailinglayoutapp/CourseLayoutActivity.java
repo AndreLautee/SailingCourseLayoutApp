@@ -75,7 +75,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         return true;
                     case R.id.topNav_compass:
                         if (markerCoordCalculations != null && cvObject != null) {
-                            Intent intent = getIntent();
+                            Intent intent = new Intent();
                             intent.putExtra("COURSE", markerCoordCalculations);
                             intent.putExtra("SELECTED_MARK", selectedMark);
                             intent.putExtra("COURSE_VARIABLES", cvObject);
@@ -85,7 +85,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         return true;
                     case R.id.topNav_navigation:
                         if (markerCoordCalculations != null && cvObject != null) {
-                            Intent intent = getIntent();
+                            Intent intent = new Intent();
                             intent.putExtra("COURSE", markerCoordCalculations);
                             intent.putExtra("SELECTED_MARK", selectedMark);
                             intent.putExtra("COURSE_VARIABLES", cvObject);
@@ -105,27 +105,17 @@ public class CourseLayoutActivity extends AppCompatActivity {
         r4 = findViewById(R.id.radioButton_layout_4);
 
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
 
         cvObject = intent.getParcelableExtra("COURSE_VARIABLES");
-        if (cvObject == null) {
-            cvObject = setCourseVariablesObject(extras);
-        }
+
         selectedMark = intent.getIntExtra("SELECTED_MARK",1);
 
-        Location previousRefPoint = extras.getParcelable("LOCATION");
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if (previousRefPoint == null) {
-
-            location = null;
-            if(checkLocationPermission()) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
-                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            }
-
-        } else {
-            location = previousRefPoint;
+        location = null;
+        if(checkLocationPermission()) {
+           locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
+           location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
 
@@ -134,15 +124,12 @@ public class CourseLayoutActivity extends AppCompatActivity {
         textView_lon = findViewById(R.id.courseLayout_lon);
         markID = findViewById(R.id.courseLayout_markID);
         if (location != null) {
-            cvObject.setLat(location.getLatitude());
-            cvObject.setLon(location.getLongitude());
             markerCoordCalculations = new MarkerCoordCalculations(cvObject);
-            intent.putExtra("LOCATION", location);
             courseSize = markerCoordCalculations.getCoords().size();
             textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
             textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
             markID.setText("MARK 1");
-            setDisplay(extras);
+            setDisplay();
         } else {
             textView_lat.setText("Could not get coords");
             textView_lon.setText("Could not get coords");
@@ -180,7 +167,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
             case R.id.btn_variables:
                 intent = new Intent();
                 intent.putExtra("COURSE_VARIABLES", cvObject);
-                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                intent.setClass(getApplicationContext(),CourseVariablesBackdropActivity.class);
                 startActivity(intent);
                 return true;
 
@@ -197,7 +184,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
         }
     }
 
-    public void setDisplay(Bundle extras) {
+    public void setDisplay() {
         r1.setChecked(true);
         RelativeLayout.LayoutParams r1_layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         r1.setOnClickListener(radioButton_listener);
@@ -218,12 +205,12 @@ public class CourseLayoutActivity extends AppCompatActivity {
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
 
-        switch (extras.getInt("SHAPE")) {
-            case 0: // windward-leeward
+        switch (cvObject.getShape()) {
+            case "windward_leeward": // windward-leeward
                 r3.setVisibility(View.INVISIBLE);
                 r4.setVisibility(View.INVISIBLE); // Only two points needed so make r3 and r4 invisible
 
-                r1_layoutParams.setMargins((width/2)-70, (1*height)/20, 0,0);
+                r1_layoutParams.setMargins((width/2)-70, (height)/20, 0,0);
                 r1.setLayoutParams(r1_layoutParams);
 
                 r2_layoutParams.setMargins((width/2)-70, (9*height)/20, 0,0);
@@ -232,11 +219,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
                 drawView = new DrawView(this, r1, r2, width);
                 rl.addView(drawView);
                 break;
-            case 1: // triangle
+            case "triangle": // triangle
                 r4.setVisibility(View.INVISIBLE); // only three points needed so make r4 invisible
-                if (extras.getInt("TYPE") == 0) { // starboard
+                if (cvObject.getType().equals("starboard")) { // starboard
 
-                    r1_layoutParams.setMargins(width/6, (1*height)/20,0,0);
+                    r1_layoutParams.setMargins(width/6, (height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
                     r2_layoutParams.setMargins((4*width)/6, (5*height)/20, 0,0);
@@ -252,9 +239,9 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     drawView = new DrawView(this, r3, r1, width);
                     rl.addView(drawView);
                     break;
-                } else if (extras.getInt("TYPE") == 1) { // portboard
+                } else if (cvObject.getType().equals("portboard")) { // portboard
 
-                    r1_layoutParams.setMargins((4*width)/6, (1*height)/20,0,0);
+                    r1_layoutParams.setMargins((4*width)/6, (height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
                     r2_layoutParams.setMargins(width/6, (5*height)/20, 0,0);
@@ -271,11 +258,11 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     rl.addView(drawView);
                     break;
                 }
-            case 2: // trapezoid
-                if (extras.getInt("TYPE") == 0) { // if starboard
-                    if (extras.getInt("SECOND_BEAT") == 0) { // if equal length second beat
+            case "trapezoid": // trapezoid
+                if (cvObject.getType().equals("starboard")) { // if starboard
+                    if (cvObject.getSecondBeat().equals("long")) { // if equal length second beat
 
-                        r1_layoutParams.setMargins(width/6, (1*height)/20,0,0);
+                        r1_layoutParams.setMargins(width/6, (height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
                         r2_layoutParams.setMargins((4*width)/6, (3*height)/20, 0,0);
@@ -296,9 +283,9 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         drawView = new DrawView(this, r4, r1, width);
                         rl.addView(drawView);
                         break;
-                    } else if (extras.getInt("SECOND_BEAT") == 1) { // if unequal length second beat
+                    } else if (cvObject.getSecondBeat().equals("short")) { // if unequal length second beat
 
-                        r1_layoutParams.setMargins(width/6, (1*height)/20,0,0);
+                        r1_layoutParams.setMargins(width/6, (height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
                         r2_layoutParams.setMargins((4*width)/6, (3*height)/20, 0,0);
@@ -320,10 +307,10 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         rl.addView(drawView);
                         break;
                     }
-                } else if (extras.getInt("TYPE") == 1) { // if portboard
-                    if (extras.getInt("SECOND_BEAT") == 0) { // if equal length second beat
+                } else if (cvObject.getType().equals("portboard")) { // if portboard
+                    if (cvObject.getSecondBeat().equals("long")) { // if equal length second beat
 
-                        r1_layoutParams.setMargins((4*width)/6, (1*height)/20,0,0);
+                        r1_layoutParams.setMargins((4*width)/6, (height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
                         r2_layoutParams.setMargins(width/6, (3*height)/20, 0,0);
@@ -344,9 +331,9 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         drawView = new DrawView(this, r4, r1, width);
                         rl.addView(drawView);
                         break;
-                    } else if (extras.getInt("SECOND_BEAT") == 1) { // if unequal length second beat
+                    } else if (cvObject.getSecondBeat().equals("short")) { // if unequal length second beat
 
-                        r1_layoutParams.setMargins((4*width)/6, (1*height)/20,0,0);
+                        r1_layoutParams.setMargins((4*width)/6, (height)/20,0,0);
                         r1.setLayoutParams(r1_layoutParams);
 
                         r2_layoutParams.setMargins(width/6, (3*height)/20, 0,0);
@@ -369,10 +356,10 @@ public class CourseLayoutActivity extends AppCompatActivity {
                         break;
                     }
                 }
-            case 3: // optimist
-                if (extras.getInt("TYPE") == 0) { // if starboard
+            case "optimist": // optimist
+                if (cvObject.getType().equals("starboard")) { // if starboard
 
-                    r1_layoutParams.setMargins(width/8, (1*height)/20,0,0);
+                    r1_layoutParams.setMargins(width/8, (height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
                     r2_layoutParams.setMargins((6*width)/8, (3*height)/20, 0,0);
@@ -391,9 +378,9 @@ public class CourseLayoutActivity extends AppCompatActivity {
                     drawView = new DrawView(this, r4, r1, width);
                     rl.addView(drawView);
                     break;
-                } else if (extras.getInt("TYPE") == 1) { // if portboard
+                } else if (cvObject.getType().equals("portboard")) { // if portboard
 
-                    r1_layoutParams.setMargins((6*width)/8, (1*height)/20,0,0);
+                    r1_layoutParams.setMargins((6*width)/8, (height)/20,0,0);
                     r1.setLayoutParams(r1_layoutParams);
 
                     r2_layoutParams.setMargins(width/8, (3*height)/20, 0,0);
@@ -416,67 +403,10 @@ public class CourseLayoutActivity extends AppCompatActivity {
         }
     }
 
-    // Extract variables from bundle to create an object
-    public CourseVariablesObject setCourseVariablesObject(Bundle extras) {
-        String type = null;
-        String shape = null;
-        double bearing;
-        double distance;
-        int angle = 0;
-        double reach = 0;
-        String secondBeat = null;
-
-        if (extras.getInt("TYPE") == 0) {
-            type = "starboard";
-        } else if (extras.getInt("TYPE") == 1){
-            type = "portboard";
-        }
-
-        bearing = extras.getDouble("BEARING");
-        distance = extras.getDouble("DISTANCE");
-
-        switch (extras.getInt("SHAPE")) {
-            case 0:
-                shape = "windward_leeward";
-                break;
-            case 1:
-                shape = "triangle";
-                if (extras.getInt("ANGLE") == 0) {
-                    angle = 60;
-                } else if (extras.getInt("ANGLE") == 1) {
-                    angle = 45;
-                }
-                break;
-            case 2:
-                shape = "trapezoid";
-                if (extras.getInt("ANGLE") == 0) {
-                    angle = 60;
-                } else if (extras.getInt("ANGLE") == 1) {
-                    angle = 70;
-                }
-                if (extras.getInt("REACH") == 0) {
-                    reach = 0.5;
-                } else if (extras.getInt("REACH") == 1) {
-                    reach = 0.66;
-                }
-                if (extras.getInt("SECOND_BEAT") == 0) {
-                    secondBeat = "long";
-                } else if (extras.getInt("SECOND_BEAT") == 1) {
-                    secondBeat = "short";
-                }
-                break;
-            case 3:
-                shape = "optimist";
-                break;
-        }
-
-        CourseVariablesObject result = new CourseVariablesObject(type, shape, bearing, distance, angle, reach, secondBeat);
-        return result;
-    }
 
     public String decimalDeg2degMins(double decDegree) {
         int d = (int) decDegree;
-        double m = (decDegree - d) * 60;
+        double m = Math.abs(decDegree - d) * 60;
         return "" + d + "°" + String.format("%.3f",m) + "'";
     }
 

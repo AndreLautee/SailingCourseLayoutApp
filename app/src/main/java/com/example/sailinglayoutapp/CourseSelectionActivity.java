@@ -49,8 +49,8 @@ public class CourseSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cvObject.setShape("triangle");
-                Intent intent = new Intent(getApplicationContext(), CourseVariablesActivity.class);
-                intent.putExtra("cvObject", cvObject);
+                Intent intent = new Intent(getApplicationContext(), CourseVariablesBackdropActivity.class);
+                intent.putExtra("COURSE_VARIABLES", cvObject);
                 startActivity(intent);
             }
         });
@@ -59,8 +59,8 @@ public class CourseSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cvObject.setShape("trapezoid");
-                Intent intent = new Intent(getApplicationContext(), CourseVariablesActivity.class);
-                intent.putExtra("cvObject", cvObject);
+                Intent intent = new Intent(getApplicationContext(), CourseVariablesBackdropActivity.class);
+                intent.putExtra("COURSE_VARIABLES", cvObject);
                 startActivity(intent);
             }
         });
@@ -69,8 +69,8 @@ public class CourseSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cvObject.setShape("windward_leeward");
-                Intent intent = new Intent(getApplicationContext(), CourseVariablesActivity.class);
-                intent.putExtra("cvObject", cvObject);
+                Intent intent = new Intent(getApplicationContext(), CourseVariablesBackdropActivity.class);
+                intent.putExtra("COURSE_VARIABLES", cvObject);
                 startActivity(intent);
             }
         });
@@ -79,7 +79,7 @@ public class CourseSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cvObject.setShape("optimist");
-                Intent intent = new Intent(getApplicationContext(), CourseVariablesActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CourseVariablesBackdropActivity.class);
                 intent.putExtra("COURSE_VARIABLES", cvObject);
                 startActivity(intent);
             }

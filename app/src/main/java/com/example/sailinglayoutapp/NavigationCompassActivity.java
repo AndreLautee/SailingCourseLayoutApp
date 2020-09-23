@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 
 import android.Manifest;
@@ -13,6 +14,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -96,7 +98,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
                     case R.id.topNav_layout:
                         if (course != null && cvObject != null) {
-                            Intent intent = getIntent();
+                            Intent intent = new Intent();
                             intent.putExtra("COURSE", course);
                             intent.putExtra("SELECTED_MARK", selectedMark);
                             intent.putExtra("COURSE_VARIABLES", cvObject);
@@ -108,7 +110,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
                         return true;
                     case R.id.topNav_navigation:
                         if (course != null && cvObject != null) {
-                            Intent intent = getIntent();
+                            Intent intent = new Intent();
                             intent.putExtra("COURSE", course);
                             intent.putExtra("SELECTED_MARK", selectedMark);
                             intent.putExtra("COURSE_VARIABLES", cvObject);
@@ -145,14 +147,15 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
 
         // Set number of radio buttons to number of marks
-
+        Typeface font = ResourcesCompat.getFont(this, R.font.roboto_medium);
         for(int i = 0; i < courseSize; i++){
             radioButtons.add(new RadioButton(this));
             radioButtons.get(i).setId(i+1);
             radioGroup.removeView(radioButtons.get(i));
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
-            radioButtons.get(i).setText("Mark " + (i+1));
+            radioButtons.get(i).setText("MARK " + (i+1));
             radioButtons.get(i).setTextSize(14);
+            radioButtons.get(i).setTypeface(font);
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
             radioButtons.get(i).setPadding(7,0,20,0);
         }
@@ -237,20 +240,20 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             case R.id.btn_home:
                 // User chose the "Menu" item, show the app menu UI...
                 intent = new Intent();
-                intent.putExtra("COURSE_VARIABLES", course.getCourseVariablesObject());
+                intent.putExtra("COURSE_VARIABLES", cvObject);
                 intent.setClass(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
                 return true;
 
             case R.id.btn_variables:
-                intent = getIntent();
-                intent.putExtra("COURSE_VARIABLES", course.getCourseVariablesObject());
-                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                intent = new Intent();
+                intent.putExtra("COURSE_VARIABLES", cvObject);
+                intent.setClass(getApplicationContext(),CourseVariablesBackdropActivity.class);
                 startActivity(intent);
                 return true;
 
             case R.id.btn_weather:
-                intent = getIntent();
+                intent = new Intent();
                 intent.putExtra("LOCATION",locations.get(locations.size() - 1));
                 intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
                 startActivity(intent);
@@ -276,10 +279,8 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
 
         // Display updated bearing to newly selected mark
-        String bearingText = bearingBetweenPoints + "°";
+        String bearingText = String.format("%.0f",bearingBetweenPoints) + "°";
         textView_bearing.setText(bearingText);
-
-
     }
 
     private double met2nm(float met) { return DoubleRounder.round(met / 1852,2);}
@@ -336,28 +337,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         bearingBetweenPoints = Math.round(bearingBetweenPoints);
         arrow.setRotation((float) -(degrees-bearingBetweenPoints));
 
-
-        String where = "NW";
-
-        if (degrees >= 350 || degrees <= 10)
-            where = "N";
-        if (degrees < 350 && degrees > 280)
-            where = "NW";
-        if (degrees <= 280 && degrees > 260)
-            where = "W";
-        if (degrees <= 260 && degrees > 190)
-            where = "SW";
-        if (degrees <= 190 && degrees > 170)
-            where = "S";
-        if (degrees <= 170 && degrees > 100)
-            where = "SE";
-        if (degrees <= 100 && degrees > 80)
-            where = "E";
-        if (degrees <= 80 && degrees > 10)
-            where = "NE";
-
-
-        txt_compass.setText(degrees + "° " + where);
+        txt_compass.setText(degrees + "°");
     }
 
     @Override

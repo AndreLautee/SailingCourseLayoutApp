@@ -27,7 +27,8 @@
                 android:layout_height="150dp"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/shape_triangle"
+                android:src="@drawable/ic_triangle_layout"
+                android:tint="@color/colorOnSecondary"
                 android:id="@+id/img_triangle"
                 android:translationZ="2dp"/>
         </RelativeLayout>
@@ -47,7 +48,8 @@
                 android:layout_height="150dp"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/shape_trapezoid"
+                android:src="@drawable/ic_trapezoid"
+                android:tint="@color/colorOnSecondary"
                 android:id="@+id/img_trapezoid"
                 android:translationZ="2dp"/>
         </RelativeLayout>
@@ -73,7 +75,8 @@
                 android:layout_height="150dp"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/shape_straight"
+                android:src="@drawable/ic_windward_leeward"
+                android:tint="@color/colorOnSecondary"
                 android:id="@+id/img_straight"
                 android:translationZ="2dp"/>
         </RelativeLayout>
@@ -93,7 +96,8 @@
                 android:layout_height="150dp"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/shape_optimist"
+                android:src="@drawable/ic_optimist"
+                android:tint="@color/colorOnSecondary"
                 android:id="@+id/img_optimist"
                 android:translationZ="2dp"/>
         </RelativeLayout>

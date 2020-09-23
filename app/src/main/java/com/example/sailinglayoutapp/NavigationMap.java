@@ -81,7 +81,7 @@ public class NavigationMap extends AppCompatActivity {
 
                     case R.id.topNav_layout:
                         if (course != null && cvObject != null) {
-                            Intent intent = getIntent();
+                            Intent intent = new Intent();
                             intent.putExtra("COURSE", course);
                             intent.putExtra("SELECTED_MARK", selectedMark);
                             intent.putExtra("COURSE_VARIABLES", cvObject);
@@ -91,7 +91,7 @@ public class NavigationMap extends AppCompatActivity {
                         return true;
                     case R.id.topNav_compass:
                         if (course != null && cvObject != null) {
-                            Intent intent = getIntent();
+                            Intent intent = new Intent();
                             intent.putExtra("COURSE", course);
                             intent.putExtra("SELECTED_MARK", selectedMark);
                             intent.putExtra("COURSE_VARIABLES", cvObject);
@@ -241,20 +241,20 @@ public class NavigationMap extends AppCompatActivity {
             case R.id.btn_home:
                 // User chose the "Menu" item, show the app menu UI...
                 intent = new Intent();
-                intent.putExtra("COURSE_VARIABLES", course.getCourseVariablesObject());
+                intent.putExtra("COURSE_VARIABLES", cvObject);
                 intent.setClass(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
                 return true;
 
             case R.id.btn_variables:
-                intent = getIntent();
-                intent.putExtra("COURSE_VARIABLES", course.getCourseVariablesObject());
-                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
+                intent = new Intent();
+                intent.putExtra("COURSE_VARIABLES", cvObject);
+                intent.setClass(getApplicationContext(),CourseVariablesBackdropActivity.class);
                 startActivity(intent);
                 return true;
 
             case R.id.btn_weather:
-                intent = getIntent();
+                intent = new Intent();
                 intent.putExtra("LOCATION",locations.get(locations.size() - 1));
                 intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
                 startActivity(intent);
