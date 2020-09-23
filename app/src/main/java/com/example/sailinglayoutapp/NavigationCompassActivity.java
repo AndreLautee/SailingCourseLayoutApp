@@ -279,10 +279,8 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
 
         // Display updated bearing to newly selected mark
-        String bearingText = bearingBetweenPoints + "°";
+        String bearingText = String.format("%.0f",bearingBetweenPoints) + "°";
         textView_bearing.setText(bearingText);
-
-
     }
 
     private double met2nm(float met) { return DoubleRounder.round(met / 1852,2);}
@@ -339,28 +337,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         bearingBetweenPoints = Math.round(bearingBetweenPoints);
         arrow.setRotation((float) -(degrees-bearingBetweenPoints));
 
-
-        String where = "NW";
-
-        if (degrees >= 350 || degrees <= 10)
-            where = "N";
-        if (degrees < 350 && degrees > 280)
-            where = "NW";
-        if (degrees <= 280 && degrees > 260)
-            where = "W";
-        if (degrees <= 260 && degrees > 190)
-            where = "SW";
-        if (degrees <= 190 && degrees > 170)
-            where = "S";
-        if (degrees <= 170 && degrees > 100)
-            where = "SE";
-        if (degrees <= 100 && degrees > 80)
-            where = "E";
-        if (degrees <= 80 && degrees > 10)
-            where = "NE";
-
-
-        txt_compass.setText(degrees + "° " + where);
+        txt_compass.setText(degrees + "°");
     }
 
     @Override
