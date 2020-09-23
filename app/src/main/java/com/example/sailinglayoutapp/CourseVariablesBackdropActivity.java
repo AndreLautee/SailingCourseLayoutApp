@@ -332,29 +332,46 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
     private boolean fillCVObject() {
         boolean completeForm = true;
         String errorText = "";
-        if (!txtLat.getText().toString().isEmpty()) {
-            cvObject.setLat(Double.parseDouble(txtLat.getText().toString()));
-        } else {
+
+        if (txtLat.getText().toString().isEmpty()) {
             errorText = errorText + "Please enter the latitude\n";
             completeForm = false;
-        }
-        if (!txtLon.getText().toString().isEmpty()) {
-            cvObject.setLon(Double.parseDouble(txtLon.getText().toString()));
+        } else if (Double.parseDouble(txtLat.getText().toString()) <= -90 || Double.parseDouble(txtLat.getText().toString()) >= 90) {
+            errorText = errorText + "Invalid latitude (must be within -90° and 90°)\n";
+            completeForm = false;
         } else {
+            cvObject.setLat(Double.parseDouble(txtLat.getText().toString()));
+        }
+
+        if (txtLon.getText().toString().isEmpty()) {
             errorText = errorText + "Please enter the longitude\n";
             completeForm = false;
-        }
-        if (!txtWind.getText().toString().isEmpty()) {
-            cvObject.setBearing(Double.parseDouble(txtWind.getText().toString()));
+        } else if (Double.parseDouble(txtLon.getText().toString()) <= -180 || Double.parseDouble(txtLon.getText().toString()) >= 180) {
+            errorText = errorText + "Invalid longitude (must be within -180° and 180°)\n";
+            completeForm = false;
         } else {
+            cvObject.setLon(Double.parseDouble(txtLon.getText().toString()));
+        }
+
+        if (txtWind.getText().toString().isEmpty()) {
             errorText = errorText + "Please enter the wind direction\n";
             completeForm = false;
-        }
-        if (!txtDist.getText().toString().isEmpty()) {
-            cvObject.setDistance(Double.parseDouble(txtDist.getText().toString()));
+        } else if (Double.parseDouble(txtWind.getText().toString()) <= 0 || Double.parseDouble(txtWind.getText().toString()) >= 360){
+            errorText = errorText + "Invalid wind direction (must be within 0° and 360°)\n";
+            completeForm = false;
         } else {
+            cvObject.setBearing(Double.parseDouble(txtWind.getText().toString()));
+        }
+
+        if (txtDist.getText().toString().isEmpty()) {
             errorText = errorText + "Please enter the distance\n";
             completeForm = false;
+        } else if (Double.parseDouble(txtDist.getText().toString()) <= 0) {
+            errorText = errorText + "Invalid distance (must be greater than 0Nm)\n";
+            completeForm = false;
+        }
+        else {
+            cvObject.setDistance(Double.parseDouble(txtDist.getText().toString()));
         }
         switch (shape) {
             case "triangle":
