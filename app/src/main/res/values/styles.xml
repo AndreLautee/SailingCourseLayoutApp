@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    @<style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    @<style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,7 +10,7 @@
         <item name="actionBarPopupTheme">@style/PopUpTheme</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButton</item>
         <item name="android:textColorPrimary">@color/colorOnPrimary</item>
-    </style>
+</style>
 
     <style name="ActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="titleTextStyle">@style/ActionBarTitle</item>
@@ -44,13 +44,11 @@
         <item name="suffixTextAppearance">@style/TextAppearance.SCLApp.TextInputLayout.HintText</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="boxStrokeColor">@color/textInputOutlineColor</item>
-
-        
-
     </style>
 
     <style name="TextAppearance.SCLApp.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColorHint">?android:attr/textColorPrimary</item>
+        <item name="hintTextColor">?android:attr/textColorPrimary</item>
     </style>
 
     <style name="TextAppearance.SCLApp.TextInputLayout.HelperText" parent="TextAppearance.MaterialComponents.Overline">

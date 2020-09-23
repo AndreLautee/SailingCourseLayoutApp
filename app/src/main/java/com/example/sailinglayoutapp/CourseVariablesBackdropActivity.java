@@ -1,6 +1,7 @@
 package com.example.sailinglayoutapp;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,13 +15,17 @@ import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,12 +49,12 @@ import org.decimal4j.util.DoubleRounder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CourseVariablesBackdropActivity extends AppCompatActivity implements WeatherDialogFragment.WeatherDialogListener{
+public class CourseVariablesBackdropActivity extends AppCompatActivity implements WeatherDialogFragment.WeatherDialogListener, HelpDialogFragment.HelpDialogListener {
 
     BottomSheetBehavior<LinearLayout> sheetBehavior;
     CourseVariablesObject cvObject;
     String shape;
-    View calcButton, stubView, arrow, topBar;
+    View calcButton, stubView, arrow, topBar, helpButton;
     EditText txtLat, txtLon, txtWind, txtDist;
     RadioGroup rgAngle, rgType, rg2ndBeat, rgReach;
     RadioButton rbAngle1, rbAngle2, rbType1, rbType2, rb2ndBeat1, rb2ndBeat2, rbReach1, rbReach2;
@@ -59,6 +64,8 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_variables_backdrop);
+
+        setupUI(findViewById(R.id.ui_behind_backdrop));
 
         Intent intent = getIntent();
         cvObject = intent.getParcelableExtra("COURSE_VARIABLES");
@@ -73,7 +80,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
 
 
         LinearLayout contentLayout = findViewById(R.id.contentLayout);
-        ViewStub stub = (ViewStub) findViewById(R.id.layout_stub);
+        ViewStub stub = findViewById(R.id.layout_stub);
 
         shape = cvObject.getShape();
         switch(shape){
@@ -205,13 +212,22 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
             }
         });
 
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showHelpDialog();
+            }
+        });
+
         calcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fillCVObject();
-                Intent intent = new Intent(getApplicationContext(), CourseLayoutActivity.class);
-                intent.putExtra("COURSE_VARIABLES",cvObject);
-                startActivity(intent);
+                if (fillCVObject()) {
+                    Intent intent = new Intent(getApplicationContext(), CourseLayoutActivity.class);
+                    intent.putExtra("COURSE_VARIABLES",cvObject);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -258,6 +274,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
         txtWind = findViewById(R.id.editText_wind);
         txtDist = findViewById(R.id.editText_dist);
 
+        helpButton = findViewById(R.id.help_button);
         calcButton = stubView.findViewById(R.id.img_calculate);
 
         rgAngle = stubView.findViewById(R.id.radioGroup_angle);
@@ -312,53 +329,137 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
 
     }
 
-    private void fillCVObject() {
-        cvObject.setLat(Double.parseDouble(txtLat.getText().toString()));
-        cvObject.setLon(Double.parseDouble(txtLon.getText().toString()));
-        cvObject.setBearing(Double.parseDouble(txtWind.getText().toString()));
-        cvObject.setDistance(Double.parseDouble(txtDist.getText().toString()));
+    private boolean fillCVObject() {
+        boolean completeForm = true;
+        String errorText = "";
+        if (!txtLat.getText().toString().isEmpty()) {
+            cvObject.setLat(Double.parseDouble(txtLat.getText().toString()));
+        } else {
+            errorText = errorText + "Please enter the latitude\n";
+            completeForm = false;
+        }
+        if (!txtLon.getText().toString().isEmpty()) {
+            cvObject.setLon(Double.parseDouble(txtLon.getText().toString()));
+        } else {
+            errorText = errorText + "Please enter the longitude\n";
+            completeForm = false;
+        }
+        if (!txtWind.getText().toString().isEmpty()) {
+            cvObject.setBearing(Double.parseDouble(txtWind.getText().toString()));
+        } else {
+            errorText = errorText + "Please enter the wind direction\n";
+            completeForm = false;
+        }
+        if (!txtDist.getText().toString().isEmpty()) {
+            cvObject.setDistance(Double.parseDouble(txtDist.getText().toString()));
+        } else {
+            errorText = errorText + "Please enter the distance\n";
+            completeForm = false;
+        }
         switch (shape) {
             case "triangle":
                 if(rgAngle.getCheckedRadioButtonId() == rbAngle1.getId()) {
                     cvObject.setAngle(60);
-                } else {
+                } else if (rgAngle.getCheckedRadioButtonId() == rbAngle2.getId()) {
                     cvObject.setAngle(45);
+                } else {
+                    errorText = errorText + "Please select an angle\n";
+                    completeForm = false;
                 }
                 if(rgType.getCheckedRadioButtonId() == rbType1.getId()) {
                     cvObject.setType("starboard");
-                } else {
+                } else if (rgType.getCheckedRadioButtonId() == rbType2.getId()) {
                     cvObject.setType("portboard");
+                } else {
+                    errorText = errorText + "Please select Starboard or Portboard\n";
+                    completeForm = false;
                 }
                 break;
             case "trapezoid":
                 if(rgAngle.getCheckedRadioButtonId() == rbAngle1.getId()) {
                     cvObject.setAngle(60);
-                } else {
+                } else if (rgAngle.getCheckedRadioButtonId() == rbAngle2.getId()){
                     cvObject.setAngle(70);
+                } else {
+                    errorText = errorText + "Please select an angle\n";
+                    completeForm = false;
                 }
                 if(rgType.getCheckedRadioButtonId() == rbType1.getId()) {
                     cvObject.setType("starboard");
-                } else {
+                } else if (rgType.getCheckedRadioButtonId() == rbType2.getId()){
                     cvObject.setType("portboard");
+                } else {
+                    errorText = errorText + "Please select Starboard or Portboard\n";
+                    completeForm = false;
                 }
                 if(rg2ndBeat.getCheckedRadioButtonId() == rb2ndBeat1.getId()) {
                     cvObject.setSecondBeat("long");
-                } else {
+                } else if (rg2ndBeat.getCheckedRadioButtonId() == rb2ndBeat2.getId()){
                     cvObject.setSecondBeat("short");
+                } else {
+                    errorText = errorText + "Please select a second beat length\n";
+                    completeForm = false;
                 }
                 if(rgReach.getCheckedRadioButtonId() == rbReach1.getId()) {
                     cvObject.setReach(0.5);
-                } else {
+                } else if (rgReach.getCheckedRadioButtonId() == rbReach2.getId()){
                     cvObject.setReach(0.66666);
+                } else {
+                    errorText = errorText + "Please select a reach length\n";
+                    completeForm = false;
                 }
                 break;
             case "optimist":
                 if(rgType.getCheckedRadioButtonId() == rbType1.getId()) {
                     cvObject.setType("starboard");
-                } else {
+                } else if (rgType.getCheckedRadioButtonId() == rbType2.getId()){
                     cvObject.setType("portboard");
+                } else {
+                    errorText = errorText + "Please select Starboard or Portboard\n";
+                    completeForm = false;
                 }
                 break;
+        }
+        if (!completeForm) {
+            errorText = errorText.trim();
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, errorText, duration);
+            toast.show();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void setupUI(View view) {
+
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(CourseVariablesBackdropActivity.this);
+                    return false;
+                }
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView);
+            }
+        }
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        if(activity.getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(), 0);
         }
     }
 
@@ -400,6 +501,11 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
         } else {
             return true;
         }
+    }
+
+    public void showHelpDialog() {
+        DialogFragment dialog = new HelpDialogFragment();
+        dialog.show(getSupportFragmentManager(),null);
     }
     public void showWeatherDialog() {
         findWeather(currentLocation);
