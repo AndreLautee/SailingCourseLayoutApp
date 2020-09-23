@@ -84,7 +84,7 @@ public class CourseVariablesObject implements Parcelable {
     }
 
     public void setBearing(double bearing) {
-        this.bearing = bearing;
+        this.bearing = getBearingsInRadians(bearing);
     }
 
     double getDistance() {
