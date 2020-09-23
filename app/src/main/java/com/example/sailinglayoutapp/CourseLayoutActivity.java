@@ -406,7 +406,7 @@ public class CourseLayoutActivity extends AppCompatActivity {
 
     public String decimalDeg2degMins(double decDegree) {
         int d = (int) decDegree;
-        double m = (decDegree - d) * 60;
+        double m = Math.abs(decDegree - d) * 60;
         return "" + d + "°" + String.format("%.3f",m) + "'";
     }
 
