@@ -9,85 +9,129 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/colorPrimary"
-        >
+        android:orientation="vertical">
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="342dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_gravity="center|start|center_horizontal"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="75dp"
-            android:layout_gravity="start"
-            android:gravity="center"
-            android:layout_marginStart="30dp">
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_gravity="center"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_gravity="center"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_globe" />
-                    >
-                    <EditText
-                        android:id="@+id/editText_lat"
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.SCLApp.TextInputLayout"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:hint="Latitude (°)"
-                        android:textSize="16dp"
-                        android:textColor="@color/colorOnPrimary"
-                        />
+                        android:hint="Latitude"
+                        app:helperText="@string/coordinate_format"
+                        app:helperTextEnabled="true"
+                        app:suffixText="@string/degrees">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_lat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textColor="@color/colorOnPrimary"
+                            android:textSize="16dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <!--                    <EditText-->
+                    <!--                        android:id="@+id/editText_lat"-->
+                    <!--                        android:layout_width="200dp"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginStart="20dp"-->
+                    <!--                        android:hint="Latitude (°)"-->
+                    <!--                        android:textSize="16dp"-->
+                    <!--                        android:textColor="@color/colorOnPrimary"-->
+                    <!--                        />-->
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_gravity="center"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
                         android:src="@drawable/lon_logo" />
-                    <EditText
-                        android:id="@+id/editText_lon"
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.SCLApp.TextInputLayout"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:hint="Longitude (°)"
-                        android:textSize="16dp"
-                        android:textColor="@color/colorOnPrimary"
-                        />
+                        android:hint="Longitude"
+                        app:helperText="@string/coordinate_format"
+                        app:helperTextEnabled="true"
+                        app:suffixText="@string/degrees">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_lon"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textColor="@color/colorOnPrimary"
+                            android:textSize="16dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
+                android:id="@+id/locate_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_gravity="center"
+                android:layout_marginStart="25dp"
                 android:gravity="center"
-                android:layout_marginStart="20dp"
-                android:id="@+id/locate_button">
+                android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@drawable/crosshair" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="LOCATE"
                     android:textColor="@color/colorOnPrimaryDefault"
-                    android:fontFamily="@font/roboto_medium" 
-                    android:textSize="14dp"/>
+                    android:textSize="14dp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -95,69 +139,100 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="start"
-            android:gravity="center"
-            android:layout_marginTop="80dp"
-            android:layout_marginStart="30dp">
+            android:layout_gravity="center|start|center_horizontal"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_height="41dp"
+                android:layout_gravity="center_vertical"
                 android:src="@drawable/wind" />
-            <EditText
-                android:id="@+id/editText_wind"
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.SCLApp.TextInputLayout"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:hint="Wind Direction (°)"
-                android:textSize="16dp"
-                android:textColor="@color/colorOnPrimary"
-                />
+                android:hint="Wind Direction"
+                app:helperText="@string/wind_dir_helper"
+                app:helperTextEnabled="true"
+                app:suffixText="@string/degrees">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editText_wind"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/colorOnPrimary"
+                    android:textSize="16dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <LinearLayout
+                android:id="@+id/weather_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_gravity="center"
-                android:gravity="center"
                 android:layout_marginStart="20dp"
-                android:id="@+id/weather_button">
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@drawable/radar" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="CONNECT"
                     android:textColor="@color/colorOnPrimaryDefault"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="start"
-            android:gravity="center"
-            android:layout_marginTop="80dp"
-            android:layout_marginStart="30dp">
+            android:layout_gravity="center|start|center_horizontal"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
                 android:src="@drawable/ruler" />
-            <EditText
-                android:id="@+id/editText_dist"
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.SCLApp.TextInputLayout"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:hint="Distance (Nm)"
-                android:textSize="16dp"
-                android:textColor="@color/colorOnPrimary"
-                />
+                android:hint="Course Length"
+                app:helperText="@string/length_format"
+                app:helperTextEnabled="true"
+                app:suffixText="@string/length_unit">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editText_dist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/colorOnPrimary"
+                    android:textSize="16dp" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-        
+
 
     </LinearLayout>
     <!--This is the backdrop's content with a BottomSheetBehaviour applied to it-->
