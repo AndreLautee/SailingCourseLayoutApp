@@ -295,7 +295,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
     private void rewriteOldValues() {
         txtLat.setText(String.valueOf(cvObject.getLat()));
         txtLon.setText(String.valueOf(cvObject.getLon()));
-        txtWind.setText(String.valueOf(cvObject.getBearing()));
+        txtWind.setText(String.format("%.0f",(cvObject.getBearing()*180)/Math.PI));
         txtDist.setText(String.valueOf(cvObject.getDistance()));
         if(rbAngle1 != null) {
             if(cvObject.getAngle() == 60) {
