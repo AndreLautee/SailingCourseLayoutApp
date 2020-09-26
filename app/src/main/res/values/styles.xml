@@ -10,7 +10,7 @@
         <item name="actionBarPopupTheme">@style/PopUpTheme</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButton</item>
         <item name="android:textColorPrimary">@color/colorOnPrimary</item>
-</style>
+    </style>
 
     <style name="ActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="titleTextStyle">@style/ActionBarTitle</item>
@@ -32,6 +32,7 @@
 
     <style name="OverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="tint">@color/colorOnPrimary</item>
+        <item name="android:src">@drawable/baseline_menu_black_24dp</item>
     </style>
 
     <style name="RadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">

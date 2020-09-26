@@ -24,9 +24,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity2"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".CourseVariablesActivity"
             android:screenOrientation="portrait" />
         <activity

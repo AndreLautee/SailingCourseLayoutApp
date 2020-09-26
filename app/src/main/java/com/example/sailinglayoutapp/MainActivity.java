@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("Home");
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
 

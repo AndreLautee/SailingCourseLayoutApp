@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -54,7 +55,8 @@ public class CourseLayoutActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("Course Layout");
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.baseline_west_black_24dp);
         }
 
         topNavigation = findViewById(R.id.courseLayout_top_navigation);
@@ -145,10 +147,15 @@ public class CourseLayoutActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_menu, menu);
+        if(menu instanceof MenuBuilder){
+            MenuBuilder m = (MenuBuilder) menu;
+            m.setOptionalIconsVisible(true);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -156,6 +163,9 @@ public class CourseLayoutActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.btn_home:
                 // User chose the "Menu" item, show the app menu UI...
                 intent = new Intent();

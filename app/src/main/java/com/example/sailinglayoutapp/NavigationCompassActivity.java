@@ -3,12 +3,14 @@ package com.example.sailinglayoutapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -79,7 +81,8 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("Navigation Compass");
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.baseline_west_black_24dp);
         }
 
         topNavigation = findViewById(R.id.navCompass_top_navigation);
@@ -226,10 +229,15 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         }
     };
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_menu, menu);
+        if(menu instanceof MenuBuilder){
+            MenuBuilder m = (MenuBuilder) menu;
+            m.setOptionalIconsVisible(true);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -237,6 +245,9 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.btn_home:
                 // User chose the "Menu" item, show the app menu UI...
                 intent = new Intent();

@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -63,7 +65,8 @@ public class WeatherAPIActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("Weather");
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.baseline_west_black_24dp);
         }
 
 
@@ -166,32 +169,15 @@ public class WeatherAPIActivity extends AppCompatActivity {
                 activeNetwork.isConnectedOrConnecting();
         return isConnected;
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
-            case R.id.btn_home:
-                // User chose the "Menu" item, show the app menu UI...
-                intent = new Intent();
-                intent.setClass(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
+            case android.R.id.home:
+                finish();
                 return true;
 
-            case R.id.btn_variables:
-                intent = new Intent();
-                intent.setClass(getApplicationContext(),CourseVariablesActivity.class);
-                startActivity(intent);
-                return true;
-
-            case R.id.btn_weather:
-                return true;
 
             default:
                 return super.onOptionsItemSelected(item);

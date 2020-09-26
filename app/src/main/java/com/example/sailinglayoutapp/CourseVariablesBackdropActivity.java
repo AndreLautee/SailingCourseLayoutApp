@@ -1,6 +1,7 @@
 package com.example.sailinglayoutapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,6 +33,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -74,7 +76,8 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("Course Variables");
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.baseline_west_black_24dp);
         }
 
 
@@ -234,10 +237,15 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
 
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_menu, menu);
+        if(menu instanceof MenuBuilder){
+            MenuBuilder m = (MenuBuilder) menu;
+            m.setOptionalIconsVisible(true);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -245,6 +253,13 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
+            case android.R.id.home:
+                if(sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                } else {
+                    finish();
+                }
+                return true;
             case R.id.btn_home:
                 // User chose the "Menu" item, show the app menu UI...
                 intent = new Intent();
