@@ -66,7 +66,7 @@ public class WeatherAPIActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("Weather");
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.baseline_west_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_black_24dp);
         }
 
 

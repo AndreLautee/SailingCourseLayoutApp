@@ -20,8 +20,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
     TextView Start;
     private int Request_code = 1;
-    BottomNavigationView bottomNavigation;
-    String prevStarted;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +31,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         Start=findViewById(R.id.btn);
-        bottomNavigation = findViewById(R.id.bottom_navigation);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle("Home");
+            actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
 

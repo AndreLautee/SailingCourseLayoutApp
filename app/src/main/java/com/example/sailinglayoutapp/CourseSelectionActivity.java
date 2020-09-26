@@ -42,7 +42,7 @@ public class CourseSelectionActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("Course Selection");
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.baseline_west_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_black_24dp);
         }
 
         final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -59,11 +59,13 @@ public class CourseSelectionActivity extends AppCompatActivity {
         imgStraight = findViewById(R.id.img_straight);
         imgOptimist = findViewById(R.id.img_optimist);
 
+        final Intent intent = new Intent(getApplicationContext(), CourseVariablesBackdropActivity.class);
+        intent.putExtra("PREV_ACTIVITY",1);
+
         imgTriangle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cvObject.setShape("triangle");
-                Intent intent = new Intent(getApplicationContext(), CourseVariablesBackdropActivity.class);
                 intent.putExtra("COURSE_VARIABLES", cvObject);
                 startActivity(intent);
             }
@@ -73,7 +75,6 @@ public class CourseSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cvObject.setShape("trapezoid");
-                Intent intent = new Intent(getApplicationContext(), CourseVariablesBackdropActivity.class);
                 intent.putExtra("COURSE_VARIABLES", cvObject);
                 startActivity(intent);
             }
@@ -83,7 +84,6 @@ public class CourseSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cvObject.setShape("windward_leeward");
-                Intent intent = new Intent(getApplicationContext(), CourseVariablesBackdropActivity.class);
                 intent.putExtra("COURSE_VARIABLES", cvObject);
                 startActivity(intent);
             }
@@ -93,7 +93,6 @@ public class CourseSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cvObject.setShape("optimist");
-                Intent intent = new Intent(getApplicationContext(), CourseVariablesBackdropActivity.class);
                 intent.putExtra("COURSE_VARIABLES", cvObject);
                 startActivity(intent);
             }
@@ -122,7 +121,6 @@ public class CourseSelectionActivity extends AppCompatActivity {
             case R.id.btn_home:
                 // User chose the "Menu" item, show the app menu UI...
                 intent = new Intent();
-                intent.putExtra("COURSE_VARIABLES", cvObject);
                 intent.setClass(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
                 return true;

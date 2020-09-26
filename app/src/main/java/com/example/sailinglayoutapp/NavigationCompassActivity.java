@@ -7,6 +7,7 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.DialogFragment;
 
 
 import android.Manifest;
@@ -42,7 +43,7 @@ import org.decimal4j.util.DoubleRounder;
 import java.util.ArrayList;
 
 
-public class NavigationCompassActivity extends AppCompatActivity implements SensorEventListener {
+public class NavigationCompassActivity extends AppCompatActivity implements SensorEventListener, ConfirmDialogFragment.ConfirmDialogListener {
 
     ImageView compass_img;
     ImageView arrow;
@@ -82,7 +83,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("Navigation Compass");
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.baseline_west_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_black_24dp);
         }
 
         topNavigation = findViewById(R.id.navCompass_top_navigation);
@@ -249,16 +250,13 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
                 finish();
                 return true;
             case R.id.btn_home:
-                // User chose the "Menu" item, show the app menu UI...
-                intent = new Intent();
-                intent.putExtra("COURSE_VARIABLES", cvObject);
-                intent.setClass(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
+                showConfirmDialog();
                 return true;
 
             case R.id.btn_variables:
                 intent = new Intent();
                 intent.putExtra("COURSE_VARIABLES", cvObject);
+                intent.putExtra("PREV_ACTIVITY",2);
                 intent.setClass(getApplicationContext(),CourseVariablesBackdropActivity.class);
                 startActivity(intent);
                 return true;
@@ -450,4 +448,20 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         }
     }
 
+    public void showConfirmDialog() {
+        DialogFragment dialog = new ConfirmDialogFragment();
+        dialog.show(getSupportFragmentManager(),null);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
 }

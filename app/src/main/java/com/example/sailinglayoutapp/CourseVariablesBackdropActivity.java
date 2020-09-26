@@ -51,7 +51,8 @@ import org.decimal4j.util.DoubleRounder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CourseVariablesBackdropActivity extends AppCompatActivity implements WeatherDialogFragment.WeatherDialogListener, HelpDialogFragment.HelpDialogListener {
+public class CourseVariablesBackdropActivity extends AppCompatActivity
+        implements WeatherDialogFragment.WeatherDialogListener, HelpDialogFragment.HelpDialogListener, ConfirmDialogFragment.ConfirmDialogListener {
 
     BottomSheetBehavior<LinearLayout> sheetBehavior;
     CourseVariablesObject cvObject;
@@ -61,6 +62,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
     RadioGroup rgAngle, rgType, rg2ndBeat, rgReach;
     RadioButton rbAngle1, rbAngle2, rbType1, rbType2, rb2ndBeat1, rb2ndBeat2, rbReach1, rbReach2;
     Location currentLocation;
+    int prevActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +72,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
         setupUI(findViewById(R.id.ui_behind_backdrop));
 
         Intent intent = getIntent();
+        prevActivity = intent.getIntExtra("PREV_ACTIVITY",0);
         cvObject = intent.getParcelableExtra("COURSE_VARIABLES");
 
         ActionBar actionBar = getSupportActionBar();
@@ -77,7 +80,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("Course Variables");
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.baseline_west_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_black_24dp);
         }
 
 
@@ -257,14 +260,15 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
                 if(sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 } else {
-                    finish();
+                    if(prevActivity == 2){
+                        finish();
+                    } else {
+                        showConfirmDialog();
+                    }
                 }
                 return true;
             case R.id.btn_home:
-                // User chose the "Menu" item, show the app menu UI...
-                intent = new Intent();
-                intent.setClass(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
+                showConfirmDialog();
                 return true;
 
             case R.id.btn_variables:
@@ -535,6 +539,10 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
         }
     }
 
+    public void showConfirmDialog() {
+        DialogFragment dialog = new ConfirmDialogFragment();
+        dialog.show(getSupportFragmentManager(),null);
+    }
     public void showHelpDialog() {
         DialogFragment dialog = new HelpDialogFragment();
         dialog.show(getSupportFragmentManager(),null);
@@ -593,9 +601,22 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity implement
                 activeNetwork.isConnectedOrConnecting();
         return isConnected;
     }
+
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, double wind) {
         txtWind.setText(String.valueOf(wind));
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        if(prevActivity == 1) {
+            // Go back to course selection page
+            finish();
+        } else {
+            Intent intent = new Intent();
+            intent.setClass(getApplicationContext(),MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

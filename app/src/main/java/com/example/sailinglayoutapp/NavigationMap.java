@@ -31,6 +31,7 @@ import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -38,7 +39,7 @@ import org.decimal4j.util.DoubleRounder;
 
 import java.util.ArrayList;
 
-public class NavigationMap extends AppCompatActivity {
+public class NavigationMap extends AppCompatActivity implements ConfirmDialogFragment.ConfirmDialogListener {
 
     NavMapGLSurfaceView gLView;
     MarkerCoordCalculations course;
@@ -65,7 +66,7 @@ public class NavigationMap extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("Course Navigation");
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.baseline_west_black_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_black_24dp);
         }
 
         topNavigation = findViewById(R.id.navMap_top_navigation);
@@ -250,16 +251,13 @@ public class NavigationMap extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.btn_home:
-                // User chose the "Menu" item, show the app menu UI...
-                intent = new Intent();
-                intent.putExtra("COURSE_VARIABLES", cvObject);
-                intent.setClass(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
+                showConfirmDialog();
                 return true;
 
             case R.id.btn_variables:
                 intent = new Intent();
                 intent.putExtra("COURSE_VARIABLES", cvObject);
+                intent.putExtra("PREV_ACTIVITY",2);
                 intent.setClass(getApplicationContext(),CourseVariablesBackdropActivity.class);
                 startActivity(intent);
                 return true;
@@ -385,5 +383,20 @@ public class NavigationMap extends AppCompatActivity {
         }
     }
 
+    public void showConfirmDialog() {
+        DialogFragment dialog = new ConfirmDialogFragment();
+        dialog.show(getSupportFragmentManager(),null);
+    }
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
 }
