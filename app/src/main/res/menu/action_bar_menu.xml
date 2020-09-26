@@ -4,11 +4,11 @@
 
     <item android:id="@+id/btn_home"
         android:title="HOME"
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/baseline_home_black_24dp"
         app:showAsAction="never" />
     <item android:id="@+id/btn_variables"
         android:title="VARIABLES"
-        android:icon="@drawable/ic_baseline_tune_24"
+        android:icon="@drawable/baseline_tune_black_24dp"
         app:showAsAction="never" />
     <item android:id="@+id/btn_weather"
         android:title="WEATHER"

@@ -24,12 +24,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity2"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".CourseVariablesActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".CourseLayoutActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -50,8 +44,6 @@
         <activity
             android:name=".WelcomeActivity"
             android:screenOrientation="portrait"/>
-
-        <activity android:name=".Testingclass" android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"

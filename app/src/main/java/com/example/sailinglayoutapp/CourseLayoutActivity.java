@@ -25,12 +25,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class CourseLayoutActivity extends AppCompatActivity {
+public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDialogFragment.ConfirmDialogListener {
 
     RadioButton r1, r2, r3, r4;
     RelativeLayout rl;
@@ -54,7 +56,8 @@ public class CourseLayoutActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("Course Layout");
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_black_24dp);
         }
 
         topNavigation = findViewById(R.id.courseLayout_top_navigation);
@@ -145,10 +148,15 @@ public class CourseLayoutActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_menu, menu);
+        if(menu instanceof MenuBuilder){
+            MenuBuilder m = (MenuBuilder) menu;
+            m.setOptionalIconsVisible(true);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -156,17 +164,17 @@ public class CourseLayoutActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.btn_home:
-                // User chose the "Menu" item, show the app menu UI...
-                intent = new Intent();
-                intent.putExtra("COURSE_VARIABLES", cvObject);
-                intent.setClass(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
+                showConfirmDialog();
                 return true;
 
             case R.id.btn_variables:
                 intent = new Intent();
                 intent.putExtra("COURSE_VARIABLES", cvObject);
+                intent.putExtra("PREV_ACTIVITY",2);
                 intent.setClass(getApplicationContext(),CourseVariablesBackdropActivity.class);
                 startActivity(intent);
                 return true;
@@ -529,5 +537,21 @@ public class CourseLayoutActivity extends AppCompatActivity {
         }
     };
 
+    public void showConfirmDialog() {
+        DialogFragment dialog = new ConfirmDialogFragment();
+        dialog.show(getSupportFragmentManager(),null);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
 }
 
