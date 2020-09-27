@@ -55,10 +55,37 @@
         </RelativeLayout>
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Triangle"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginStart="60dp"
+                />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trapezoid"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginStart="120dp"
+                />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,6 +128,30 @@
                 android:id="@+id/img_optimist"
                 android:translationZ="2dp"/>
         </RelativeLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Windward"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="60dp"
+            />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Optimist"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="110dp"
+            />
 
     </LinearLayout>
 
