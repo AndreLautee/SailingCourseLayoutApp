@@ -51,7 +51,7 @@
                         android:hint="Latitude"
                         app:hintTextColor="@color/colorOnPrimary"
                         app:helperText="@string/coordinate_format"
-
+                        app:errorEnabled="true"
                         app:suffixText="@string/degrees">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -90,7 +90,7 @@
                         android:hint="Longitude"
                         app:hintTextColor="@color/colorOnPrimary"
                         app:helperText="@string/coordinate_format"
-
+                        app:errorEnabled="true"
                         app:suffixText="@string/degrees">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -164,7 +164,7 @@
                 android:hint="Wind Direction"
                 app:hintTextColor="@color/colorOnPrimary"
                 app:helperText="@string/wind_dir_helper"
-
+                app:errorEnabled="true"
                 app:suffixText="@string/degrees">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -226,7 +226,7 @@
                 android:hint="Course Length"
                 app:hintTextColor="@color/colorOnPrimary"
                 app:helperText="@string/length_format"
-
+                app:errorEnabled="true"
                 app:suffixText="@string/length_unit">
 
                 <com.google.android.material.textfield.TextInputEditText
