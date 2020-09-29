@@ -41,10 +41,16 @@
     </style>
 
     <style name="Widget.SCLApp.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/textInputOutlineColor</item>
         <item name="hintTextAppearance">@style/TextAppearance.SCLApp.TextInputLayout.HintText</item>
         <item name="suffixTextAppearance">@style/TextAppearance.SCLApp.TextInputLayout.HintText</item>
+        <item name="errorTextAppearance">@style/TextAppearance.SCLApp.TextInputLayout.ErrorText</item>
+        <item name="errorIconTint">@color/colorError</item>
+        <item name="errorTextColor">@color/colorError</item>
+        <item name="boxStrokeErrorColor">@color/colorError</item>
         <item name="android:paddingBottom">8dp</item>
-        <item name="boxStrokeColor">@color/textInputOutlineColor</item>
+        <item name="helperTextEnabled">true</item>
+        <item name="errorEnabled">true</item>
     </style>
 
     <style name="TextAppearance.SCLApp.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
@@ -54,6 +60,10 @@
 
     <style name="TextAppearance.SCLApp.TextInputLayout.HelperText" parent="TextAppearance.MaterialComponents.Overline">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="TextAppearance.SCLApp.TextInputLayout.ErrorText" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="errorTextColor">@color/colorError</item>
     </style>
 
     <declare-styleable name="LayoutGLSurfaceView">
