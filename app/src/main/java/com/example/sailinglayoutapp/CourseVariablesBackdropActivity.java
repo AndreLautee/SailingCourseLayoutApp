@@ -467,92 +467,80 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     private boolean fillCVObject() {
         boolean completeForm = true;
         String errorText = "";
-        String latErrorText = "";
-        String longErrorText = "";
-        String windErrorText = "";
-        String distErrorText = "";
 
         Boolean collapseBttmSheet = false;
 
         try {
             if (txtLat.getText().toString().isEmpty()) {
-                latErrorText = latErrorText + "Please enter the latitude\n";
+                txtLayLat.setError("Please enter latitude");
                 completeForm = false;
                 collapseBttmSheet = true;
             } else if (Double.parseDouble(txtLat.getText().toString()) <= -90 || Double.parseDouble(txtLat.getText().toString()) >= 90) {
-                latErrorText = latErrorText + "Please enter a valid latitude\n";
+                txtLayLat.setError("Must be within -90° and 90°");
                 completeForm = false;
                 collapseBttmSheet = true;
             } else {
                 cvObject.setLat(Double.parseDouble(txtLat.getText().toString()));
             }
-            txtLayLat.setError(latErrorText);
         } catch (NumberFormatException nfe) {
-            latErrorText = latErrorText + "Please enter a number for latitude\n";
+            txtLayLat.setError("Latitude must be a number");
             completeForm = false;
             collapseBttmSheet = true;
-            txtLayLat.setError(latErrorText);
         }
 
         try {
             if (txtLon.getText().toString().isEmpty()) {
-                longErrorText = longErrorText + "Please enter the longitude\n";
+                txtLayLon.setError("Please enter longitude");
                 completeForm = false;
                 collapseBttmSheet = true;
             } else if (Double.parseDouble(txtLon.getText().toString()) <= -180 || Double.parseDouble(txtLon.getText().toString()) >= 180) {
-                longErrorText = longErrorText + "Please enter a valid longitude\n";
+                txtLayLon.setError("Must be within -180° and 180°");
                 completeForm = false;
                 collapseBttmSheet = true;
             } else {
                 cvObject.setLon(Double.parseDouble(txtLon.getText().toString()));
             }
-            txtLayLon.setError(longErrorText);
         } catch (NumberFormatException nfe) {
-            longErrorText = longErrorText + "Please enter a number for longitude\n";
+            txtLayLon.setError("Longitude must be a number");
             completeForm = false;
             collapseBttmSheet = true;
-            txtLayLon.setError(longErrorText);
         }
 
         try {
             if (txtWind.getText().toString().isEmpty()) {
-                windErrorText = windErrorText + "Please enter the wind direction\n";
+                txtLayWind.setError("Please enter wind direction");
                 completeForm = false;
                 collapseBttmSheet = true;
             } else if (Double.parseDouble(txtWind.getText().toString()) <= 0 || Double.parseDouble(txtWind.getText().toString()) >= 360){
-                windErrorText = windErrorText + "Please enter a valid wind direction\n";
+                txtLayWind.setError("Must be within 0° and 360°");
                 completeForm = false;
                 collapseBttmSheet = true;
             } else {
                 cvObject.setBearing(Double.parseDouble(txtWind.getText().toString()));
             }
-            txtLayWind.setError(windErrorText);
         } catch (NumberFormatException nfe) {
-            windErrorText = windErrorText + "Please enter a number for wind direction\n";
+            txtLayWind.setError("Wind must be a number");
             completeForm = false;
             collapseBttmSheet = true;
-            txtLayWind.setError(windErrorText);
         }
 
         try {
             if (txtDist.getText().toString().isEmpty()) {
-                distErrorText = distErrorText + "Please enter the distance\n";
+                txtLayDist.setError("Please enter distance");
                 completeForm = false;
                 collapseBttmSheet = true;
             } else if (Double.parseDouble(txtDist.getText().toString()) <= 0) {
-                distErrorText = distErrorText + "Please enter a valid distance\n";
+                txtLayDist.setError("Must be greater than 0");
                 completeForm = false;
                 collapseBttmSheet = true;
             }
             else {
                 cvObject.setDistance(Double.parseDouble(txtDist.getText().toString()));
             }
-            txtLayDist.setError(distErrorText);
         } catch (NumberFormatException nfe) {
-            distErrorText = distErrorText + "Please enter a number for distance\n";
+            txtLayDist.setError("Distance must be a number");
             completeForm = false;
             collapseBttmSheet = true;
-            txtLayDist.setError(distErrorText);
         }
 
         switch (shape) {
@@ -624,11 +612,13 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         }
 
         if (!completeForm) {
-            errorText = errorText.trim();
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, errorText, duration);
-            toast.show();
+            if (!errorText.equals("")) {
+                errorText = errorText.trim();
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast.makeText(context, errorText, duration);
+                toast.show();
+            }
             return false;
         } else {
             return true;
