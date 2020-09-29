@@ -13,6 +13,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,6 +48,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.decimal4j.util.DoubleRounder;
 import org.json.JSONException;
@@ -59,6 +62,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     String shape;
     View calcButton, stubView, arrow, topBar, helpButton;
     EditText txtLat, txtLon, txtWind, txtDist;
+    TextInputLayout txtLayLat, txtLayLon, txtLayWind, txtLayDist;
     RadioGroup rgAngle, rgType, rg2ndBeat, rgReach;
     RadioButton rbAngle1, rbAngle2, rbType1, rbType2, rb2ndBeat1, rb2ndBeat2, rbReach1, rbReach2;
     Location currentLocation;
@@ -238,6 +242,113 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         });
 
 
+        txtLat.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtLayLat.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    if (!(s.toString().equals("-"))) {
+                        try {
+                            if (Double.parseDouble(s.toString()) > 90 || Double.parseDouble(s.toString()) < -90) {
+                                txtLayLat.setError("Must be within -90° and 90°");
+                            }
+                        } catch (NumberFormatException nfe) {
+                            txtLayLat.setError("Latitude must be a number");
+                        }
+                    }
+                }
+            }
+        });
+
+        txtLon.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtLayLon.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    if (!(s.toString().equals("-"))) {
+                        try {
+                            if (Double.parseDouble(s.toString()) > 180 || Double.parseDouble(s.toString()) < -180) {
+                                txtLayLon.setError("Must be within -180° and 180°");
+                            }
+                        } catch (NumberFormatException nfe) {
+                            txtLayLon.setError("Longitude must be a number");
+                        }
+                    }
+                }
+            }
+        });
+
+        txtWind.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtLayWind.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    if (!(s.toString().equals("-"))) {
+                        try {
+                            if (Double.parseDouble(s.toString()) > 360 || Double.parseDouble(s.toString()) < 0) {
+                                txtLayWind.setError("Must be within 0° and 360°");
+                            }
+                        } catch (NumberFormatException nfe) {
+                            txtLayWind.setError("Wind must be a number");
+                        }
+                    }
+                }
+            }
+        });
+
+        txtDist.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtLayDist.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    if (!(s.toString().equals("-"))) {
+                        try {
+                            if (Double.parseDouble(s.toString()) <= 0) {
+                                txtLayDist.setError("Must be greater than 0");
+                            }
+                        } catch (NumberFormatException nfe) {
+                            txtLayDist.setError("Distance must be a number");
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @SuppressLint("RestrictedApi")
@@ -292,6 +403,11 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         txtLon = findViewById(R.id.editText_lon);
         txtWind = findViewById(R.id.editText_wind);
         txtDist = findViewById(R.id.editText_dist);
+
+        txtLayLat = findViewById(R.id.latitude_layout);
+        txtLayLon = findViewById(R.id.longitude_layout);
+        txtLayWind = findViewById(R.id.wind_layout);
+        txtLayDist = findViewById(R.id.distance_layout);
 
         helpButton = findViewById(R.id.help_button);
         calcButton = stubView.findViewById(R.id.img_calculate);
@@ -352,46 +468,81 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         boolean completeForm = true;
         String errorText = "";
 
-        if (txtLat.getText().toString().isEmpty()) {
-            errorText = errorText + "Please enter the latitude\n";
+        Boolean collapseBttmSheet = false;
+
+        try {
+            if (txtLat.getText().toString().isEmpty()) {
+                txtLayLat.setError("Please enter latitude");
+                completeForm = false;
+                collapseBttmSheet = true;
+            } else if (Double.parseDouble(txtLat.getText().toString()) <= -90 || Double.parseDouble(txtLat.getText().toString()) >= 90) {
+                txtLayLat.setError("Must be within -90° and 90°");
+                completeForm = false;
+                collapseBttmSheet = true;
+            } else {
+                cvObject.setLat(Double.parseDouble(txtLat.getText().toString()));
+            }
+        } catch (NumberFormatException nfe) {
+            txtLayLat.setError("Latitude must be a number");
             completeForm = false;
-        } else if (Double.parseDouble(txtLat.getText().toString()) <= -90 || Double.parseDouble(txtLat.getText().toString()) >= 90) {
-            errorText = errorText + "Invalid latitude (must be within -90° and 90°)\n";
-            completeForm = false;
-        } else {
-            cvObject.setLat(Double.parseDouble(txtLat.getText().toString()));
+            collapseBttmSheet = true;
         }
 
-        if (txtLon.getText().toString().isEmpty()) {
-            errorText = errorText + "Please enter the longitude\n";
+        try {
+            if (txtLon.getText().toString().isEmpty()) {
+                txtLayLon.setError("Please enter longitude");
+                completeForm = false;
+                collapseBttmSheet = true;
+            } else if (Double.parseDouble(txtLon.getText().toString()) <= -180 || Double.parseDouble(txtLon.getText().toString()) >= 180) {
+                txtLayLon.setError("Must be within -180° and 180°");
+                completeForm = false;
+                collapseBttmSheet = true;
+            } else {
+                cvObject.setLon(Double.parseDouble(txtLon.getText().toString()));
+            }
+        } catch (NumberFormatException nfe) {
+            txtLayLon.setError("Longitude must be a number");
             completeForm = false;
-        } else if (Double.parseDouble(txtLon.getText().toString()) <= -180 || Double.parseDouble(txtLon.getText().toString()) >= 180) {
-            errorText = errorText + "Invalid longitude (must be within -180° and 180°)\n";
-            completeForm = false;
-        } else {
-            cvObject.setLon(Double.parseDouble(txtLon.getText().toString()));
+            collapseBttmSheet = true;
         }
 
-        if (txtWind.getText().toString().isEmpty()) {
-            errorText = errorText + "Please enter the wind direction\n";
+        try {
+            if (txtWind.getText().toString().isEmpty()) {
+                txtLayWind.setError("Please enter wind direction");
+                completeForm = false;
+                collapseBttmSheet = true;
+            } else if (Double.parseDouble(txtWind.getText().toString()) <= 0 || Double.parseDouble(txtWind.getText().toString()) >= 360){
+                txtLayWind.setError("Must be within 0° and 360°");
+                completeForm = false;
+                collapseBttmSheet = true;
+            } else {
+                cvObject.setBearing(Double.parseDouble(txtWind.getText().toString()));
+            }
+        } catch (NumberFormatException nfe) {
+            txtLayWind.setError("Wind must be a number");
             completeForm = false;
-        } else if (Double.parseDouble(txtWind.getText().toString()) <= 0 || Double.parseDouble(txtWind.getText().toString()) >= 360){
-            errorText = errorText + "Invalid wind direction (must be within 0° and 360°)\n";
-            completeForm = false;
-        } else {
-            cvObject.setBearing(Double.parseDouble(txtWind.getText().toString()));
+            collapseBttmSheet = true;
         }
 
-        if (txtDist.getText().toString().isEmpty()) {
-            errorText = errorText + "Please enter the distance\n";
+        try {
+            if (txtDist.getText().toString().isEmpty()) {
+                txtLayDist.setError("Please enter distance");
+                completeForm = false;
+                collapseBttmSheet = true;
+            } else if (Double.parseDouble(txtDist.getText().toString()) <= 0) {
+                txtLayDist.setError("Must be greater than 0");
+                completeForm = false;
+                collapseBttmSheet = true;
+            }
+            else {
+                cvObject.setDistance(Double.parseDouble(txtDist.getText().toString()));
+            }
+        } catch (NumberFormatException nfe) {
+            txtLayDist.setError("Distance must be a number");
             completeForm = false;
-        } else if (Double.parseDouble(txtDist.getText().toString()) <= 0) {
-            errorText = errorText + "Invalid distance (must be greater than 0Nm)\n";
-            completeForm = false;
+            collapseBttmSheet = true;
         }
-        else {
-            cvObject.setDistance(Double.parseDouble(txtDist.getText().toString()));
-        }
+
         switch (shape) {
             case "triangle":
                 if(rgAngle.getCheckedRadioButtonId() == rbAngle1.getId()) {
@@ -456,12 +607,18 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 }
                 break;
         }
+        if (collapseBttmSheet){
+            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+
         if (!completeForm) {
-            errorText = errorText.trim();
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, errorText, duration);
-            toast.show();
+            if (!errorText.equals("")) {
+                errorText = errorText.trim();
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast.makeText(context, errorText, duration);
+                toast.show();
+            }
             return false;
         } else {
             return true;
