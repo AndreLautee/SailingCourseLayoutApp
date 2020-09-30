@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:key="coordinates"
+        app:entries="@array/coord_entries"
+        app:entryValues="@array/coord_values"
+        app:title="Coordinate Format"
+        app:summary="%s"
+        app:dialogTitle="Coordinate Format"
+        app:icon="@drawable/crosshair"/>
+
+
+</PreferenceScreen>

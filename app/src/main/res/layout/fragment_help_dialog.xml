@@ -7,7 +7,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="10dp"
-        android:src="@drawable/crosshair"
+        android:src="@drawable/baseline_help_outline_black_18dp"
         android:layout_gravity="center"/>
     <TextView
         android:layout_width="wrap_content"

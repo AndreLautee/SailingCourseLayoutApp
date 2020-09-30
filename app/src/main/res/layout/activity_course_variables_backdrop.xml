@@ -45,12 +45,12 @@
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.SCLApp.TextInputLayout"
                         android:id="@+id/latitude_layout"
-                        android:layout_width="200dp"
+                        android:layout_width="95dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:hint="Latitude"
+                        android:hint="@string/latitude"
                         app:hintTextColor="@color/colorOnPrimary"
-                        app:helperText="@string/coordinate_format"
+                        app:helperText="@string/coord_format_degmin_deg_lat"
                         app:errorEnabled="true"
                         app:suffixText="@string/degrees">
 
@@ -60,6 +60,29 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:inputType="numberDecimal|numberSigned"
+                            android:maxLines="1"
+                            android:textColor="@color/colorOnPrimary"
+                            android:textSize="16dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.SCLApp.TextInputLayout"
+                        android:id="@+id/latitude_layout_min"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:hint="@string/latitude"
+                        app:hintTextColor="@color/colorOnPrimary"
+                        app:helperText="@string/coord_format_degmin_min"
+                        app:errorEnabled="true"
+                        app:suffixText="@string/minutes">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_lat_min"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:inputType="numberDecimal"
                             android:maxLines="1"
                             android:textColor="@color/colorOnPrimary"
                             android:textSize="16dp" />
@@ -84,12 +107,12 @@
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.SCLApp.TextInputLayout"
                         android:id="@+id/longitude_layout"
-                        android:layout_width="200dp"
+                        android:layout_width="95dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:hint="Longitude"
+                        android:hint="@string/longitude"
                         app:hintTextColor="@color/colorOnPrimary"
-                        app:helperText="@string/coordinate_format"
+                        app:helperText="@string/coordinate_format_deg_lon"
                         app:errorEnabled="true"
                         app:suffixText="@string/degrees">
 
@@ -103,7 +126,28 @@
                             android:textColor="@color/colorOnPrimary"
                             android:textSize="16dp" />
                     </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.SCLApp.TextInputLayout"
+                        android:id="@+id/longitude_layout_min"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:hint="@string/longitude"
+                        app:hintTextColor="@color/colorOnPrimary"
+                        app:helperText="@string/coord_format_degmin_min"
+                        app:errorEnabled="true"
+                        app:suffixText="@string/minutes">
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_lon_min"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:textColor="@color/colorOnPrimary"
+                            android:textSize="16dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </LinearLayout>
 

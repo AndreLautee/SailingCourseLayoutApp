@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -15,6 +16,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,6 +43,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.PreferenceManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -55,18 +59,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CourseVariablesBackdropActivity extends AppCompatActivity
-        implements WeatherDialogFragment.WeatherDialogListener, HelpDialogFragment.HelpDialogListener, ConfirmDialogFragment.ConfirmDialogListener {
+        implements WeatherDialogFragment.WeatherDialogListener, HelpDialogFragment.HelpDialogListener, ConfirmDialogFragment.ConfirmDialogListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     BottomSheetBehavior<LinearLayout> sheetBehavior;
     CourseVariablesObject cvObject;
     String shape;
-    View calcButton, stubView, arrow, topBar, helpButton;
-    EditText txtLat, txtLon, txtWind, txtDist;
-    TextInputLayout txtLayLat, txtLayLon, txtLayWind, txtLayDist;
+    View calcButton, stubView, arrow, topBar, helpButton, advancedBar;
+    EditText txtLat, txtLon, txtWind, txtDist, txtLatMin, txtLonMin;
+    TextInputLayout txtLayLat, txtLayLon, txtLayWind, txtLayDist, txtLayLatMin, txtLayLonMin;
     RadioGroup rgAngle, rgType, rg2ndBeat, rgReach;
     RadioButton rbAngle1, rbAngle2, rbType1, rbType2, rb2ndBeat1, rb2ndBeat2, rbReach1, rbReach2;
     Location currentLocation;
     int prevActivity;
+    String coordFormat;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,6 +93,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         }
 
 
+        setupSharedPreferences();
 
         LinearLayout contentLayout = findViewById(R.id.contentLayout);
         ViewStub stub = findViewById(R.id.layout_stub);
@@ -121,10 +127,21 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);//initially state to fully expanded
         sheetBehavior.setHalfExpandedRatio(0.2f);
 
-        arrow = findViewById(R.id.filterIcon);
-        topBar = findViewById(R.id.topBar);
+
 
         topBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+                if(sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+        });
+
+        advancedBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
@@ -163,6 +180,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
         final View button_locate = findViewById(R.id.locate_button);
         button_locate.setOnClickListener(new View.OnClickListener(){
+            @SuppressLint("DefaultLocale")
             public void onClick(View v) {
 
                 if (currentLocation == null) {
@@ -184,8 +202,15 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                                 .show();
                     }
                 } else {
-                    txtLat.setText(String.valueOf(DoubleRounder.round(currentLocation.getLatitude(),5)));
-                    txtLon.setText(String.valueOf(DoubleRounder.round(currentLocation.getLongitude(),5)));
+                    if (coordFormat.equals("deg")) {
+                        txtLat.setText(String.valueOf(DoubleRounder.round(currentLocation.getLatitude(),5)));
+                        txtLon.setText(String.valueOf(DoubleRounder.round(currentLocation.getLongitude(),5)));
+                    } else {
+                        txtLat.setText(String.valueOf((int) currentLocation.getLatitude()));
+                        txtLon.setText(String.valueOf((int) currentLocation.getLongitude()));
+                        txtLatMin.setText(String.format("%.3f", decimalDeg2Mins(currentLocation.getLatitude())));
+                        txtLonMin.setText(String.format("%.3f", decimalDeg2Mins(currentLocation.getLongitude())));
+                    }
                 }
 
             }
@@ -241,6 +266,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
             }
         });
 
+        setupTextFields();
 
         txtLat.addTextChangedListener(new TextWatcher() {
             @Override
@@ -262,9 +288,34 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                                 txtLayLat.setError("Must be within -90° and 90°");
                             }
                         } catch (NumberFormatException nfe) {
-                            txtLayLat.setError("Latitude must be a number");
+                            txtLayLat.setError("Must be a number");
                         }
                     }
+                }
+            }
+        });
+
+        txtLatMin.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtLayLatMin.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                        try {
+                            if (Double.parseDouble(s.toString()) > 60 || Double.parseDouble(s.toString()) < 0) {
+                                txtLayLatMin.setError("Must be within 0' and 60'");
+                            }
+                        } catch (NumberFormatException nfe) {
+                            txtLayLatMin.setError("Must be a number");
+                        }
                 }
             }
         });
@@ -291,6 +342,31 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                         } catch (NumberFormatException nfe) {
                             txtLayLon.setError("Longitude must be a number");
                         }
+                    }
+                }
+            }
+        });
+
+        txtLonMin.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtLayLonMin.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    try {
+                        if (Double.parseDouble(s.toString()) > 60 || Double.parseDouble(s.toString()) < 0) {
+                            txtLayLonMin.setError("Must be within 0' and 60'");
+                        }
+                    } catch (NumberFormatException nfe) {
+                        txtLayLonMin.setError("Must be a number");
                     }
                 }
             }
@@ -351,6 +427,12 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         });
     }
 
+    private void setupSharedPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        coordFormat = sharedPreferences.getString("coordinates", "deg_min");
+    }
+
     @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -392,6 +474,12 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 startActivity(intent);
                 return true;
 
+            case R.id.btn_settings:
+                intent = new Intent();
+                intent.setClass(getApplicationContext(),SettingsActivity.class);
+                startActivity(intent);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -400,17 +488,24 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
     private void assignViews() {
         txtLat = findViewById(R.id.editText_lat);
+        txtLatMin = findViewById(R.id.editText_lat_min);
         txtLon = findViewById(R.id.editText_lon);
+        txtLonMin = findViewById(R.id.editText_lon_min);
         txtWind = findViewById(R.id.editText_wind);
         txtDist = findViewById(R.id.editText_dist);
 
         txtLayLat = findViewById(R.id.latitude_layout);
+        txtLayLatMin = findViewById(R.id.latitude_layout_min);
         txtLayLon = findViewById(R.id.longitude_layout);
+        txtLayLonMin = findViewById(R.id.longitude_layout_min);
         txtLayWind = findViewById(R.id.wind_layout);
         txtLayDist = findViewById(R.id.distance_layout);
 
         helpButton = findViewById(R.id.help_button);
         calcButton = stubView.findViewById(R.id.img_calculate);
+        arrow = findViewById(R.id.filterIcon);
+        topBar = findViewById(R.id.topBar);
+        advancedBar = stubView.findViewById(R.id.LinearLayout2);
 
         rgAngle = stubView.findViewById(R.id.radioGroup_angle);
         rgType = stubView.findViewById(R.id.radioGroup_type);
@@ -427,9 +522,17 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         rbReach2 = stubView.findViewById(R.id.rb_reach_2);
     }
 
+    @SuppressLint("DefaultLocale")
     private void rewriteOldValues() {
-        txtLat.setText(String.valueOf(cvObject.getLat()));
-        txtLon.setText(String.valueOf(cvObject.getLon()));
+        if (coordFormat.equals("deg")) {
+            txtLat.setText(String.valueOf(cvObject.getLat()));
+            txtLon.setText(String.valueOf(cvObject.getLon()));
+        } else {
+            txtLat.setText(String.valueOf((int) cvObject.getLat()));
+            txtLatMin.setText(String.format("%.3f", decimalDeg2Mins(cvObject.getLat())));
+            txtLon.setText(String.valueOf((int) cvObject.getLon()));
+            txtLonMin.setText(String.format("%.3f", decimalDeg2Mins(cvObject.getLon())));
+        }
         txtWind.setText(String.format("%.0f",(cvObject.getBearing()*180)/Math.PI));
         txtDist.setText(String.valueOf(cvObject.getDistance()));
         if(rbAngle1 != null) {
@@ -464,46 +567,140 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
     }
 
+    private double decimalDeg2Mins(double decDegree) {
+        int d = (int) decDegree;
+        return Math.abs(decDegree - d) * 60;
+    }
+
+    private double degMins2decDeg(double degs, double mins) {
+        return Math.signum(degs) * (Math.abs(degs) + (mins/60));
+    }
+
     private boolean fillCVObject() {
         boolean completeForm = true;
         String errorText = "";
 
         Boolean collapseBttmSheet = false;
 
-        try {
-            if (txtLat.getText().toString().isEmpty()) {
-                txtLayLat.setError("Please enter latitude");
+        if (coordFormat.equals("deg")) {
+            try {
+                if (txtLat.getText().toString().isEmpty()) {
+                    txtLayLat.setError("Please enter latitude");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else if (Double.parseDouble(txtLat.getText().toString()) < -90 || Double.parseDouble(txtLat.getText().toString()) > 90) {
+                    txtLayLat.setError("Must be within -90° and 90°");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else {
+                    cvObject.setLat(Double.parseDouble(txtLat.getText().toString()));
+                }
+            } catch (NumberFormatException nfe) {
+                txtLayLat.setError("Latitude must be a number");
                 completeForm = false;
                 collapseBttmSheet = true;
-            } else if (Double.parseDouble(txtLat.getText().toString()) <= -90 || Double.parseDouble(txtLat.getText().toString()) >= 90) {
-                txtLayLat.setError("Must be within -90° and 90°");
-                completeForm = false;
-                collapseBttmSheet = true;
-            } else {
-                cvObject.setLat(Double.parseDouble(txtLat.getText().toString()));
             }
-        } catch (NumberFormatException nfe) {
-            txtLayLat.setError("Latitude must be a number");
-            completeForm = false;
-            collapseBttmSheet = true;
-        }
 
-        try {
-            if (txtLon.getText().toString().isEmpty()) {
-                txtLayLon.setError("Please enter longitude");
+
+            try {
+                if (txtLon.getText().toString().isEmpty()) {
+                    txtLayLon.setError("Please enter longitude");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else if (Double.parseDouble(txtLon.getText().toString()) < -180 || Double.parseDouble(txtLon.getText().toString()) > 180) {
+                    txtLayLon.setError("Must be within -180° and 180°");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else {
+                    cvObject.setLon(Double.parseDouble(txtLon.getText().toString()));
+                }
+            } catch (NumberFormatException nfe) {
+                txtLayLon.setError("Longitude must be a number");
                 completeForm = false;
                 collapseBttmSheet = true;
-            } else if (Double.parseDouble(txtLon.getText().toString()) <= -180 || Double.parseDouble(txtLon.getText().toString()) >= 180) {
-                txtLayLon.setError("Must be within -180° and 180°");
-                completeForm = false;
-                collapseBttmSheet = true;
-            } else {
-                cvObject.setLon(Double.parseDouble(txtLon.getText().toString()));
             }
-        } catch (NumberFormatException nfe) {
-            txtLayLon.setError("Longitude must be a number");
-            completeForm = false;
-            collapseBttmSheet = true;
+
+        } else {
+            double deg = 0, min = 0;
+            try {
+                if (txtLat.getText().toString().isEmpty()) {
+                    txtLayLat.setError("Please enter degrees");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else if (Double.parseDouble(txtLat.getText().toString()) < -90 || Double.parseDouble(txtLat.getText().toString()) > 90) {
+                    txtLayLat.setError("Must be within -90° and 90°");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else {
+                    deg = Double.parseDouble(txtLat.getText().toString());
+                }
+            } catch (NumberFormatException nfe) {
+                txtLayLat.setError("Degrees must be a number");
+                completeForm = false;
+                collapseBttmSheet = true;
+            }
+
+            try {
+                if (txtLatMin.getText().toString().isEmpty()) {
+                    txtLayLatMin.setError("Please enter minutes");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else if (Double.parseDouble(txtLatMin.getText().toString()) < 0 || Double.parseDouble(txtLatMin.getText().toString()) > 60) {
+                    txtLayLatMin.setError("Must be between 0' and 60'");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else {
+                    min = Double.parseDouble(txtLatMin.getText().toString());
+                }
+            } catch (NumberFormatException nfe) {
+                txtLayLatMin.setError("Minutes must be a number");
+                completeForm = false;
+                collapseBttmSheet = true;
+            }
+
+            if(completeForm) {
+                cvObject.setLat(degMins2decDeg(deg,min));
+            }
+
+            try {
+                if (txtLon.getText().toString().isEmpty()) {
+                    txtLayLon.setError("Please enter degrees");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else if (Double.parseDouble(txtLon.getText().toString()) < -180 || Double.parseDouble(txtLon.getText().toString()) > 180) {
+                    txtLayLon.setError("Must be within -180° and 180°");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else {
+                    deg = Double.parseDouble(txtLon.getText().toString());
+                }
+            } catch (NumberFormatException nfe) {
+                txtLayLon.setError("Degrees must be a number");
+                completeForm = false;
+                collapseBttmSheet = true;
+            }
+
+            try {
+                if (txtLonMin.getText().toString().isEmpty()) {
+                    txtLayLonMin.setError("Please enter minutes");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else if (Double.parseDouble(txtLonMin.getText().toString()) < 0 || Double.parseDouble(txtLonMin.getText().toString()) > 60) {
+                    txtLayLonMin.setError("Must be between 0' and 60'");
+                    completeForm = false;
+                    collapseBttmSheet = true;
+                } else {
+                    min = Double.parseDouble(txtLonMin.getText().toString());
+                }
+            } catch (NumberFormatException nfe) {
+                txtLayLonMin.setError("Minutes must be a number");
+                completeForm = false;
+                collapseBttmSheet = true;
+            }
+
+            if(completeForm) {
+                cvObject.setLon(degMins2decDeg(deg,min));
+            }
         }
 
         try {
@@ -511,7 +708,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 txtLayWind.setError("Please enter wind direction");
                 completeForm = false;
                 collapseBttmSheet = true;
-            } else if (Double.parseDouble(txtWind.getText().toString()) <= 0 || Double.parseDouble(txtWind.getText().toString()) >= 360){
+            } else if (Double.parseDouble(txtWind.getText().toString()) < 0 || Double.parseDouble(txtWind.getText().toString()) > 360){
                 txtLayWind.setError("Must be within 0° and 360°");
                 completeForm = false;
                 collapseBttmSheet = true;
@@ -622,6 +819,35 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
             return false;
         } else {
             return true;
+        }
+    }
+
+    public void setupTextFields() {
+        int dp1 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1,
+                this.getResources().getDisplayMetrics());
+
+        if (coordFormat.equals("deg")) {
+            txtLayLatMin.setVisibility(View.GONE);
+            txtLayLonMin.setVisibility(View.GONE);
+            ViewGroup.LayoutParams lp = txtLayLat.getLayoutParams();
+            lp.width = dp1 * 275;
+            txtLayLat.requestLayout();
+            txtLayLat.setHelperText(getResources().getString(R.string.coordinate_format_deg_lat));
+            lp = txtLayLon.getLayoutParams();
+            lp.width = dp1 * 275;
+            txtLayLon.requestLayout();
+            txtLayLon.setHelperText(getResources().getString(R.string.coordinate_format_deg_lon));
+        } else {
+            txtLayLatMin.setVisibility(View.VISIBLE);
+            txtLayLonMin.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams lp = txtLayLat.getLayoutParams();
+            lp.width = dp1 * 130;
+            txtLayLat.requestLayout();
+            txtLayLat.setHelperText(getResources().getString(R.string.coord_format_degmin_deg_lat));
+            lp = txtLayLon.getLayoutParams();
+            lp.width = dp1 * 130;
+            txtLayLon.requestLayout();
+            txtLayLon.setHelperText(getResources().getString(R.string.coord_format_degmin_deg_lon));
         }
     }
 
@@ -779,5 +1005,52 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
 
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void writeCoords() {
+        if(!txtLat.getText().toString().equals("") && !txtLon.getText().toString().equals("")) {
+            if (coordFormat.equals("deg")) {
+                double m;
+                double d;
+                if (!txtLatMin.getText().toString().equals("")) {
+                    m = Double.parseDouble(String.valueOf(txtLatMin.getText()));
+                } else {
+                    m = 0;
+                }
+                d = Double.parseDouble(String.valueOf(txtLat.getText()));
+                txtLat.setText(String.valueOf(degMins2decDeg(d,m)));
+                if (!txtLonMin.getText().toString().equals("")) {
+                    m = Double.parseDouble(String.valueOf(txtLonMin.getText()));
+                } else {
+                    m = 0;
+                }
+                d = Double.parseDouble(String.valueOf(txtLon.getText()));
+                txtLon.setText(String.valueOf(degMins2decDeg(d,m)));
+            } else {
+                double d = Double.parseDouble(String.valueOf(txtLat.getText()));
+                txtLat.setText(String.valueOf((int) d));
+                txtLatMin.setText(String.format("%.3f", decimalDeg2Mins(d)));
+                d = Double.parseDouble(String.valueOf(txtLon.getText()));
+                txtLon.setText(String.valueOf((int) d));
+                txtLonMin.setText(String.format("%.3f", decimalDeg2Mins(d)));
+            }
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("coordinates")) {
+            coordFormat = sharedPreferences.getString(key, "deg_min");
+            setupTextFields();
+            writeCoords();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 }

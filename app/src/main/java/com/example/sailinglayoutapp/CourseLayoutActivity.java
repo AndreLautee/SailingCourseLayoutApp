@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -29,10 +30,11 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDialogFragment.ConfirmDialogListener {
+public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDialogFragment.ConfirmDialogListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     RadioButton r1, r2, r3, r4;
     RelativeLayout rl;
@@ -45,6 +47,7 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
     BottomNavigationView topNavigation;
     private LocationManager locationManager;
     int selectedMark;
+    String coordFormat;
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
@@ -121,7 +124,7 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
-
+        setupSharedPreferences();
 
         textView_lat = findViewById(R.id.courseLayout_lat);
         textView_lon = findViewById(R.id.courseLayout_lon);
@@ -129,9 +132,7 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
         if (location != null) {
             markerCoordCalculations = new MarkerCoordCalculations(cvObject);
             courseSize = markerCoordCalculations.getCoords().size();
-            textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
-            textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
-            markID.setText("MARK 1");
+            setText();
             setDisplay();
         } else {
             textView_lat.setText("Could not get coords");
@@ -144,8 +145,12 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
             // Display an error
         }
 
+    }
 
-
+    private void setupSharedPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        coordFormat = sharedPreferences.getString("coordinates", "deg_min");
     }
 
     @SuppressLint("RestrictedApi")
@@ -183,6 +188,12 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
                 intent = new Intent();
                 intent.putExtra("LOCATION", location);
                 intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.btn_settings:
+                intent = new Intent();
+                intent.setClass(getApplicationContext(),SettingsActivity.class);
                 startActivity(intent);
                 return true;
 
@@ -412,7 +423,11 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
     }
 
 
-    public String decimalDeg2degMins(double decDegree) {
+    private String decimalDeg(double decDegree) {
+        return "" + String.format("%.4f", decDegree) + "°";
+    }
+
+    private String decimalDeg2degMins(double decDegree) {
         int d = (int) decDegree;
         double m = Math.abs(decDegree - d) * 60;
         return "" + d + "°" + String.format("%.3f",m) + "'";
@@ -490,52 +505,83 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
                 r2.setChecked(false);
                 r3.setChecked(false);
                 r4.setChecked(false);
-                textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLatitude()));
-                textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(1).getLongitude()));
-                markID.setText("MARK 1");
                 selectedMark = 1;
+                setText();
+
             }
             if (r2.getId() == v.getId()) {
                 r1.setChecked(false);
                 r3.setChecked(false);
                 r4.setChecked(false);
-                int i;
-                if (courseSize == 2) {
-                    i = 0;
-                } else {
-                    i = 2;
-                }
-                textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLatitude()));
-                textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLongitude()));
-                markID.setText("MARK 2");
                 selectedMark = 2;
+                setText();
             }
             if (r3.getId() == v.getId()) {
                 r1.setChecked(false);
                 r2.setChecked(false);
                 r4.setChecked(false);
-                int i;
-                if (courseSize == 3) {
-                    i = 0;
-                } else {
-                    i = 3;
-                }
-                textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLatitude()));
-                textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(i).getLongitude()));
-                markID.setText("MARK 3");
                 selectedMark = 3;
+                setText();
             }
             if (r4.getId() == v.getId()) {
                 r1.setChecked(false);
                 r2.setChecked(false);
                 r3.setChecked(false);
-                textView_lat.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(0).getLatitude()));
-                textView_lon.setText("" + decimalDeg2degMins(markerCoordCalculations.getCoords().get(0).getLongitude()));
-                markID.setText("MARK 4");
                 selectedMark = 4;
+                setText();
             }
         }
     };
+
+    private void setText() {
+        markID.setText("MARK " + selectedMark);
+        int i;
+        switch(selectedMark) {
+            case 1:
+                setLatText(markerCoordCalculations.getCoords().get(1).getLatitude());
+                setLonText(markerCoordCalculations.getCoords().get(1).getLongitude());
+                break;
+            case 2:
+                if (courseSize == 2) {
+                    i = 0;
+                } else {
+                    i = 2;
+                }
+                setLatText(markerCoordCalculations.getCoords().get(i).getLatitude());
+                setLonText(markerCoordCalculations.getCoords().get(i).getLongitude());
+                break;
+            case 3:
+                if (courseSize == 3) {
+                    i = 0;
+                } else {
+                    i = 3;
+                }
+                setLatText(markerCoordCalculations.getCoords().get(i).getLatitude());
+                setLonText(markerCoordCalculations.getCoords().get(i).getLongitude());
+                break;
+            case 4:
+                setLatText(markerCoordCalculations.getCoords().get(0).getLatitude());
+                setLonText(markerCoordCalculations.getCoords().get(0).getLongitude());
+                break;
+
+        }
+    }
+
+    private void setLatText(double latDeg){
+        if (coordFormat.equals("deg")) {
+            textView_lat.setText("" + decimalDeg(latDeg));
+        } else {
+            textView_lat.setText("" + decimalDeg2degMins(latDeg));
+        }
+    }
+
+    private void setLonText(double lonDeg) {
+        if (coordFormat.equals("deg")) {
+            textView_lon.setText("" + decimalDeg(lonDeg));
+        } else {
+            textView_lon.setText("" + decimalDeg2degMins(lonDeg));
+        }
+    }
 
     public void showConfirmDialog() {
         DialogFragment dialog = new ConfirmDialogFragment();
@@ -552,6 +598,21 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
 
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("coordinates")) {
+            coordFormat = sharedPreferences.getString(key, "deg_min");
+            setText();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 }
 
