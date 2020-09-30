@@ -64,7 +64,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     BottomSheetBehavior<LinearLayout> sheetBehavior;
     CourseVariablesObject cvObject;
     String shape;
-    View calcButton, stubView, arrow, topBar, helpButton;
+    View calcButton, stubView, arrow, topBar, helpButton, advancedBar;
     EditText txtLat, txtLon, txtWind, txtDist, txtLatMin, txtLonMin;
     TextInputLayout txtLayLat, txtLayLon, txtLayWind, txtLayDist, txtLayLatMin, txtLayLonMin;
     RadioGroup rgAngle, rgType, rg2ndBeat, rgReach;
@@ -127,10 +127,21 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);//initially state to fully expanded
         sheetBehavior.setHalfExpandedRatio(0.2f);
 
-        arrow = findViewById(R.id.filterIcon);
-        topBar = findViewById(R.id.topBar);
+
 
         topBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+                if(sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+        });
+
+        advancedBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
@@ -492,6 +503,9 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
         helpButton = findViewById(R.id.help_button);
         calcButton = stubView.findViewById(R.id.img_calculate);
+        arrow = findViewById(R.id.filterIcon);
+        topBar = findViewById(R.id.topBar);
+        advancedBar = stubView.findViewById(R.id.LinearLayout2);
 
         rgAngle = stubView.findViewById(R.id.radioGroup_angle);
         rgType = stubView.findViewById(R.id.radioGroup_type);
