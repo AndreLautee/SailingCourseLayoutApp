@@ -1,0 +1,12 @@
+<resources>
+    <!-- Coordinates Preferences -->
+    <string-array name="coord_entries">
+        <item>Degrees</item>
+        <item>Degrees and minutes</item>
+    </string-array>
+
+    <string-array name="coord_values">
+        <item>deg</item>
+        <item>deg_min</item>
+    </string-array>
+</resources>

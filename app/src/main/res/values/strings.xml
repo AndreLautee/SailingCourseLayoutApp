@@ -3,6 +3,7 @@
     <string name="wind_direction">Wind Direction</string>
     <string name="angle">Corner Angles</string>
     <string name="degrees">°</string>
+    <string name="minutes">\'</string>
     <string name="reach_length">Reach Length</string>
     <string name="calculate">Calculate</string>
     <string name="_1_2_beat_length">1/2 Beat Length</string>
@@ -19,7 +20,11 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="course_orientation">Course Orientation</string>
-    <string name="coordinate_format">[+-]DDD.DDDDDD</string>
+    <string name="coordinate_format_deg_lat">[+-]DD.DDDDDD</string>
+    <string name="coordinate_format_deg_lon">[+-]DDD.DDDDDD</string>
+    <string name="coord_format_degmin_deg_lat">[+-]DD</string>
+    <string name="coord_format_degmin_deg_lon">[+-]DDD</string>
+    <string name="coord_format_degmin_min">MM.MMM</string>
     <string name="wind_dir_helper">0° - 360°</string>
     <string name="length_unit">Nm</string>
     <string name="length_format">0.00Nm</string>
@@ -33,6 +38,27 @@
     <string name="mark_3">MARK 3</string>
     <string name="mark_4">MARK 4</string>
     <string name="back">Back</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+    <string name="signature_title">Your signature</string>
+
+    <!-- Preference Titles -->
+    <string name="reply_title">Default reply action</string>
+    <string name="sync_title">Sync email periodically</string>
+
+    <!-- Messages Preferences -->
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+
+    <!-- Sync Preferences -->
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="home">HOME</string>
+    <string name="variables">VARIABLES</string>
+    <string name="weather">WEATHER</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
     <string-array name="course_shapes">
         <item>Windward-Leeward</item>
         <item>Triangle</item>

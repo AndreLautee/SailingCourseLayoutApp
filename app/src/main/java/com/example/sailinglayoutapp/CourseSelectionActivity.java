@@ -135,6 +135,12 @@ public class CourseSelectionActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
 
+            case R.id.btn_settings:
+                intent = new Intent();
+                intent.setClass(getApplicationContext(),SettingsActivity.class);
+                startActivity(intent);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
 

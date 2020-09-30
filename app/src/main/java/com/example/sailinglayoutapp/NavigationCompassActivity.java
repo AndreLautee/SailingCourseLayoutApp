@@ -268,6 +268,12 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
                 startActivity(intent);
                 return true;
 
+            case R.id.btn_settings:
+                intent = new Intent();
+                intent.setClass(getApplicationContext(),SettingsActivity.class);
+                startActivity(intent);
+                return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
