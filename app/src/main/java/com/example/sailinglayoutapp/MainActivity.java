@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        Start=findViewById(R.id.btn);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
