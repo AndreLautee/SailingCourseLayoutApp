@@ -836,22 +836,22 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
             txtLayLatMin.setVisibility(View.GONE);
             txtLayLonMin.setVisibility(View.GONE);
             ViewGroup.LayoutParams lp = txtLayLat.getLayoutParams();
-            lp.width = dp1 * 275;
+            lp.width = dp1 * 200;
             txtLayLat.requestLayout();
             txtLayLat.setHelperText(getResources().getString(R.string.coordinate_format_deg_lat));
             lp = txtLayLon.getLayoutParams();
-            lp.width = dp1 * 275;
+            lp.width = dp1 * 200;
             txtLayLon.requestLayout();
             txtLayLon.setHelperText(getResources().getString(R.string.coordinate_format_deg_lon));
         } else {
             txtLayLatMin.setVisibility(View.VISIBLE);
             txtLayLonMin.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams lp = txtLayLat.getLayoutParams();
-            lp.width = dp1 * 130;
+            lp.width = dp1 * 95;
             txtLayLat.requestLayout();
             txtLayLat.setHelperText(getResources().getString(R.string.coord_format_degmin_deg_lat));
             lp = txtLayLon.getLayoutParams();
-            lp.width = dp1 * 130;
+            lp.width = dp1 * 95;
             txtLayLon.requestLayout();
             txtLayLon.setHelperText(getResources().getString(R.string.coord_format_degmin_deg_lon));
         }
