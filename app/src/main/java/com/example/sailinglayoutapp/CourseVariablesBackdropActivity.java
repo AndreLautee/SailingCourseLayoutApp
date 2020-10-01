@@ -582,7 +582,8 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
         Boolean collapseBttmSheet = false;
 
-        if (coordFormat.equals("deg")) {
+        // check if in degrees or degrees and minutes
+        if (coordFormat.equals("deg")) { // If in degrees only one textbox to check
             try {
                 if (txtLat.getText().toString().isEmpty()) {
                     txtLayLat.setError("Please enter latitude");
@@ -620,7 +621,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 collapseBttmSheet = true;
             }
 
-        } else {
+        } else { // if in degrees and minutes, two textboxes to check
             double deg = 0, min = 0;
             try {
                 if (txtLat.getText().toString().isEmpty()) {
@@ -658,6 +659,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 collapseBttmSheet = true;
             }
 
+            // If input is valid, enter the latitude in cvObject
             if(completeForm) {
                 cvObject.setLat(degMins2decDeg(deg,min));
             }
@@ -698,6 +700,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 collapseBttmSheet = true;
             }
 
+            // If input is valid, enter the longitude in cvObject
             if(completeForm) {
                 cvObject.setLon(degMins2decDeg(deg,min));
             }
@@ -755,7 +758,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 } else if (rgType.getCheckedRadioButtonId() == rbType2.getId()) {
                     cvObject.setType("portboard");
                 } else {
-                    errorText = errorText + "Please select Starboard or Portboard\n";
+                    errorText = errorText + "Please select Starboard or Port\n";
                     completeForm = false;
                 }
                 break;
@@ -773,7 +776,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 } else if (rgType.getCheckedRadioButtonId() == rbType2.getId()){
                     cvObject.setType("portboard");
                 } else {
-                    errorText = errorText + "Please select Starboard or Portboard\n";
+                    errorText = errorText + "Please select Starboard or Port\n";
                     completeForm = false;
                 }
                 if(rg2ndBeat.getCheckedRadioButtonId() == rb2ndBeat1.getId()) {
@@ -799,15 +802,17 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 } else if (rgType.getCheckedRadioButtonId() == rbType2.getId()){
                     cvObject.setType("portboard");
                 } else {
-                    errorText = errorText + "Please select Starboard or Portboard\n";
+                    errorText = errorText + "Please select Starboard or Port\n";
                     completeForm = false;
                 }
                 break;
         }
+        // If there is an error/s in the textboxes, collapse backdrop to show them
         if (collapseBttmSheet){
             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
 
+        // Show error message if any invalid or unfilled input
         if (!completeForm) {
             if (!errorText.equals("")) {
                 errorText = errorText.trim();
@@ -826,6 +831,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         int dp1 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1,
                 this.getResources().getDisplayMetrics());
 
+        // Change text boxes to cater for new coord format
         if (coordFormat.equals("deg")) {
             txtLayLatMin.setVisibility(View.GONE);
             txtLayLonMin.setVisibility(View.GONE);
@@ -1009,6 +1015,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
     @SuppressLint("DefaultLocale")
     private void writeCoords() {
+        // Write coords in text boxes with new coord format
         if(!txtLat.getText().toString().equals("") && !txtLon.getText().toString().equals("")) {
             if (coordFormat.equals("deg")) {
                 double m;
