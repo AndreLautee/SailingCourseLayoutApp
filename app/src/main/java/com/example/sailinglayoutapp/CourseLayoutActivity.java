@@ -147,6 +147,13 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        topNavigation.setSelectedItemId(R.id.topNav_layout);
+
+    }
+
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);

@@ -13,7 +13,7 @@
     <string name="second_beat_length">Second Beat Length</string>
     <string name="course_length">Course Length</string>
     <string name="starboard">Starboard</string>
-    <string name="portboard">Portboard</string>
+    <string name="portboard">Port</string>
     <string name="nautical_miles">Nautical Miles</string>
     <string name="title_activity_navigation_a_p_i">NavigationAPIActivity</string>
     <string name="reference_point">Keep previous reference point?</string>

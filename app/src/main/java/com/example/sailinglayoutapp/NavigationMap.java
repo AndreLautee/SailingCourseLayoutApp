@@ -283,6 +283,13 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        topNavigation.setSelectedItemId(R.id.topNav_navigation);
+
+    }
+
     public void setTexts() {
         double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
 
