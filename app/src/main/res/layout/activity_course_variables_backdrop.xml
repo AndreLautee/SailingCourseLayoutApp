@@ -14,7 +14,7 @@
         android:id="@+id/ui_behind_backdrop">
 
         <LinearLayout
-            android:layout_width="342dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|start|center_horizontal"
             android:layout_marginStart="30dp"
@@ -42,51 +42,53 @@
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_globe" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.SCLApp.TextInputLayout"
-                        android:id="@+id/latitude_layout"
-                        android:layout_width="95dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:hint="@string/latitude"
-                        app:hintTextColor="@color/colorOnPrimary"
-                        app:helperText="@string/coord_format_degmin_deg_lat"
-                        app:errorEnabled="true"
-                        app:suffixText="@string/degrees">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editText_lat"
-                            android:layout_width="match_parent"
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.SCLApp.TextInputLayout"
+                            android:id="@+id/latitude_layout"
+                            android:layout_width="95dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:inputType="numberDecimal|numberSigned"
-                            android:maxLines="1"
-                            android:textColor="@color/colorOnPrimary"
-                            android:textSize="16dp" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_marginStart="20dp"
+                            android:hint="@string/latitude"
+                            app:hintTextColor="@color/colorOnPrimary"
+                            app:helperText="@string/coord_format_degmin_deg_lat"
+                            app:errorEnabled="true"
+                            app:suffixText="@string/degrees">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.SCLApp.TextInputLayout"
-                        android:id="@+id/latitude_layout_min"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:hint="@string/latitude"
-                        app:hintTextColor="@color/colorOnPrimary"
-                        app:helperText="@string/coord_format_degmin_min"
-                        app:errorEnabled="true"
-                        app:suffixText="@string/minutes">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editText_lat"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:inputType="numberDecimal|numberSigned"
+                                android:maxLines="1"
+                                android:textColor="@color/colorOnPrimary"
+                                android:textSize="16dp" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editText_lat_min"
-                            android:layout_width="match_parent"
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.SCLApp.TextInputLayout"
+                            android:id="@+id/latitude_layout_min"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:textColor="@color/colorOnPrimary"
-                            android:textSize="16dp" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_marginStart="5dp"
+                            android:hint="@string/latitude"
+                            app:hintTextColor="@color/colorOnPrimary"
+                            app:helperText="@string/coord_format_degmin_min"
+                            app:errorEnabled="true"
+                            app:suffixText="@string/minutes">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editText_lat_min"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:textColor="@color/colorOnPrimary"
+                                android:textSize="16dp" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
 
                 </LinearLayout>
@@ -112,7 +114,7 @@
                         android:layout_marginStart="20dp"
                         android:hint="@string/longitude"
                         app:hintTextColor="@color/colorOnPrimary"
-                        app:helperText="@string/coordinate_format_deg_lon"
+                        app:helperText="@string/coord_format_degmin_deg_lon"
                         app:errorEnabled="true"
                         app:suffixText="@string/degrees">
 
@@ -284,9 +286,9 @@
                     android:textSize="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
-
     </LinearLayout>
+
+
     <!--This is the backdrop's content with a BottomSheetBehaviour applied to it-->
     <LinearLayout
         android:id="@+id/contentLayout"

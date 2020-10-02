@@ -828,30 +828,39 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     }
 
     public void setupTextFields() {
-        int dp1 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1,
-                this.getResources().getDisplayMetrics());
+        int dp1;
 
         // Change text boxes to cater for new coord format
         if (coordFormat.equals("deg")) {
+            // Make minute text boxes disappear
             txtLayLatMin.setVisibility(View.GONE);
             txtLayLonMin.setVisibility(View.GONE);
+            // New dimension of text box set to 200dp
+            dp1 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200,
+                    getResources().getDisplayMetrics());
+            // Apply new width to both the lat and lon text boxes
             ViewGroup.LayoutParams lp = txtLayLat.getLayoutParams();
-            lp.width = dp1 * 200;
+            lp.width = dp1;
             txtLayLat.requestLayout();
             txtLayLat.setHelperText(getResources().getString(R.string.coordinate_format_deg_lat));
             lp = txtLayLon.getLayoutParams();
-            lp.width = dp1 * 200;
+            lp.width = dp1;
             txtLayLon.requestLayout();
             txtLayLon.setHelperText(getResources().getString(R.string.coordinate_format_deg_lon));
         } else {
+            // Make minute text boxes appear
             txtLayLatMin.setVisibility(View.VISIBLE);
             txtLayLonMin.setVisibility(View.VISIBLE);
+            // New dimension of text box set to 95dp
+            dp1 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 95,
+                    getResources().getDisplayMetrics());
+            // Apply new width to both the lat and lon text boxes
             ViewGroup.LayoutParams lp = txtLayLat.getLayoutParams();
-            lp.width = dp1 * 95;
+            lp.width = dp1;
             txtLayLat.requestLayout();
             txtLayLat.setHelperText(getResources().getString(R.string.coord_format_degmin_deg_lat));
             lp = txtLayLon.getLayoutParams();
-            lp.width = dp1 * 95;
+            lp.width = dp1;
             txtLayLon.requestLayout();
             txtLayLon.setHelperText(getResources().getString(R.string.coord_format_degmin_deg_lon));
         }
