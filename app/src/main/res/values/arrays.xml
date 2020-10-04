@@ -9,4 +9,14 @@
         <item>deg</item>
         <item>deg_min</item>
     </string-array>
+
+    <string-array name="dist_entries">
+        <item>Nautical Miles</item>
+        <item>Kilometres</item>
+    </string-array>
+
+    <string-array name="dist_values">
+        <item>nm</item>
+        <item>km</item>
+    </string-array>
 </resources>

@@ -271,9 +271,9 @@
                 android:layout_marginStart="20dp"
                 android:hint="Course Length"
                 app:hintTextColor="@color/colorOnPrimary"
-                app:helperText="@string/length_format"
+                app:helperText="@string/length_format_nm"
                 app:errorEnabled="true"
-                app:suffixText="@string/length_unit">
+                app:suffixText="@string/length_unit_nm">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editText_dist"

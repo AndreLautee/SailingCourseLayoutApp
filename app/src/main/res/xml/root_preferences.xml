@@ -7,7 +7,18 @@
         app:title="Coordinate Format"
         app:summary="%s"
         app:dialogTitle="Coordinate Format"
-        app:icon="@drawable/crosshair"/>
+        app:icon="@drawable/crosshair"
+        app:layout="@layout/preference_layout"/>
+
+    <ListPreference
+        app:key="distance"
+        app:entries="@array/dist_entries"
+        app:entryValues="@array/dist_values"
+        app:title="Distance Unit"
+        app:summary="%s"
+        app:dialogTitle="Distance Unit"
+        app:icon="@drawable/ruler"
+        app:layout="@layout/preference_layout"/>
 
 
 </PreferenceScreen>
