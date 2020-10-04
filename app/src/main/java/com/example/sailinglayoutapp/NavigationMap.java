@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -32,6 +33,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -39,7 +41,7 @@ import org.decimal4j.util.DoubleRounder;
 
 import java.util.ArrayList;
 
-public class NavigationMap extends AppCompatActivity implements ConfirmDialogFragment.ConfirmDialogListener {
+public class NavigationMap extends AppCompatActivity implements ConfirmDialogFragment.ConfirmDialogListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     NavMapGLSurfaceView gLView;
     MarkerCoordCalculations course;
@@ -55,6 +57,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
     double bearingDirection;
     ImageView img_compass;
     BottomNavigationView topNavigation;
+    String distFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,8 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_black_24dp);
         }
+
+        setupSharedPreferences();
 
         topNavigation = findViewById(R.id.navMap_top_navigation);
 
@@ -151,9 +156,10 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
             radioButtons.get(i).setPadding(7,0,20,0);
         }
-        radioGroup.check((int)selectedMark);
-        if (selectedMark == courseSize) {
-            selectedMark = 0;
+        if (selectedMark == 0) {
+            radioGroup.check(courseSize);
+        } else {
+            radioGroup.check(selectedMark);
         }
 
 
@@ -165,7 +171,6 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
                 } else {
                     selectedMark = checkedId;
                 }
-
                 setTexts();
             }
         });
@@ -188,6 +193,12 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
                 }
             }
         });
+    }
+
+    private void setupSharedPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        distFormat = sharedPreferences.getString("distance", "nm");
     }
 
     View.OnTouchListener rotationListener = new View.OnTouchListener() {
@@ -291,15 +302,11 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
     }
 
     public void setTexts() {
-        double distBetweenPoints = met2nm(course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1)));
+
+        setDistText();
 
         double bearingBetweenPoints = bearingBetweenPoints(locations.get(locations.size()-1).getLatitude(),locations.get(locations.size()-1).getLongitude(),
                 course.getCoords().get(selectedMark).getLatitude(),course.getCoords().get(selectedMark).getLongitude());
-
-        // Display new distance to selected mark
-        String distText = distBetweenPoints + " Nm";
-        textView_distance.setText(distText);
-
 
         // Display updated bearing to newly selected mark
         String bearingText = Math.round(bearingBetweenPoints) + "°";
@@ -319,7 +326,21 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         });
     }
 
-    private double met2nm(float met) { return DoubleRounder.round(met / 1852,2);}
+    public void setDistText() {
+        double distBetweenPointsMetres = course.getCoords().get(selectedMark).distanceTo(locations.get(locations.size()-1));
+
+        // Display new distance to selected mark
+        if (distFormat.equals("km")) {
+            String distText = met2km(distBetweenPointsMetres) + " km";
+            textView_distance.setText(distText);
+        } else {
+            String distText = met2nm(distBetweenPointsMetres) + " Nm";
+            textView_distance.setText(distText);
+        }
+    }
+
+    private double met2nm(double met) { return DoubleRounder.round(met / 1852,2);}
+    private double met2km(double met) { return DoubleRounder.round(met / 1000, 2);}
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
@@ -411,5 +432,13 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
 
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("distance")) {
+            distFormat = sharedPreferences.getString(key, "nm");
+            setDistText();
+        }
     }
 }

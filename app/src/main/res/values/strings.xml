@@ -26,8 +26,10 @@
     <string name="coord_format_degmin_deg_lon">[+-]DDD</string>
     <string name="coord_format_degmin_min">MM.MMM</string>
     <string name="wind_dir_helper">0° - 360°</string>
-    <string name="length_unit">Nm</string>
-    <string name="length_format">0.00Nm</string>
+    <string name="length_unit_nm">Nm</string>
+    <string name="length_unit_km">km</string>
+    <string name="length_format_km">0.00km</string>
+    <string name="length_format_nm">0.00Nm</string>
 
     <string name="hello_world">Hello Square World!</string>
 

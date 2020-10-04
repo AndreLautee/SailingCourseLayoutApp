@@ -16,11 +16,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -39,7 +37,7 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
     RadioButton r1, r2, r3, r4;
     RelativeLayout rl;
     DrawView drawView;
-    Location location;
+    Location currentLocation;
     CourseVariablesObject cvObject;
     MarkerCoordCalculations markerCoordCalculations;
     TextView textView_lat, textView_lon, markID;
@@ -116,12 +114,17 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
 
         selectedMark = intent.getIntExtra("SELECTED_MARK",1);
 
+        markerCoordCalculations = intent.getParcelableExtra("COURSE");
+        if (markerCoordCalculations == null) {
+            markerCoordCalculations = new MarkerCoordCalculations(cvObject);
+        }
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        location = null;
+        currentLocation = null;
         if(checkLocationPermission()) {
            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
-           location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+           currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
         setupSharedPreferences();
@@ -129,8 +132,8 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
         textView_lat = findViewById(R.id.courseLayout_lat);
         textView_lon = findViewById(R.id.courseLayout_lon);
         markID = findViewById(R.id.courseLayout_markID);
-        if (location != null) {
-            markerCoordCalculations = new MarkerCoordCalculations(cvObject);
+
+        if (markerCoordCalculations != null) {
             courseSize = markerCoordCalculations.getCoords().size();
             setText();
             setDisplay();
@@ -193,7 +196,7 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
 
             case R.id.btn_weather:
                 intent = new Intent();
-                intent.putExtra("LOCATION", location);
+                intent.putExtra("LOCATION", currentLocation);
                 intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
                 startActivity(intent);
                 return true;
@@ -211,7 +214,6 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
     }
 
     public void setDisplay() {
-        r1.setChecked(true);
         RelativeLayout.LayoutParams r1_layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         r1.setOnClickListener(radioButton_listener);
 
@@ -444,7 +446,7 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
 
         @Override
         public void onLocationChanged(Location location) {
-
+            currentLocation = location;
         }
 
         @Override
@@ -520,33 +522,45 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
                 r1.setChecked(false);
                 r3.setChecked(false);
                 r4.setChecked(false);
-                selectedMark = 2;
+                if (courseSize == 2) {
+                    selectedMark = 0;
+                } else {
+                    selectedMark = 2;
+                }
                 setText();
             }
             if (r3.getId() == v.getId()) {
                 r1.setChecked(false);
                 r2.setChecked(false);
                 r4.setChecked(false);
-                selectedMark = 3;
+                if (courseSize == 3) {
+                    selectedMark = 0;
+                } else {
+                    selectedMark = 3;
+                }
                 setText();
             }
             if (r4.getId() == v.getId()) {
                 r1.setChecked(false);
                 r2.setChecked(false);
                 r3.setChecked(false);
-                selectedMark = 4;
+                selectedMark = 0;
                 setText();
             }
         }
     };
 
     private void setText() {
-        markID.setText("MARK " + selectedMark);
         int i;
         switch(selectedMark) {
             case 1:
                 setLatText(markerCoordCalculations.getCoords().get(1).getLatitude());
                 setLonText(markerCoordCalculations.getCoords().get(1).getLongitude());
+                markID.setText("MARK 1");
+                r1.setChecked(true);
+                r2.setChecked(false);
+                r3.setChecked(false);
+                r4.setChecked(false);
                 break;
             case 2:
                 if (courseSize == 2) {
@@ -556,6 +570,11 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
                 }
                 setLatText(markerCoordCalculations.getCoords().get(i).getLatitude());
                 setLonText(markerCoordCalculations.getCoords().get(i).getLongitude());
+                markID.setText("MARK 2");
+                r1.setChecked(false);
+                r2.setChecked(true);
+                r3.setChecked(false);
+                r4.setChecked(false);
                 break;
             case 3:
                 if (courseSize == 3) {
@@ -565,12 +584,32 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
                 }
                 setLatText(markerCoordCalculations.getCoords().get(i).getLatitude());
                 setLonText(markerCoordCalculations.getCoords().get(i).getLongitude());
+                markID.setText("MARK 3");
+                r1.setChecked(false);
+                r2.setChecked(false);
+                r3.setChecked(true);
+                r4.setChecked(false);
                 break;
-            case 4:
+            case 0:
                 setLatText(markerCoordCalculations.getCoords().get(0).getLatitude());
                 setLonText(markerCoordCalculations.getCoords().get(0).getLongitude());
+                markID.setText("MARK " + courseSize);
+                r1.setChecked(false);
+                r2.setChecked(false);
+                r3.setChecked(false);
+                r4.setChecked(false);
+                switch (courseSize) {
+                    case 2:
+                        r2.setChecked(true);
+                        break;
+                    case 3:
+                        r3.setChecked(true);
+                        break;
+                    case 4:
+                        r4.setChecked(true);
+                        break;
+                }
                 break;
-
         }
     }
 

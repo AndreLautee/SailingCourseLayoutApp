@@ -3,35 +3,14 @@ package com.example.sailinglayoutapp;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class WeatherDialogFragment extends DialogFragment {
 
@@ -55,7 +34,7 @@ public class WeatherDialogFragment extends DialogFragment {
 
         View v;
         if(wind == -1) {
-            v = inflater.inflate(R.layout.dialog_weather_error, null);
+            v = inflater.inflate(R.layout.fragment_dialog_weather_error, null);
             builder.setView(v)
                     .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -64,7 +43,7 @@ public class WeatherDialogFragment extends DialogFragment {
                         }
                     });
         } else {
-            v = inflater.inflate(R.layout.dialog_weather, null);
+            v = inflater.inflate(R.layout.fragment_dialog_weather, null);
             View vt = v.findViewById(R.id.weather_dialog_wind);
             ((TextView)vt).setText(String.valueOf(wind));
             builder.setView(v)
