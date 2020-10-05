@@ -50,6 +50,14 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
         return locations;
     }
 
+    public NavMapGLRenderer getRenderer() { return renderer; }
+
+    public void setOffset() {
+        renderer.resetOffsetX();
+        renderer.resetOffsetY();
+        requestRender();
+    }
+
     public float getmAngle() {
         return mAngle;
     }
@@ -130,13 +138,12 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
         switch (e.getActionMasked()) {
 
-              case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_MOVE:
 
-                  if(mRotationDetector.isInProgress()) {
-
-                  }
-                float dx = x - previousX;
-                float dy = (y - previousY) * -1;
+                // Calculate dx then divide by current scale
+                // so movement stays the same speed no matter the scale
+                float dx = (x - previousX)/renderer.getScale();
+                float dy = ((y - previousY) * -1)/renderer.getScale();
 
                 if(!(mScaleDetector.isInProgress() || mRotationDetector.isInProgress())) {
                     renderer.setOffsetX(dx * 0.0015f);
@@ -160,10 +167,11 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor = renderer.getScale();
             mScaleFactor *= detector.getScaleFactor();
 
             // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(0.2f, Math.min(mScaleFactor, 5.0f));
+            mScaleFactor = Math.max(0.2f, Math.min(mScaleFactor, 2f));
 
             // Update scale
             renderer.setScale(mScaleFactor);

@@ -155,15 +155,20 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     public void setScale(float scale) {
         mScale = scale;
     }
+    public float getScale() { return mScale; }
 
     public float mOffsetX;
     public float mOffsetY;
     public void setOffsetX(float offsetX) {
         mOffsetX += offsetX;
     }
+    public void resetOffsetX() { mOffsetX = 0; }
+    public float getOffsetX() { return mOffsetX; }
     public void setOffsetY(float offsetY) {
         mOffsetY += offsetY;
     }
+    public void resetOffsetY() { mOffsetY = 0; }
+    public float getOffsetY() { return mOffsetY; }
 
 
     double centre_x = 0;
@@ -258,26 +263,6 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
 
         ratio_x = Math.abs((locations.get(j).getLongitude() - centre_x) / max_xy_dispersion);
         ratio_y = Math.abs((locations.get(j).getLatitude() - centre_y) / max_xy_dispersion);
-
-        // Scale the map so that the user is always visible
-        // even when they go outside the perimeters
-        if (ratio_x > 1) {
-            mScale *= (prevRatioX/ratio_x);
-            prevRatioX = ratio_x;
-        }
-
-        if (ratio_y > 1) {
-            mScale *= (prevRatioY/ratio_y);
-            prevRatioY = ratio_y;
-        }
-
-        // Make sure scale is 1 when user is within perimeters
-        if (ratio_x <= 1 && ratio_y <= 1) {
-            mScale = 1;
-        }
-
-        // Don't let the object get too small or too large.
-        mScale = Math.max(0.2f, Math.min(mScale, 5.0f));
 
         // Find x ratio to draw user location
         if (locations.get(j).getLongitude() - centre_x < 0) {
