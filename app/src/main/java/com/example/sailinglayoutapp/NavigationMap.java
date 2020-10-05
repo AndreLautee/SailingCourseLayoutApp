@@ -2,6 +2,7 @@ package com.example.sailinglayoutapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,9 +58,10 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
     ArrayList<AppCompatRadioButton> radioButtons;
     int selectedMark;
     double bearingDirection;
-    ImageView img_compass;
+    ImageView img_compass, img_crosshair;
     BottomNavigationView topNavigation;
     String distFormat;
+    int width, height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +136,18 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         bearingDirection = -courseBearing;
         img_compass = findViewById(R.id.img_NavMapCompass);
 
+        // Hide crosshair until marks are out of sight
+        img_crosshair = findViewById(R.id.img_crosshair);
+        img_crosshair.setVisibility(View.GONE);
+        // Reset to centre of screen when user clicks
+        img_crosshair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gLView.setOffset();
+                img_crosshair.setVisibility(View.GONE);
+            }
+        });
+
         layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_navigationMap);
         layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
 
@@ -193,6 +209,11 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
                 }
             }
         });
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
     }
 
     private void setupSharedPreferences() {
@@ -201,10 +222,24 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         distFormat = sharedPreferences.getString("distance", "nm");
     }
 
+
     View.OnTouchListener rotationListener = new View.OnTouchListener() {
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+
+            // Make the compass rotate with the map
             img_compass.setRotation(gLView.getmAngle());
+
+            // Check if the marks are off the screen
+            // If they are then show the crosshair image
+            if (Math.abs(gLView.getRenderer().getScale() * gLView.getRenderer().getOffsetX()) > 1 ||
+                    Math.abs(gLView.getRenderer().getScale() * gLView.getRenderer().getOffsetY()) > 1) {
+                img_crosshair.setVisibility(View.VISIBLE);
+            } else {
+                img_crosshair.setVisibility(View.GONE);
+            }
+
             return false;
         }
     };
