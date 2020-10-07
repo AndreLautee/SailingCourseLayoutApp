@@ -52,9 +52,15 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
     public NavMapGLRenderer getRenderer() { return renderer; }
 
-    public void setOffset() {
+    public void resetMapCentre() {
         renderer.resetOffsetX();
         renderer.resetOffsetY();
+        requestRender();
+    }
+
+    public void setUserCentre() {
+        renderer.setOffsetXUserCentre();
+        renderer.setOffsetYUserCentre();
         requestRender();
     }
 
@@ -184,7 +190,7 @@ public class NavMapGLSurfaceView extends GLSurfaceView {
 
         @Override
         public boolean OnRotation(RotationGestureDetector rotationDetector) {
-            mDeltaAngle = rotationDetector.getAngle();
+            mDeltaAngle = -rotationDetector.getAngle();
             mAngle = mDeltaAngle + mPrevAngle;
             mPrevAngle = mAngle;
             renderer.setAngle(mAngle);

@@ -163,12 +163,24 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         mOffsetX += offsetX;
     }
     public void resetOffsetX() { mOffsetX = 0; }
+    public void setOffsetXUserCentre() { mOffsetX = getOffsetXUserCentre(); }
     public float getOffsetX() { return mOffsetX; }
     public void setOffsetY(float offsetY) {
         mOffsetY += offsetY;
     }
     public void resetOffsetY() { mOffsetY = 0; }
+    public void setOffsetYUserCentre() { mOffsetY = getOffsetYUserCentre(); }
     public float getOffsetY() { return mOffsetY; }
+
+    private double deg2rad(float deg) {return deg * (Math.PI/180);}
+
+    public float getOffsetXUserCentre() {
+        return (float) -(userX*Math.cos(deg2rad(-mAngle)) - userY*Math.sin(deg2rad(-mAngle)));
+    }
+
+    public float getOffsetYUserCentre() {
+        return (float) -(userY*Math.cos(deg2rad(-mAngle)) + userX*Math.sin(deg2rad(-mAngle)));
+    }
 
 
     double centre_x = 0;
@@ -248,8 +260,8 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         positionCircles();
     }
 
-    double prevRatioX = 1;
-    double prevRatioY = 1;
+    float userX = 0;
+    float userY = 0;
     public void positionTriangle() {
         float length = 0.15f;
         x = 0.75f;
@@ -281,6 +293,9 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         } else {
             y = 0;
         }
+
+        userX = x;
+        userY = y;
 
         float XmidBase = (float) (-Math.sin(bearingDirection)*length) + x;
         float YmidBase = (float) (-Math.cos(bearingDirection)*length) + y;

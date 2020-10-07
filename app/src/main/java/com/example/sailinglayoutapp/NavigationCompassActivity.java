@@ -198,6 +198,8 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         txt_compass = (TextView) findViewById(R.id.text_NavCompHead);
 
         start();
+        setBearText();
+        setDistText();
     }
 
     private void setupSharedPreferences() {
