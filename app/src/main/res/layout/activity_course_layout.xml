@@ -24,22 +24,25 @@
         android:layout_weight="1"
         >
 
-
-
         <RadioButton
             android:id="@+id/radioButton_layout_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:gravity="center"
-            android:text="@string/mark_1"
+            android:button="@drawable/selector_radio"
+            />
+        <TextView
+            android:id="@+id/txt_layout_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/radioButton_layout_1"
+            android:layout_alignBaseline="@id/radioButton_layout_1"
             android:fontFamily="@font/roboto_medium"
             android:textColor="@color/colorOnSecondary"
             android:textSize="14dp"
-            android:button="@drawable/selector_radio"
-            android:paddingStart="7dp"
-            />
+            android:text="@string/mark_1" />
+
 
         <RadioButton
             android:id="@+id/radioButton_layout_2"
@@ -47,14 +50,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:minWidth="0dp"
-            android:text="@string/mark_2"
+            android:button="@drawable/selector_radio"
+            />
+        <TextView
+            android:id="@+id/txt_layout_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/radioButton_layout_2"
+            android:layout_alignBaseline="@id/radioButton_layout_2"
             android:fontFamily="@font/roboto_medium"
             android:textColor="@color/colorOnSecondary"
             android:textSize="14dp"
-            android:button="@drawable/selector_radio"
-            android:paddingStart="7dp"
-            />
+            android:text="@string/mark_2" />
 
         <RadioButton
             android:id="@+id/radioButton_layout_3"
@@ -62,14 +69,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:minWidth="0dp"
-            android:text="@string/mark_3"
+            android:button="@drawable/selector_radio"
+            />
+        <TextView
+            android:id="@+id/txt_layout_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/radioButton_layout_3"
+            android:layout_alignBaseline="@id/radioButton_layout_3"
             android:fontFamily="@font/roboto_medium"
             android:textColor="@color/colorOnSecondary"
             android:textSize="14dp"
-            android:button="@drawable/selector_radio"
-            android:paddingStart="7dp"
-            />
+            android:text="@string/mark_3" />
 
         <RadioButton
             android:id="@+id/radioButton_layout_4"
@@ -77,14 +88,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:minWidth="0dp"
-            android:text="@string/mark_4"
+            android:button="@drawable/selector_radio"
+            />
+        <TextView
+            android:id="@+id/txt_layout_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/radioButton_layout_4"
+            android:layout_alignBaseline="@id/radioButton_layout_4"
             android:fontFamily="@font/roboto_medium"
             android:textColor="@color/colorOnSecondary"
             android:textSize="14dp"
-            android:button="@drawable/selector_radio"
-            android:paddingStart="7dp"
-            />
+            android:text="@string/mark_4" />
 
     </RelativeLayout>
     <TextView
