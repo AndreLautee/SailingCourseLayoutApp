@@ -19,22 +19,22 @@
         android:textColor="@color/colorOnPrimary"
         android:gravity="center"
         android:layout_gravity="center_vertical"/>
+
     <Button
-        android:background="@drawable/home_start_button"
-        android:drawableLeft="@drawable/icon_content_add_24px"
-        android:padding="15dp"
-        android:layout_height="60dp"
-        android:layout_width="150dp"
-        android:layout_marginTop="100dp"
         android:id="@+id/home_btn"
-        android:textColor="@color/colorOnSecondary"
-        android:text="START"
-        android:textSize="20dp"
-        android:fontFamily="@font/roboto_medium"
-        android:translationZ="2dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/home_start_button"
+        android:drawableLeft="@drawable/ic_icon_create"
+        android:fontFamily="@font/roboto_medium"
         android:onClick="Start_onclick"
-        />
+        android:padding="15dp"
+        android:text="START"
+        android:textColor="@color/colorOnSecondary"
+        android:textSize="20dp"
+        android:translationZ="2dp" />
 
 
 

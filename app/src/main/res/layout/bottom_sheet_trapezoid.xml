@@ -223,7 +223,7 @@
             android:text="CALCULATE"
             android:fontFamily="@font/roboto_medium"
             android:textColor="@color/colorOnSecondary"
-            android:drawableLeft="@drawable/path" />
+            android:drawableLeft="@drawable/ic_path" />
     </LinearLayout>
 
 
