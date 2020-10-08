@@ -40,7 +40,7 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
     Location currentLocation;
     CourseVariablesObject cvObject;
     MarkerCoordCalculations markerCoordCalculations;
-    TextView textView_lat, textView_lon, markID;
+    TextView textView_lat, textView_lon, markID, t1, t2, t3, t4;
     int courseSize;
     BottomNavigationView topNavigation;
     private LocationManager locationManager;
@@ -107,6 +107,11 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
         r2 = findViewById(R.id.radioButton_layout_2);
         r3 = findViewById(R.id.radioButton_layout_3);
         r4 = findViewById(R.id.radioButton_layout_4);
+        t1 = findViewById(R.id.txt_layout_1);
+        t2 = findViewById(R.id.txt_layout_2);
+        t3 = findViewById(R.id.txt_layout_3);
+        t4 = findViewById(R.id.txt_layout_4);
+
 
         Intent intent = getIntent();
 
@@ -145,6 +150,10 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
             r2.setVisibility(View.INVISIBLE);
             r3.setVisibility(View.INVISIBLE);
             r4.setVisibility(View.INVISIBLE);
+            t1.setVisibility(View.INVISIBLE);
+            t2.setVisibility(View.INVISIBLE);
+            t3.setVisibility(View.INVISIBLE);
+            t4.setVisibility(View.INVISIBLE);
             // Display an error
         }
 
@@ -237,6 +246,8 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
             case "windward_leeward": // windward-leeward
                 r3.setVisibility(View.INVISIBLE);
                 r4.setVisibility(View.INVISIBLE); // Only two points needed so make r3 and r4 invisible
+                t3.setVisibility(View.INVISIBLE);
+                t4.setVisibility(View.INVISIBLE);
 
                 r1_layoutParams.setMargins((width/2)-70, (height)/20, 0,0);
                 r1.setLayoutParams(r1_layoutParams);
@@ -249,6 +260,7 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
                 break;
             case "triangle": // triangle
                 r4.setVisibility(View.INVISIBLE); // only three points needed so make r4 invisible
+                t4.setVisibility(View.INVISIBLE);
                 if (cvObject.getType().equals("starboard")) { // starboard
 
                     r1_layoutParams.setMargins(width/6, (height)/20,0,0);
