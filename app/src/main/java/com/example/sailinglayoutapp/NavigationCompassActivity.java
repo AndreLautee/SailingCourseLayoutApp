@@ -79,7 +79,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation_compass);
+        setContentView(R.layout.activity_navigation_compass2);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

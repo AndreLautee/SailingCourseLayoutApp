@@ -2,7 +2,6 @@ package com.example.sailinglayoutapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +30,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -52,8 +51,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
     int courseSize;
     ArrayList<Location> locations;
     TextView textView_distance, textView_bearing;
-    LinearLayout layoutCourseLayout;
-    RelativeLayout layoutGL;
+    ConstraintLayout layoutGL;
     RadioGroup radioGroup;
     ArrayList<AppCompatRadioButton> radioButtons;
     int selectedMark;
@@ -148,8 +146,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             }
         });
 
-        layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_navigationMap);
-        layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
+        layoutGL = (ConstraintLayout) findViewById(R.id.cl_nav_map);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 

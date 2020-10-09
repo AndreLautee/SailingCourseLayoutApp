@@ -61,6 +61,18 @@
     <string name="weather">WEATHER</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="optimist">Optimist</string>
+    <string name="windward">Windward</string>
+    <string name="triangle">Triangle</string>
+    <string name="trapezoid">Trapezoid</string>
+    <string name="coordinates">Coordinates</string>
+    <string name="latitudeCaps">LATITUDE</string>
+    <string name="longitudeCaps">LONGITUDE</string>
+    <string name="current_nheading">CURRENT\nHEADING</string>
+    <string name="distance_nto_mark">DISTANCE\nTO MARK</string>
+    <string name="bearing_nto_mark">BEARING\nTO MARK</string>
+    <string name="distance">DISTANCE</string>
+    <string name="bearing">BEARING</string>
     <string-array name="course_shapes">
         <item>Windward-Leeward</item>
         <item>Triangle</item>
