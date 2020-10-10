@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="course_selection_text">24sp</dimen><!--20sp-->
+    <dimen name="radio_button_text">20sp</dimen><!--14sp-->
+    <dimen name="coordinate_text">28sp</dimen><!--20sp-->
+    <dimen name="coordinate_label">18sp</dimen> <!--12sp-->
+    <dimen name="mark_text">24sp</dimen><!--14sp-->
+    <dimen name="mark_label">28sp</dimen><!--20sp-->
+    <dimen name="nav_compass_labels">18sp</dimen><!--12sp-->
+    <dimen name="nav_compass_txt">28sp</dimen><!--20sp-->
+
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">18sp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">16sp</dimen>
+    <dimen name="design_bottom_navigation_icon_size" tools:override="true">30dp</dimen>
+    <dimen name="design_bottom_navigation_height" tools:override="true">76dp</dimen>
+</resources>

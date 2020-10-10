@@ -73,6 +73,13 @@
     <string name="bearing_nto_mark">BEARING\nTO MARK</string>
     <string name="distance">DISTANCE</string>
     <string name="bearing">BEARING</string>
+    <string name="date">DATE:</string>
+    <string name="description">DESCRIPTION:</string>
+    <string name="temperature_c">TEMPERATURE (°C):</string>
+    <string name="wind_speed_m_s">WIND SPEED (m/s):</string>
+    <string name="wind_direction_deg">WIND DIRECTION (deg):</string>
+    <string name="humidity">HUMIDITY (%):</string>
+    <string name="pressure_hpa">PRESSURE (hPa):</string>
     <string-array name="course_shapes">
         <item>Windward-Leeward</item>
         <item>Triangle</item>

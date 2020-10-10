@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="course_selection_text">40sp</dimen>
+
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">30sp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">26sp</dimen>
+    <dimen name="design_bottom_navigation_icon_size" tools:override="true">45dp</dimen>
+    <dimen name="design_bottom_navigation_height" tools:override="true">100dp</dimen>
+</resources>

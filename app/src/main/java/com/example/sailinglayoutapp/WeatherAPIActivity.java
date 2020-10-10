@@ -43,7 +43,7 @@ public class WeatherAPIActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather_api);
+        setContentView(R.layout.activity_weather_api2);
 
         Button btnBack = findViewById(R.id.btn_weatherBack);
         btnBack.setOnClickListener(new View.OnClickListener() {

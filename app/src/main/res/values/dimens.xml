@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--
     Because the window insets on round devices are larger than 15dp, this padding only applies
     to square screens.
@@ -18,4 +18,24 @@
     <dimen name="card_padding">50dp</dimen>
 
     <dimen name="text_size">14sp</dimen>
+
+    <!-- TOP NAVIGATION BAR -->
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">14sp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">12sp</dimen>
+    <dimen name="design_bottom_navigation_icon_size" tools:override="true">24dp</dimen>
+    <dimen name="design_bottom_navigation_height" tools:override="true">60dp</dimen>
+
+    <!-- COURSE SELECTION PAGE -->
+    <dimen name="course_selection_text">20sp</dimen>
+
+    <!-- COURSE LAYOUT PAGE -->
+    <dimen name="radio_button_text">14sp</dimen>
+    <dimen name="coordinate_text">20sp</dimen>
+    <dimen name="coordinate_label">12sp</dimen>
+    <dimen name="mark_text">14sp</dimen>
+    <dimen name="mark_label">20sp</dimen>
+
+    <!-- NAV COMPASS PAGE -->
+    <dimen name="nav_compass_labels">12sp</dimen>
+    <dimen name="nav_compass_txt">20sp</dimen>
 </resources>

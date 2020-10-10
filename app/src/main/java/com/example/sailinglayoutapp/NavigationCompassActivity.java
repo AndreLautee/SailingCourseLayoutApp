@@ -66,7 +66,6 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     int courseSize;
     ArrayList<Location> locations;
     TextView textView_distance, textView_bearing;
-    LinearLayout layoutCourseLayout;
     RadioGroup radioGroup;
     ArrayList<RadioButton> radioButtons;
     int selectedMark;
@@ -79,7 +78,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation_compass2);
+        setContentView(R.layout.activity_navigation_compass);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -146,7 +145,6 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         radioButtons = new ArrayList<>();
         float courseBearing = (float) - rad2deg(course.getCourseVariablesObject().getBearing());
         bearingDirection = -courseBearing;
-        layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_navigationCompass);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if(checkLocationPermission()) {

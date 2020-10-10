@@ -72,7 +72,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
         android:adjustViewBounds="true"
         android:clickable="true"
         android:maxWidth="120dp"
@@ -84,7 +83,10 @@
         android:scaleType="fitCenter"
         android:src="@drawable/compass_navmap"
         android:translationZ="2dp"
+        app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/navMap_top_navigation" />
 
     <RadioGroup
@@ -100,7 +102,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navMap_top_navigation"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         app:itemIconTint="@color/top_nav_colour"
