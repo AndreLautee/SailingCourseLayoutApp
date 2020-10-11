@@ -4,15 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -32,7 +28,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -43,7 +38,7 @@ public class WeatherAPIActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather_api2);
+        setContentView(R.layout.activity_weather_api);
 
         Button btnBack = findViewById(R.id.btn_weatherBack);
         btnBack.setOnClickListener(new View.OnClickListener() {

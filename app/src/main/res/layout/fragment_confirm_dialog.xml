@@ -1,32 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
-        android:src="@drawable/round_warning_black_24dp"
-        android:tint="@color/colorError"
-        android:layout_gravity="center"/>
     <TextView
+        android:id="@+id/textView15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:textColor="@color/colorOnPrimaryDefault"
+        android:text="@string/confirm_text"
+        android:textSize="18sp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+
+    <TextView
+        android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="16dp"
+        android:layout_marginTop="16dp"
         android:textColor="@color/colorError"
-        android:text="Course Lost" />
+        android:text="Course Lost"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-    <TextView
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:src="@drawable/round_warning_black_24dp"
+        android:tint="@color/colorError"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline15"
+        app:layout_constraintStart_toStartOf="@+id/guideline14"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:gravity="center"
-        android:textSize="18dp"
-        android:textColor="@color/colorOnPrimaryDefault"
-        android:text="By proceeding to this page you will lose the existing course setup." />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
 
-
-
-</LinearLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
+</androidx.constraintlayout.widget.ConstraintLayout>

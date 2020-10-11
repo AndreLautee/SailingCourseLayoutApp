@@ -164,7 +164,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             radioGroup.removeView(radioButtons.get(i));
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
             radioButtons.get(i).setText("MARK " + (i+1));
-            radioButtons.get(i).setTextSize(14);
+            radioButtons.get(i).setTextSize(getResources().getDimensionPixelSize(R.dimen.radio_button_text)/ getResources().getDisplayMetrics().density);
             radioButtons.get(i).setTypeface(font);
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
             radioButtons.get(i).setPadding(7,0,20,0);

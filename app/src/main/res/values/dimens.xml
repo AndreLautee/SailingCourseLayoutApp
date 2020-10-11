@@ -38,4 +38,7 @@
     <!-- NAV COMPASS PAGE -->
     <dimen name="nav_compass_labels">12sp</dimen>
     <dimen name="nav_compass_txt">20sp</dimen>
+
+    <!-- WELCOME PAGE -->
+    <dimen name="dots_size">16dp</dimen>
 </resources>

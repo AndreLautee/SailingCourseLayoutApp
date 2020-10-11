@@ -13,4 +13,6 @@
     <dimen name="design_bottom_navigation_text_size" tools:override="true">22sp</dimen>
     <dimen name="design_bottom_navigation_icon_size" tools:override="true">40dp</dimen>
     <dimen name="design_bottom_navigation_height" tools:override="true">92dp</dimen>
+
+    <dimen name="dots_size">45dp</dimen>
 </resources>

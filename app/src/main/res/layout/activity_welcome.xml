@@ -1,57 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".WelcomeActivity">
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/welcome_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/home_start_button"
+        android:drawableStart="@drawable/ic_icon_create"
+        android:drawablePadding="15dp"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="20dp"
+        android:text="@string/start"
+        android:textColor="@color/colorOnSecondary"
+        android:textSize="20sp"
+        android:translationZ="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutDots" />
+
     <LinearLayout
-        android:layout_height="@dimen/dots_height"
-        android:layout_width="match_parent"
+        android:id="@+id/layoutDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:layout_marginBottom="125dp"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/layoutDots"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline18" />
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline16"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="40dp"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/rl_header">
-        <LinearLayout
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:gravity="center">
-            <Button
-                android:background="@drawable/button"
-                android:layout_height="60dp"
-                android:layout_width="128dp"
-                android:gravity="center"
-                android:layout_marginBottom="1dp"
-                android:id="@+id/btn"
-                android:textColor="@color/colorGray"
-                android:textAllCaps="false"
-                android:layout_marginEnd="145dp"
-                android:layout_marginStart="145dp"
-                android:layout_gravity="bottom"
-                />
-        </LinearLayout>
-        <androidx.viewpager.widget.ViewPager
-            android:layout_height="390dp"
-            android:layout_width="match_parent"
-            android:id="@+id/viewpager"
-            android:layout_gravity="center|top"
-            android:paddingBottom="30dp"
-            android:paddingRight="@dimen/card_padding"
-            android:paddingEnd="@dimen/card_padding"
-            android:paddingLeft="@dimen/card_padding"
-            android:paddingStart="@dimen/card_padding"
-            android:overScrollMode="never"
-            android:clipToPadding="false"
-            android:layout_marginTop="75dp"
-            android:layout_alignParentTop="true"/>
-    </RelativeLayout>
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
 
-</RelativeLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center|top"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline16" />
+</androidx.constraintlayout.widget.ConstraintLayout>
