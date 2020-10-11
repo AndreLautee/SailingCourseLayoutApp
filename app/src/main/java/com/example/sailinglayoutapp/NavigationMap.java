@@ -2,7 +2,6 @@ package com.example.sailinglayoutapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -62,6 +60,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
     BottomNavigationView topNavigation;
     String distFormat;
     int width, height;
+    boolean locate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +76,8 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         }
 
         setupSharedPreferences();
+
+        assignFields();
 
         topNavigation = findViewById(R.id.navMap_top_navigation);
 
@@ -119,32 +120,18 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             }
         });
 
-        Intent intent = getIntent();
-        course = intent.getParcelableExtra("COURSE");
-        cvObject = intent.getParcelableExtra("COURSE_VARIABLES");
-        courseSize = course.getCoords().size();
-
-        selectedMark = intent.getIntExtra("SELECTED_MARK",0);
-
-
-        locations = new ArrayList<>();
-        textView_distance = findViewById(R.id.text_NavMapDist);
-        textView_bearing = findViewById(R.id.text_NavMapBear);
-        radioGroup = findViewById(R.id.rgNavMap);
-        radioButtons = new ArrayList<>();
-        float courseBearing = (float) - rad2deg(course.getCourseVariablesObject().getBearing());
-        bearingDirection = -courseBearing;
-        img_compass = findViewById(R.id.img_NavMapCompass);
-
-        // Hide crosshair until marks are out of sight
-        img_crosshair = findViewById(R.id.img_crosshair);
-        img_crosshair.setVisibility(View.GONE);
+        locate = true;
         // Reset to centre of screen when user clicks
         img_crosshair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gLView.setOffset();
-                img_crosshair.setVisibility(View.GONE);
+                if (locate) {
+                    gLView.setUserCentre();
+                    locate = false;
+                } else {
+                    gLView.resetMapCentre();
+                    locate = true;
+                }
             }
         });
 
@@ -172,12 +159,12 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
             radioButtons.get(i).setPadding(7,0,20,0);
         }
+        // If selected mark = 0, then that is the final mark
         if (selectedMark == 0) {
             radioGroup.check(courseSize);
         } else {
             radioGroup.check(selectedMark);
         }
-
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -193,6 +180,8 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
 
         gLView = new NavMapGLSurfaceView(this, course.getCoords(), locations, selectedMark, bearingDirection);
 
+        float courseBearing = (float) - rad2deg(course.getCourseVariablesObject().getBearing());
+        bearingDirection = -courseBearing;
         img_compass.setRotation(courseBearing);
         gLView.setmAngle(courseBearing);
 
@@ -204,6 +193,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             @Override
             public void onClick(View v) {
                 if (gLView.getmAngle() != 0) {
+                    // Rotate map and compass so north is straight up
                     img_compass.setRotation(0);
                     gLView.setmAngle(0);
                 }
@@ -214,7 +204,27 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
+
+        setTexts();
     }
+
+    public void assignFields() {
+        Intent intent = getIntent();
+        course = intent.getParcelableExtra("COURSE");
+        cvObject = intent.getParcelableExtra("COURSE_VARIABLES");
+        courseSize = course.getCoords().size();
+
+        selectedMark = intent.getIntExtra("SELECTED_MARK",0);
+
+        locations = new ArrayList<>();
+        textView_distance = findViewById(R.id.text_NavMapDist);
+        textView_bearing = findViewById(R.id.text_NavMapBear);
+        radioGroup = findViewById(R.id.rgNavMap);
+        radioButtons = new ArrayList<>();
+        img_compass = findViewById(R.id.img_NavMapCompass);
+        img_crosshair = findViewById(R.id.img_crosshair);
+    }
+
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -230,15 +240,6 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
 
             // Make the compass rotate with the map
             img_compass.setRotation(gLView.getmAngle());
-
-            // Check if the marks are off the screen
-            // If they are then show the crosshair image
-            if (Math.abs(gLView.getRenderer().getScale() * gLView.getRenderer().getOffsetX()) > 1 ||
-                    Math.abs(gLView.getRenderer().getScale() * gLView.getRenderer().getOffsetY()) > 1) {
-                img_crosshair.setVisibility(View.VISIBLE);
-            } else {
-                img_crosshair.setVisibility(View.GONE);
-            }
 
             return false;
         }
