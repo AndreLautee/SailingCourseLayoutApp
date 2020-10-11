@@ -30,6 +30,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -50,8 +51,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
     int courseSize;
     ArrayList<Location> locations;
     TextView textView_distance, textView_bearing;
-    LinearLayout layoutCourseLayout;
-    RelativeLayout layoutGL;
+    ConstraintLayout layoutGL;
     RadioGroup radioGroup;
     ArrayList<AppCompatRadioButton> radioButtons;
     int selectedMark;
@@ -135,8 +135,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             }
         });
 
-        layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_navigationMap);
-        layoutGL = (RelativeLayout) findViewById(R.id.rl_navigationMap);
+        layoutGL = (ConstraintLayout) findViewById(R.id.cl_nav_map);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -154,7 +153,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             radioGroup.removeView(radioButtons.get(i));
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
             radioButtons.get(i).setText("MARK " + (i+1));
-            radioButtons.get(i).setTextSize(14);
+            radioButtons.get(i).setTextSize(getResources().getDimensionPixelSize(R.dimen.radio_button_text)/ getResources().getDisplayMetrics().density);
             radioButtons.get(i).setTypeface(font);
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
             radioButtons.get(i).setPadding(7,0,20,0);

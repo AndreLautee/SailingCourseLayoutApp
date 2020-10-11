@@ -66,7 +66,6 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     int courseSize;
     ArrayList<Location> locations;
     TextView textView_distance, textView_bearing;
-    LinearLayout layoutCourseLayout;
     RadioGroup radioGroup;
     ArrayList<RadioButton> radioButtons;
     int selectedMark;
@@ -146,7 +145,6 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         radioButtons = new ArrayList<>();
         float courseBearing = (float) - rad2deg(course.getCourseVariablesObject().getBearing());
         bearingDirection = -courseBearing;
-        layoutCourseLayout = (LinearLayout) findViewById(R.id.layout_navigationCompass);
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if(checkLocationPermission()) {
@@ -163,7 +161,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             radioGroup.removeView(radioButtons.get(i));
             radioGroup.addView(radioButtons.get(i)); //the RadioButtons are added to the radioGroup instead of the layout
             radioButtons.get(i).setText("MARK " + (i+1));
-            radioButtons.get(i).setTextSize(14);
+            radioButtons.get(i).setTextSize(getResources().getDimensionPixelSize(R.dimen.radio_button_text)/ getResources().getDisplayMetrics().density);
             radioButtons.get(i).setTypeface(font);
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
             radioButtons.get(i).setPadding(7,0,20,0);

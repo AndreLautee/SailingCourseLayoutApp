@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Sailing Course Layout</string>
+    <string name="app_name">SCLANA</string>
+    <string name="app_name_full">Sailing Course Layout and Navigation</string>
     <string name="wind_direction">Wind Direction</string>
     <string name="angle">Corner Angles</string>
     <string name="degrees">°</string>
@@ -61,6 +62,29 @@
     <string name="weather">WEATHER</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="optimist">Optimist</string>
+    <string name="windward">Windward</string>
+    <string name="triangle">Triangle</string>
+    <string name="trapezoid">Trapezoid</string>
+    <string name="coordinates">Coordinates</string>
+    <string name="latitudeCaps">LATITUDE</string>
+    <string name="longitudeCaps">LONGITUDE</string>
+    <string name="current_nheading">CURRENT\nHEADING</string>
+    <string name="distance_nto_mark">DISTANCE\nTO MARK</string>
+    <string name="bearing_nto_mark">BEARING\nTO MARK</string>
+    <string name="distance">DISTANCE</string>
+    <string name="bearing">BEARING</string>
+    <string name="date">DATE:</string>
+    <string name="description">DESCRIPTION:</string>
+    <string name="temperature_c">TEMPERATURE (°C):</string>
+    <string name="wind_speed_m_s">WIND SPEED (m/s):</string>
+    <string name="wind_direction_deg">WIND DIRECTION (deg):</string>
+    <string name="humidity">HUMIDITY (%):</string>
+    <string name="pressure_hpa">PRESSURE (hPa):</string>
+    <string name="start">START</string>
+    <string name="weather_data">Weather Data</string>
+    <string name="help_text">The coordinates you input will be used as the reference point and mark 4 coordinates.</string>
+    <string name="confirm_text">By proceeding to this page you will lose the existing course setup.</string>
     <string-array name="course_shapes">
         <item>Windward-Leeward</item>
         <item>Triangle</item>

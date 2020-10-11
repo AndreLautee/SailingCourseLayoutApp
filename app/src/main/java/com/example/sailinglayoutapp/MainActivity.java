@@ -1,24 +1,16 @@
 package com.example.sailinglayoutapp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 public class MainActivity extends AppCompatActivity {
-    TextView Start;
     private int Request_code = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
         if (isFirstTime()){
             startActivity(new Intent(this, WelcomeActivity.class));
         }
-
 
 
         ActionBar actionBar = getSupportActionBar();

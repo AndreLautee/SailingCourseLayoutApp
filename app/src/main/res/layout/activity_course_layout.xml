@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/courseLayoutPage"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_course_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/courseLayout_top_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:menu="@menu/top_navigation_menu"
-        app:itemIconTint="@color/top_nav_colour"
-        app:itemTextColor="@color/top_nav_colour"
-        />
     <RelativeLayout
         android:id="@+id/rl_courseLayout"
-        android:tag="trueLayout"
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        >
+        android:orientation="vertical"
+        android:tag="trueLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/courseLayout_top_navigation">
 
         <RadioButton
             android:id="@+id/radioButton_layout_1"
@@ -30,19 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:button="@drawable/selector_radio"
-            />
-        <TextView
-            android:id="@+id/txt_layout_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/radioButton_layout_1"
-            android:layout_alignBaseline="@id/radioButton_layout_1"
-            android:fontFamily="@font/roboto_medium"
-            android:textColor="@color/colorOnSecondary"
-            android:textSize="14dp"
-            android:text="@string/mark_1" />
-
+            android:button="@drawable/selector_radio" />
 
         <RadioButton
             android:id="@+id/radioButton_layout_2"
@@ -50,18 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:button="@drawable/selector_radio"
-            />
-        <TextView
-            android:id="@+id/txt_layout_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/radioButton_layout_2"
-            android:layout_alignBaseline="@id/radioButton_layout_2"
-            android:fontFamily="@font/roboto_medium"
-            android:textColor="@color/colorOnSecondary"
-            android:textSize="14dp"
-            android:text="@string/mark_2" />
+            android:button="@drawable/selector_radio" />
+
 
         <RadioButton
             android:id="@+id/radioButton_layout_3"
@@ -69,18 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:button="@drawable/selector_radio"
-            />
-        <TextView
-            android:id="@+id/txt_layout_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/radioButton_layout_3"
-            android:layout_alignBaseline="@id/radioButton_layout_3"
-            android:fontFamily="@font/roboto_medium"
-            android:textColor="@color/colorOnSecondary"
-            android:textSize="14dp"
-            android:text="@string/mark_3" />
+            android:button="@drawable/selector_radio" />
 
         <RadioButton
             android:id="@+id/radioButton_layout_4"
@@ -88,97 +47,171 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:button="@drawable/selector_radio"
-            />
+            android:button="@drawable/selector_radio" />
+
+        <TextView
+            android:id="@+id/txt_layout_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/radioButton_layout_1"
+            android:layout_alignBottom="@id/radioButton_layout_1"
+            android:layout_toEndOf="@id/radioButton_layout_1"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:text="@string/mark_1"
+            android:textColor="@color/colorOnSecondary"
+            android:textSize="@dimen/radio_button_text" />
+
+        <TextView
+            android:id="@+id/txt_layout_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/radioButton_layout_3"
+            android:layout_alignBottom="@id/radioButton_layout_3"
+            android:layout_toEndOf="@id/radioButton_layout_3"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:text="@string/mark_3"
+            android:textColor="@color/colorOnSecondary"
+            android:textSize="@dimen/radio_button_text" />
+
+        <TextView
+            android:id="@+id/txt_layout_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/radioButton_layout_2"
+            android:layout_alignBottom="@id/radioButton_layout_2"
+            android:layout_toEndOf="@id/radioButton_layout_2"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:text="@string/mark_2"
+            android:textColor="@color/colorOnSecondary"
+            android:textSize="@dimen/radio_button_text" />
+
         <TextView
             android:id="@+id/txt_layout_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/radioButton_layout_4"
-            android:layout_alignBaseline="@id/radioButton_layout_4"
+            android:layout_alignTop="@id/radioButton_layout_4"
+            android:layout_alignBottom="@id/radioButton_layout_4"
+            android:layout_toEndOf="@id/radioButton_layout_4"
             android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:text="@string/mark_4"
             android:textColor="@color/colorOnSecondary"
-            android:textSize="14dp"
-            android:text="@string/mark_4" />
+            android:textSize="@dimen/radio_button_text" />
 
     </RelativeLayout>
+
+
     <TextView
+        android:id="@+id/courseLayout_lon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Coordinates"
         android:layout_gravity="center"
-        android:textSize="20dp"
         android:fontFamily="@font/roboto_medium"
-        android:textColor="@color/colorOnPrimaryDefault"/>
+        android:textColor="@color/colorSecondaryDark"
+        android:textSize="@dimen/coordinate_text"
+        app:layout_constraintBottom_toTopOf="@+id/txt_Lon_Label"
+        app:layout_constraintEnd_toEndOf="@+id/txt_Lon_Label"
+        app:layout_constraintStart_toStartOf="@+id/txt_Lon_Label" />
+
     <TextView
+        android:id="@+id/courseLayout_lat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="14dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/colorSecondaryDark"
+        android:textSize="@dimen/coordinate_text"
+        app:layout_constraintBottom_toTopOf="@+id/txt_Lat_Label"
+        app:layout_constraintEnd_toEndOf="@+id/txt_Lat_Label"
+        app:layout_constraintStart_toStartOf="@+id/txt_Lat_Label" />
+
+    <TextView
+        android:id="@+id/txt_Lon_Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/longitudeCaps"
+        android:textColor="@color/colorOnSecondary"
+        android:textSize="@dimen/coordinate_label"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline10"
+        app:layout_constraintStart_toStartOf="@+id/guideline10" />
+
+    <TextView
+        android:id="@+id/txt_Lat_Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/latitudeCaps"
+        android:textColor="@color/colorOnSecondary"
+        android:textSize="@dimen/coordinate_label"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintStart_toStartOf="@+id/guideline9" />
+
+    <TextView
+        android:id="@+id/courseLayout_markID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
         android:fontFamily="@font/roboto_medium"
         android:textColor="@color/colorOnSecondary"
-        android:id="@+id/courseLayout_markID"/>
-    <LinearLayout
+        android:textSize="@dimen/mark_text"
+        app:layout_constraintBottom_toTopOf="@+id/courseLayout_lat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_Coord_Label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/coordinates"
+        android:textColor="@color/colorOnPrimaryDefault"
+        android:textSize="@dimen/mark_label"
+        app:layout_constraintBottom_toTopOf="@+id/courseLayout_markID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="50dp"
-            android:layout_marginEnd="25dp">
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3" />
 
-            <TextView
-                android:id="@+id/courseLayout_lat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/colorSecondaryDark"
-                android:textSize="20dp"
-                android:fontFamily="@font/roboto_medium"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="LATITUDE"
-                android:layout_gravity="center"
-                android:textColor="@color/colorOnSecondary"
-                android:textSize="12dp"
-                android:fontFamily="@font/roboto_medium"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="25dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="50dp"
-            android:layout_marginEnd="25dp">
-            <TextView
-                android:id="@+id/courseLayout_lon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/colorSecondaryDark"
-                android:textSize="20dp"
-                android:fontFamily="@font/roboto_medium"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="LONGITUDE"
-                android:layout_gravity="center"
-                android:textColor="@color/colorOnSecondary"
-                android:textSize="12dp"
-                android:fontFamily="@font/roboto_medium"/>
-        </LinearLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
 
-    </LinearLayout>
-
-
-</LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/courseLayout_top_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/top_nav_colour"
+        app:itemTextColor="@color/top_nav_colour"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/top_navigation_menu" />
+</androidx.constraintlayout.widget.ConstraintLayout>

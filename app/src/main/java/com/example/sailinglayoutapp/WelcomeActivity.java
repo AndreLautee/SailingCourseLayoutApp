@@ -8,10 +8,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -70,7 +68,7 @@ public class WelcomeActivity extends AppCompatActivity {
         viewPager.setPadding(100,0,100,0);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
-        button = findViewById(R.id.btn);
+        button = findViewById(R.id.welcome_btn);
         button.setVisibility(View.GONE);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +98,7 @@ public class WelcomeActivity extends AppCompatActivity {
         for (int i = 0; i < mDots.length; i++) {
             mDots[i] = new TextView(this);
             mDots[i].setText(Html.fromHtml("&#8226;"));
-            mDots[i].setTextSize(70);
+            mDots[i].setTextSize(getResources().getDimension(R.dimen.dots_size));
             mDots[i].setTextColor(colorsInactive[currentPage]);
             mDotsLayout.addView(mDots[i]);
         }

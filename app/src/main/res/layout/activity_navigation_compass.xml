@@ -1,157 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_navigationCompass"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/img_arrow"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:elevation="4dp"
+        android:gravity="center_horizontal"
+        android:src="@drawable/ic_navigation_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/img_compass"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="20dp"
+        android:layout_height="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:src="@drawable/line"
+        android:translationZ="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/img_compass"
+        app:layout_constraintEnd_toEndOf="@+id/img_compass"
+        app:layout_constraintStart_toStartOf="@+id/img_compass" />
+
+    <ImageView
+        android:id="@+id/img_compass"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:elevation="2dp"
+        android:gravity="center_horizontal"
+        android:src="@drawable/navcompass"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/navCompass_top_navigation" />
+
+    <TextView
+        android:id="@+id/text_NavCompHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/colorSecondaryDark"
+        android:textSize="@dimen/nav_compass_txt"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="@+id/textView3"
+        app:layout_constraintStart_toStartOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/text_NavCompDist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/colorSecondaryDark"
+        android:textSize="@dimen/nav_compass_txt"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/text_NavCompBear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/colorSecondaryDark"
+        android:textSize="@dimen/nav_compass_txt"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="50dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/current_nheading"
+        android:textColor="@color/colorOnSecondary"
+        android:textSize="@dimen/nav_compass_labels"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/distance_nto_mark"
+        android:textColor="@color/colorOnSecondary"
+        android:textSize="@dimen/nav_compass_labels"
+        app:layout_constraintBottom_toTopOf="@+id/rgNavCompass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="50dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/bearing_nto_mark"
+        android:textColor="@color/colorOnSecondary"
+        android:textSize="@dimen/nav_compass_labels"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.65" />
+    <RadioGroup
+        android:id="@+id/rgNavCompass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal"
+        android:translationZ="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navCompass_top_navigation"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:menu="@menu/top_navigation_menu"
         app:itemIconTint="@color/top_nav_colour"
         app:itemTextColor="@color/top_nav_colour"
-        />
-    <RelativeLayout
-        android:id="@+id/activity_compass"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        >
-
-
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="25dp"
-            android:layout_centerInParent="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/line"
-            android:translationZ="1dp"/>
-
-        <ImageView
-            android:id="@+id/img_compass"
-            android:layout_width="330dp"
-            android:layout_height="330dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="60dp"
-            android:elevation="2dp"
-            android:gravity="center_horizontal"
-            android:src="@drawable/navcompass" />
-
-        <ImageView
-            android:id="@+id/img_arrow"
-            android:layout_width="120dp"
-            android:layout_height="80dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="185dp"
-            android:elevation="4dp"
-            android:gravity="center_horizontal"
-            android:src="@drawable/ic_navigation_arrow" />
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="90dp"
-        >
-
-
-        <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-
-            <TextView
-                android:id="@+id/text_NavCompBear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/colorSecondaryDark"
-                android:textSize="20dp"
-                android:fontFamily="@font/roboto_medium"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BEARING\nTO MARK"
-                android:layout_gravity="center"
-                android:textColor="@color/colorOnSecondary"
-                android:textSize="12dp"
-                android:fontFamily="@font/roboto_medium"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:id="@+id/text_NavCompDist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/colorSecondaryDark"
-                android:textSize="20dp"
-                android:fontFamily="@font/roboto_medium"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="DISTANCE\nTO MARK"
-                android:layout_gravity="center"
-                android:textColor="@color/colorOnSecondary"
-                android:textSize="12dp"
-                android:fontFamily="@font/roboto_medium"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:id="@+id/text_NavCompHead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/colorSecondaryDark"
-                android:textSize="20dp"
-                android:fontFamily="@font/roboto_medium"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CURRENT\nHEADING"
-                android:layout_gravity="center"
-                android:textColor="@color/colorOnSecondary"
-                android:textSize="12dp"
-                android:fontFamily="@font/roboto_medium"/>
-        </LinearLayout>
-
-    </LinearLayout>
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:translationZ="2dp"
-        android:textColor="#64D8CB"
-        android:id="@+id/rgNavCompass"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_centerHorizontal="true"
-
-        />
-</RelativeLayout>
-
-</LinearLayout>
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/top_navigation_menu" />
+</androidx.constraintlayout.widget.ConstraintLayout>
