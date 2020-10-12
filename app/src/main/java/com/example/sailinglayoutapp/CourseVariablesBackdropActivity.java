@@ -88,7 +88,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                },4*1000);
+                },1000);
             }
         });
 
