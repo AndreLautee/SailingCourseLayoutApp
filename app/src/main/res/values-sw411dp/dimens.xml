@@ -8,6 +8,12 @@
     <dimen name="mark_label">28sp</dimen><!--20sp-->
     <dimen name="nav_compass_labels">18sp</dimen><!--12sp-->
     <dimen name="nav_compass_txt">28sp</dimen><!--20sp-->
+    <dimen name="nav_map_txt">20sp</dimen>
+    <dimen name="nav_map_bear">24sp</dimen>
+    <dimen name="main_txt">42sp</dimen>
+    <dimen name="weather_txt">18sp</dimen>
+    <dimen name="weather_name">38sp</dimen>
+    <dimen name="weather_txt2">20sp</dimen>
 
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">18sp</dimen>
     <dimen name="design_bottom_navigation_text_size" tools:override="true">16sp</dimen>

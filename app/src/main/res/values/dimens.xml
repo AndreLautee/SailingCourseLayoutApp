@@ -41,4 +41,16 @@
 
     <!-- WELCOME PAGE -->
     <dimen name="dots_size">16dp</dimen>
+
+    <!-- NAV MAP PAGE -->
+    <dimen name="nav_map_txt">12sp</dimen>
+    <dimen name="nav_map_bear">16sp</dimen>
+
+    <!-- MAIN PAGE -->
+    <dimen name="main_txt">34sp</dimen>
+
+    <!-- WEATHER PAGE -->
+    <dimen name="weather_txt">16sp</dimen>
+    <dimen name="weather_name">30sp</dimen>
+    <dimen name="weather_txt2">18sp</dimen>
 </resources>
