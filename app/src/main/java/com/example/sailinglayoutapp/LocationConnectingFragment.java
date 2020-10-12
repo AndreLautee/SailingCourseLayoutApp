@@ -49,7 +49,7 @@ public class LocationConnectingFragment extends DialogFragment {
                     while (location == null) {
                         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         try {
-                            TimeUnit.SECONDS.sleep(5);
+                            TimeUnit.SECONDS.sleep(3);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

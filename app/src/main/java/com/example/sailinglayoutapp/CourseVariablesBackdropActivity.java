@@ -504,7 +504,6 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
             case R.id.btn_weather:
                 intent = new Intent();
-                intent.putExtra("LOCATION", currentLocation);
                 intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
                 startActivity(intent);
                 return true;
@@ -1128,9 +1127,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
     @Override
     public void onDialogLocationNotEnabled(DialogFragment dialog) {
-        Intent intent = new Intent();
-        intent.setClass(getApplicationContext(),MainActivity.class);
-        startActivity(intent);
+
     }
 
     @Override

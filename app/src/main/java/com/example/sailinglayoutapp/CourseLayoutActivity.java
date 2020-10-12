@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,7 +33,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDialogFragment.ConfirmDialogListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDialogFragment.ConfirmDialogListener, LocationServicesFragment.LocationServicesListener, LocationConnectingFragment.LocationConnectingListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     RadioButton r1, r2, r3, r4;
     RelativeLayout rl;
@@ -129,7 +130,7 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
         currentLocation = null;
         if(checkLocationPermission()) {
            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
-           currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+           getLocation();
         }
 
         setupSharedPreferences();
@@ -157,6 +158,14 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
             // Display an error
         }
 
+    }
+
+    private void getLocation() {
+        if (checkLocationPermission()) {
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
+        }
     }
 
     @Override
@@ -205,7 +214,6 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
 
             case R.id.btn_weather:
                 intent = new Intent();
-                intent.putExtra("LOCATION", currentLocation);
                 intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
                 startActivity(intent);
                 return true;
@@ -468,14 +476,35 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
 
         @Override
         public void onProviderEnabled(String provider) {
-
+            showConnectingDialog();
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-
+            showLocationServicesDialog();
         }
     };
+
+    boolean mIsStateAlreadySaved = false, mPendingShowDialog = false;
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        mIsStateAlreadySaved = false;
+        if(mPendingShowDialog){
+            mPendingShowDialog = false;
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showLocationServicesDialog();
+            } else {
+                showConnectingDialog();
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mIsStateAlreadySaved = true;
+    }
 
     final int REQUEST_LOCATION = 2;
 
@@ -642,8 +671,28 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
     }
 
     public void showConfirmDialog() {
-        DialogFragment dialog = new ConfirmDialogFragment();
-        dialog.show(getSupportFragmentManager(),null);
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new ConfirmDialogFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
+    }
+    public void showLocationServicesDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationServicesFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
+    }
+    public void showConnectingDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationConnectingFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
     }
 
     @Override
@@ -655,6 +704,16 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
+    @Override
+    public void onDialogLocationEnable(DialogFragment dialog) {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDialogLocationNotEnabled(DialogFragment dialog) {
 
     }
 
@@ -672,5 +731,7 @@ public class CourseLayoutActivity extends AppCompatActivity implements ConfirmDi
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
+
+
 }
 

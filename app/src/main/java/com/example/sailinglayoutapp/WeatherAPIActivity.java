@@ -4,9 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -32,9 +40,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 
-public class WeatherAPIActivity extends AppCompatActivity {
+public class WeatherAPIActivity extends AppCompatActivity implements LocationNullFragment.LocationNullListener {
 
     TextView t1_temp,t2_city,t3_description,t4_date,t5_wind,t6_wind1,t7_humidity,t8_pressure;
+    Location location;
+    LocationManager locationManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,15 +74,31 @@ public class WeatherAPIActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_black_24dp);
         }
 
+        Intent gpsIntent = getIntent();
 
-        find_weather();
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        location = null;
+
+        if(checkLocationPermission()) {
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        if (location != null) {
+            find_weather();
+        } else {
+            showLocationNullDialog();
+        }
+    }
+
+
+
+    public void showLocationNullDialog() {
+        DialogFragment dialog = new LocationNullFragment();
+        dialog.show(getSupportFragmentManager(),null);
     }
 
     public void find_weather()
     {
 
-        Intent gpsIntent = getIntent();
-        Location location = gpsIntent.getParcelableExtra("LOCATION");
 
         double lat = location.getLatitude();
         double lon = location.getLongitude();
@@ -178,5 +204,62 @@ public class WeatherAPIActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    final int REQUEST_LOCATION = 2;
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setMessage("GPS not enabled. Please allow location services and then return")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(WeatherAPIActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onDialogRetryLocation(DialogFragment dialog) {
+        if (checkLocationPermission()) {
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        if (location == null) {
+            showLocationNullDialog();
+        } else {
+            find_weather();
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
     }
 }

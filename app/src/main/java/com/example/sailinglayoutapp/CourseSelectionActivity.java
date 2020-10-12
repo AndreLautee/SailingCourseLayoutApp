@@ -126,7 +126,6 @@ public class CourseSelectionActivity extends AppCompatActivity {
 
             case R.id.btn_weather:
                 intent = new Intent();
-                intent.putExtra("LOCATION", currentLocation);
                 intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
                 startActivity(intent);
                 return true;
