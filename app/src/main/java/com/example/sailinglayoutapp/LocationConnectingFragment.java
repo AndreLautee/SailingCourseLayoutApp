@@ -22,6 +22,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class LocationConnectingFragment extends DialogFragment {
 
@@ -37,15 +39,26 @@ public class LocationConnectingFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Location location = null;
-        LocationManager locationManager;
-        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-        if (checkLocationPermission()){
-            while (location == null) {
-                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Location location = null;
+                LocationManager locationManager;
+                locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+                if (checkLocationPermission()){
+                    while (location == null) {
+                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        try {
+                            TimeUnit.SECONDS.sleep(5);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    dismiss();
+                }
             }
-            dismiss();
-        }
+        }).start();
+
     }
 
     @Override

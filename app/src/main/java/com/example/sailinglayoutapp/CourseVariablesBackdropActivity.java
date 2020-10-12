@@ -447,7 +447,11 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         mIsStateAlreadySaved = false;
         if(mPendingShowDialog){
             mPendingShowDialog = false;
-            showConnectingDialog();
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showLocationServicesDialog();
+            } else {
+                showConnectingDialog();
+            }
         }
     }
 
