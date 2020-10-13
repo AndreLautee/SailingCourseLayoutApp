@@ -85,6 +85,7 @@
     <string name="weather_data">Weather Data</string>
     <string name="help_text">The coordinates you input will be used as the reference point and mark 4 coordinates.</string>
     <string name="confirm_text">By proceeding to this page you will lose the existing course setup.</string>
+    <string name="settings">SETTINGS</string>
     <string-array name="course_shapes">
         <item>Windward-Leeward</item>
         <item>Triangle</item>

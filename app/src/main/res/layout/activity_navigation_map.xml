@@ -1,76 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_nav_map"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center"
-        android:translationZ="2dp"
-        android:src="@drawable/crosshair"
-        android:id="@+id/img_crosshair"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/img_NavMapCompass"
-        app:layout_constraintStart_toStartOf="@+id/img_NavMapCompass"
-        app:layout_constraintTop_toBottomOf="@id/text_NavMapBear"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:translationZ="2dp"
-        android:textSize="16sp"
-        android:textColor="@color/colorBlack"
-        android:fontFamily="@font/roboto"
-        android:id="@+id/text_NavMapBear"
-        app:layout_constraintEnd_toEndOf="@+id/img_NavMapCompass"
-        app:layout_constraintStart_toStartOf="@+id/img_NavMapCompass"
-        app:layout_constraintTop_toBottomOf="@id/text_NavMapBear_Label"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:translationZ="2dp"
-        android:text="@string/bearing"
-        android:textSize="12sp"
-        android:fontFamily="@font/roboto_medium"
-        android:id="@+id/text_NavMapBear_Label"
-        app:layout_constraintEnd_toEndOf="@+id/img_NavMapCompass"
-        app:layout_constraintStart_toStartOf="@+id/img_NavMapCompass"
-        app:layout_constraintTop_toBottomOf="@id/text_NavMapDist"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:translationZ="2dp"
-        android:textSize="16sp"
-        android:textColor="@color/colorBlack"
-        android:fontFamily="@font/roboto"
-        android:id="@+id/text_NavMapDist"
-        app:layout_constraintEnd_toEndOf="@+id/img_NavMapCompass"
-        app:layout_constraintStart_toStartOf="@+id/img_NavMapCompass"
-        app:layout_constraintTop_toBottomOf="@id/text_NavMapDist_Label"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/text_NavMapDist_Label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/img_crosshair"
+        android:layout_width="@dimen/crosshir_btn"
+        android:layout_height="@dimen/crosshir_btn"
         android:layout_gravity="center"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/distance"
-        android:textSize="12sp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/crosshair"
         android:translationZ="2dp"
         app:layout_constraintEnd_toEndOf="@+id/img_NavMapCompass"
         app:layout_constraintStart_toStartOf="@+id/img_NavMapCompass"
-        app:layout_constraintTop_toBottomOf="@id/img_NavMapCompass" />
+        app:layout_constraintTop_toBottomOf="@id/text_NavMapBear" />
 
     <ImageView
         android:id="@+id/img_NavMapCompass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:adjustViewBounds="true"
         android:clickable="true"
@@ -85,8 +35,7 @@
         android:translationZ="2dp"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline20"
         app:layout_constraintTop_toBottomOf="@id/navMap_top_navigation" />
 
     <RadioGroup
@@ -99,6 +48,66 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/text_NavMapDist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/nav_map_txt"
+        android:translationZ="2dp"
+        app:layout_constraintEnd_toEndOf="@+id/img_NavMapCompass"
+        app:layout_constraintStart_toStartOf="@+id/img_NavMapCompass"
+        app:layout_constraintTop_toBottomOf="@id/text_NavMapDist_Label" />
+
+    <TextView
+        android:id="@+id/text_NavMapDist_Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/distance"
+        android:textSize="@dimen/nav_map_txt"
+        android:translationZ="2dp"
+        app:layout_constraintEnd_toEndOf="@+id/img_NavMapCompass"
+        app:layout_constraintStart_toStartOf="@+id/img_NavMapCompass"
+        app:layout_constraintTop_toBottomOf="@id/img_NavMapCompass" />
+
+    <TextView
+        android:id="@+id/text_NavMapBear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/nav_map_bear"
+        android:translationZ="2dp"
+        app:layout_constraintEnd_toEndOf="@+id/img_NavMapCompass"
+        app:layout_constraintStart_toStartOf="@+id/img_NavMapCompass"
+        app:layout_constraintTop_toBottomOf="@id/text_NavMapBear_Label" />
+
+    <TextView
+        android:id="@+id/text_NavMapBear_Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/bearing"
+        android:textSize="@dimen/nav_map_txt"
+        android:translationZ="2dp"
+        app:layout_constraintEnd_toEndOf="@+id/img_NavMapCompass"
+        app:layout_constraintStart_toStartOf="@+id/img_NavMapCompass"
+        app:layout_constraintTop_toBottomOf="@id/text_NavMapDist" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navMap_top_navigation"
