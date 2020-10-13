@@ -42,5 +42,4 @@ dependencies {
     compile 'org.decimal4j:decimal4j:1.0.3'
     compile 'com.dinuscxj:multitouchgesturedetector:1.0.0'
 
-
 }

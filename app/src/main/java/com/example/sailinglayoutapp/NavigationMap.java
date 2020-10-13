@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,7 +44,7 @@ import org.decimal4j.util.DoubleRounder;
 
 import java.util.ArrayList;
 
-public class NavigationMap extends AppCompatActivity implements ConfirmDialogFragment.ConfirmDialogListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class NavigationMap extends AppCompatActivity implements ConfirmDialogFragment.ConfirmDialogListener, LocationServicesFragment.LocationServicesListener, LocationConnectingFragment.LocationConnectingListener, LocationNullFragment.LocationNullListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     NavMapGLSurfaceView gLView;
     MarkerCoordCalculations course;
@@ -61,6 +62,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
     String distFormat;
     int width, height;
     boolean locate;
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,12 +139,12 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
 
         layoutGL = (ConstraintLayout) findViewById(R.id.cl_nav_map);
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if(checkLocationPermission()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
-            locations.add(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
         }
+
+        getLocation();
 
         // Set number of radio buttons to number of marks
 
@@ -173,7 +175,12 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
                 } else {
                     selectedMark = checkedId;
                 }
-                setTexts();
+                if (locations.size() > 0) {
+                    setTexts();
+                } else {
+                    gLView.setSelectedMark(selectedMark);
+                    redrawGLView();
+                }
             }
         });
 
@@ -204,7 +211,9 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
 
-        setTexts();
+        if (locations.size() > 0) {
+            setTexts();
+        }
     }
 
     public void assignFields() {
@@ -244,10 +253,18 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         }
     };
 
-    LocationListener locationListener = new LocationListener() {
+    private void getLocation() {
+        if (checkLocationPermission()) {
+            if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
+                showLocationNullDialog();
+            } else {
+                updateLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+            }
+        }
+    }
 
-        @Override
-        public void onLocationChanged(Location location) {
+    private void updateLocation(Location location) {
+        if (location != null) {
             if (locations.size() >= 2) {
                 locations.remove(0);
                 locations.add(location);
@@ -255,10 +272,16 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             } else {
                 locations.add(location);
             }
-
-
             setTexts();
+        }
 
+    }
+
+    LocationListener locationListener = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            updateLocation(location);
         }
 
         @Override
@@ -268,14 +291,29 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
 
         @Override
         public void onProviderEnabled(String provider) {
-
+            showConnectingDialog();
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-
+            showLocationServicesDialog();
         }
     };
+
+    boolean mIsStateAlreadySaved = false, mPendingShowDialog = false;
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        mIsStateAlreadySaved = false;
+        if(mPendingShowDialog){
+            mPendingShowDialog = false;
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showLocationServicesDialog();
+            } else {
+                showConnectingDialog();
+            }
+        }
+    }
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -310,7 +348,6 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
 
             case R.id.btn_weather:
                 intent = new Intent();
-                intent.putExtra("LOCATION",locations.get(locations.size() - 1));
                 intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
                 startActivity(intent);
                 return true;
@@ -347,18 +384,10 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         String bearingText = Math.round(bearingBetweenPoints) + "°";
         textView_bearing.setText(bearingText);
 
-        // Display new glview with new location
-
         gLView.setLocations(locations);
         gLView.setBearing(bearingDirection);
         gLView.setSelectedMark(selectedMark);
-
-        gLView.queueEvent(new Runnable() {
-            @Override
-            public void run() {
-                gLView.redraw();
-            }
-        });
+        redrawGLView();
     }
 
     public void setDistText() {
@@ -372,6 +401,17 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             String distText = met2nm(distBetweenPointsMetres) + " Nm";
             textView_distance.setText(distText);
         }
+    }
+
+    public void redrawGLView() {
+        // Display new glview with new location
+
+        gLView.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                gLView.redraw();
+            }
+        });
     }
 
     private double met2nm(double met) { return DoubleRounder.round(met / 1852,2);}
@@ -410,6 +450,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
     protected void onPause() {
         super.onPause();
         gLView.onPause();
+        mIsStateAlreadySaved = true;
     }
 
     final int REQUEST_LOCATION = 2;
@@ -453,8 +494,36 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
     }
 
     public void showConfirmDialog() {
-        DialogFragment dialog = new ConfirmDialogFragment();
-        dialog.show(getSupportFragmentManager(),null);
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new ConfirmDialogFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
+    }
+    public void showLocationServicesDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationServicesFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
+    }
+    public void showConnectingDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationConnectingFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
+    }
+    public void showLocationNullDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationNullFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
     }
 
     @Override
@@ -462,6 +531,16 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         Intent intent = new Intent();
         intent.setClass(getApplicationContext(),MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDialogRetryLocation(DialogFragment dialog) {
+        if (checkLocationPermission()) {
+            updateLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+        }
+        if (locations.size() == 0) {
+            showLocationNullDialog();
+        }
     }
 
     @Override
@@ -475,5 +554,16 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             distFormat = sharedPreferences.getString(key, "nm");
             setDistText();
         }
+    }
+
+    @Override
+    public void onDialogLocationEnable(DialogFragment dialog) {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDialogLocationNotEnabled(DialogFragment dialog) {
+        showLocationNullDialog();
     }
 }

@@ -19,8 +19,6 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
     private ArrayList<Location> coordinates;
     List<Circle> circles;
     Triangle triangle;
-    Triangle arrow;
-    Line northSouth, eastWest;
     private ArrayList<Location> locations;
     private int selectedMark;
     private double bearingDirection;
@@ -137,7 +135,9 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
             circles.get(i).draw(scratch);
         }
 
-        triangle.draw(scratch);
+        if (triangle != null) {
+            triangle.draw(scratch);
+        }
 
     }
 
@@ -256,7 +256,9 @@ public class NavMapGLRenderer implements GLSurfaceView.Renderer {
         // Dispersion is from centre of screen so divide length by 2
         max_xy_dispersion = max_xy_dispersion/2;
 
-        positionTriangle();
+        if (locations.size() > 0) {
+            positionTriangle();
+        }
         positionCircles();
     }
 

@@ -28,6 +28,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,7 +46,7 @@ import org.decimal4j.util.DoubleRounder;
 import java.util.ArrayList;
 
 
-public class NavigationCompassActivity extends AppCompatActivity implements SensorEventListener, ConfirmDialogFragment.ConfirmDialogListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class NavigationCompassActivity extends AppCompatActivity implements SensorEventListener, ConfirmDialogFragment.ConfirmDialogListener, LocationServicesFragment.LocationServicesListener, LocationConnectingFragment.LocationConnectingListener, LocationNullFragment.LocationNullListener,  SharedPreferences.OnSharedPreferenceChangeListener {
 
     ImageView compass_img;
     ImageView arrow;
@@ -72,7 +73,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     double bearingDirection;
     BottomNavigationView topNavigation;
     String distFormat;
-
+    LocationManager locationManager;
 
 
     @Override
@@ -146,12 +147,12 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         float courseBearing = (float) - rad2deg(course.getCourseVariablesObject().getBearing());
         bearingDirection = -courseBearing;
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if(checkLocationPermission()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
-            locations.add(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
         }
 
+        getLocation();
 
         // Set number of radio buttons to number of marks
         Typeface font = ResourcesCompat.getFont(this, R.font.roboto_medium);
@@ -181,8 +182,11 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
                     selectedMark = checkedId;
                 }
 
-                setBearText();
-                setDistText();
+                if (locations.size() > 0) {
+                    setBearText();
+                    setDistText();
+                }
+
             }
 
 
@@ -196,8 +200,6 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         txt_compass = (TextView) findViewById(R.id.text_NavCompHead);
 
         start();
-        setBearText();
-        setDistText();
     }
 
     private void setupSharedPreferences() {
@@ -205,11 +207,18 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         distFormat = sharedPreferences.getString("distance", "nm");
     }
+    private void getLocation() {
+        if (checkLocationPermission()) {
+            if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
+                showLocationNullDialog();
+            } else {
+                updateLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+            }
+        }
+    }
 
-    LocationListener locationListener = new LocationListener() {
-
-        @Override
-        public void onLocationChanged(Location location) {
+    private void updateLocation(Location location) {
+        if (location != null) {
             if (locations.size() >= 2) {
                 locations.remove(0);
                 locations.add(location);
@@ -217,10 +226,17 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             } else {
                 locations.add(location);
             }
-
             setBearText();
             setDistText();
+        }
 
+    }
+
+    LocationListener locationListener = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            updateLocation(location);
         }
 
 
@@ -232,14 +248,29 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
         @Override
         public void onProviderEnabled(String provider) {
-
+            showConnectingDialog();
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-
+            showLocationServicesDialog();
         }
     };
+
+    boolean mIsStateAlreadySaved = false, mPendingShowDialog = false;
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        mIsStateAlreadySaved = false;
+        if(mPendingShowDialog){
+            mPendingShowDialog = false;
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showLocationServicesDialog();
+            } else {
+                showConnectingDialog();
+            }
+        }
+    }
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -274,7 +305,6 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
             case R.id.btn_weather:
                 intent = new Intent();
-                intent.putExtra("LOCATION",locations.get(locations.size() - 1));
                 intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
                 startActivity(intent);
                 return true;
@@ -368,12 +398,15 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
         degrees = Math.round(degrees);
         compass_img.setRotation(-degrees);
 
-        double bearingBetweenPoints = bearingBetweenPoints(locations.get(locations.size()-1).getLatitude(),locations.get(locations.size()-1).getLongitude(),
-                course.getCoords().get(selectedMark).getLatitude(),course.getCoords().get(selectedMark).getLongitude());
-        bearingBetweenPoints = Math.round(bearingBetweenPoints);
-        arrow.setRotation((float) -(degrees-bearingBetweenPoints));
+        if (locations.size() > 0) {
+            double bearingBetweenPoints = bearingBetweenPoints(locations.get(locations.size()-1).getLatitude(),locations.get(locations.size()-1).getLongitude(),
+                    course.getCoords().get(selectedMark).getLatitude(),course.getCoords().get(selectedMark).getLongitude());
+            bearingBetweenPoints = Math.round(bearingBetweenPoints);
+            arrow.setRotation((float) -(degrees-bearingBetweenPoints));
 
+        }
         txt_compass.setText(degrees + "°");
+
     }
 
     @Override
@@ -427,6 +460,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     protected void onPause() {
         super.onPause();
         stop();
+        mIsStateAlreadySaved = true;
     }
 
     @Override
@@ -476,15 +510,52 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
     }
 
     public void showConfirmDialog() {
-        DialogFragment dialog = new ConfirmDialogFragment();
-        dialog.show(getSupportFragmentManager(),null);
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new ConfirmDialogFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
     }
-
+    public void showLocationServicesDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationServicesFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
+    }
+    public void showConnectingDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationConnectingFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
+    }
+    public void showLocationNullDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationNullFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
+    }
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         Intent intent = new Intent();
         intent.setClass(getApplicationContext(),MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDialogRetryLocation(DialogFragment dialog) {
+        if (checkLocationPermission()) {
+            updateLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+        }
+        if (locations.size() == 0) {
+            showLocationNullDialog();
+        }
     }
 
     @Override
@@ -498,5 +569,16 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             distFormat = sharedPreferences.getString(key, "nm");
             setDistText();
         }
+    }
+
+    @Override
+    public void onDialogLocationEnable(DialogFragment dialog) {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDialogLocationNotEnabled(DialogFragment dialog) {
+        showLocationNullDialog();
     }
 }

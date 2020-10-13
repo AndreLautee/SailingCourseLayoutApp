@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -14,6 +15,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -51,6 +53,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -59,7 +70,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CourseVariablesBackdropActivity extends AppCompatActivity
-        implements WeatherDialogFragment.WeatherDialogListener, HelpDialogFragment.HelpDialogListener, ConfirmDialogFragment.ConfirmDialogListener, SharedPreferences.OnSharedPreferenceChangeListener {
+        implements WeatherDialogFragment.WeatherDialogListener, HelpDialogFragment.HelpDialogListener, ConfirmDialogFragment.ConfirmDialogListener, LocationServicesFragment.LocationServicesListener, LocationConnectingFragment.LocationConnectingListener, LocationNullFragment.LocationNullListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     BottomSheetBehavior<LinearLayout> sheetBehavior;
     CourseVariablesObject cvObject;
@@ -72,6 +83,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     Location currentLocation;
     int prevActivity;
     String coordFormat, distFormat;
+    LocationManager locationManager;
     SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -188,12 +200,12 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
             }
         });
-        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         currentLocation = null;
 
         if(checkLocationPermission()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
-            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
         final View button_locate = findViewById(R.id.locate_button);
@@ -201,8 +213,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
             @SuppressLint("DefaultLocale")
             public void onClick(View v) {
 
-                checkLocationPermission();
-                currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                getLocation();
 
                 if (currentLocation != null) {
                     if (coordFormat.equals("deg")) {
@@ -222,8 +233,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         final View button_weather = findViewById(R.id.weather_button);
         button_weather.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                checkLocationPermission();
-                currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                getLocation();
 
                 if (currentLocation != null) {
                     showWeatherDialog();
@@ -409,6 +419,20 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 }
             }
         });
+
+    }
+
+    private void getLocation() {
+        if (checkLocationPermission()) {
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showLocationServicesDialog();
+            }
+            else if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
+                showLocationNullDialog();
+            } else {
+                currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
+        }
     }
 
     LocationListener locationListener = new LocationListener() {
@@ -419,20 +443,39 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
+        public void onStatusChanged(String provider, int status, Bundle extras) {        }
 
         @Override
         public void onProviderEnabled(String provider) {
-
+            showConnectingDialog();
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-
+            showLocationServicesDialog();
         }
     };
+
+    boolean mIsStateAlreadySaved = false, mPendingShowDialog = false;
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        mIsStateAlreadySaved = false;
+        if(mPendingShowDialog){
+            mPendingShowDialog = false;
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showLocationServicesDialog();
+            } else {
+                showConnectingDialog();
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mIsStateAlreadySaved = true;
+    }
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -477,7 +520,6 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
             case R.id.btn_weather:
                 intent = new Intent();
-                intent.putExtra("LOCATION", currentLocation);
                 intent.setClass(getApplicationContext(),WeatherAPIActivity.class);
                 startActivity(intent);
                 return true;
@@ -973,15 +1015,51 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     }
 
     public void showConfirmDialog() {
-        DialogFragment dialog = new ConfirmDialogFragment();
-        dialog.show(getSupportFragmentManager(),null);
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new ConfirmDialogFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
     }
     public void showHelpDialog() {
-        DialogFragment dialog = new HelpDialogFragment();
-        dialog.show(getSupportFragmentManager(),null);
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new HelpDialogFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
     }
     public void showWeatherDialog() {
-        findWeather(currentLocation);
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            findWeather(currentLocation);
+        }
+    }
+    public void showLocationServicesDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationServicesFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
+    }
+    public void showConnectingDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationConnectingFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
+    }
+    public void showLocationNullDialog() {
+        if(mIsStateAlreadySaved){
+            mPendingShowDialog = true;
+        }else{
+            DialogFragment dialog = new LocationNullFragment();
+            dialog.show(getSupportFragmentManager(),null);
+        }
     }
     public void findWeather(Location location) {
         double lat = location.getLatitude();
@@ -1041,6 +1119,11 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     }
 
     @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
+
+    @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         if(prevActivity == 1) {
             // Go back to course selection page
@@ -1053,8 +1136,24 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogLocationEnable(DialogFragment dialog) {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+    }
 
+    @Override
+    public void onDialogLocationNotEnabled(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onDialogRetryLocation(DialogFragment dialog) {
+        if (checkLocationPermission()) {
+            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        if (currentLocation == null) {
+            showLocationNullDialog();
+        }
     }
 
     @SuppressLint("DefaultLocale")
@@ -1122,7 +1221,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
