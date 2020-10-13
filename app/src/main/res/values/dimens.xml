@@ -78,7 +78,10 @@
 
     <dimen name="fragment_page3">14sp</dimen><!--14sp-->
 
-
+    <!-- ACTION BAR -->
+    <dimen name="popup_txt">16sp</dimen><!--16sp-->
+    <dimen name="popup_txt_padding">5dp</dimen>
+    <dimen name="title_txt">20sp</dimen>
 
 
 </resources>
