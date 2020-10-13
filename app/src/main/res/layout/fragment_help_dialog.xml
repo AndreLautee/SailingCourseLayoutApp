@@ -12,7 +12,7 @@
         android:layout_margin="20dp"
         android:text="@string/help_text"
         android:textColor="@color/colorOnPrimaryDefault"
-        android:textSize="18sp"
+        android:textSize="@dimen/fragment_help_dialog"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:layout_gravity="center"
         android:text="LATITUDE AND LONGITUDE"
         android:textColor="@color/colorSecondary"
-        android:textSize="12sp"
+        android:textSize="@dimen/fragment_help_dialog1"
         app:layout_constraintEnd_toEndOf="@+id/textView13"
         app:layout_constraintStart_toStartOf="@+id/textView13"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
@@ -38,7 +38,7 @@
         android:layout_marginTop="16dp"
         android:text="Coordinate Input"
         android:textColor="@color/colorSecondary"
-        android:textSize="16sp"
+        android:textSize="@dimen/fragment_help_dialog2"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />

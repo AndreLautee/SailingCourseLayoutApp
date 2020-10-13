@@ -28,7 +28,7 @@
         android:text="Sharing your location helps\n you to navigate to points \n in the course"
         android:textAlignment="center"
         android:textColor="@color/colorOnPrimary"
-        android:textSize="14sp"
+        android:textSize="@dimen/fragment_page2"
         android:textStyle="bold"
         android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/epy"

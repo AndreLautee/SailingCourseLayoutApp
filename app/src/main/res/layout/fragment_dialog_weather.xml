@@ -12,7 +12,7 @@
         android:layout_margin="20dp"
         android:text="---"
         android:textColor="@color/colorOnPrimary"
-        android:textSize="20sp"
+        android:textSize="@dimen/fragment_dialog_weather"
         app:layout_constraintBottom_toBottomOf="@+id/textView15"
         app:layout_constraintStart_toStartOf="@+id/guideline15"
         app:layout_constraintTop_toTopOf="@+id/textView15" />
@@ -24,7 +24,7 @@
         android:layout_margin="20dp"
         android:text="@string/wind_direction"
         android:textColor="@color/colorOnPrimaryDefault"
-        android:textSize="20sp"
+        android:textSize="@dimen/fragment_dialog_weather"
         app:layout_constraintEnd_toStartOf="@+id/guideline15"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
@@ -35,7 +35,7 @@
         android:layout_gravity="center"
         android:text="CONNECTED"
         android:textColor="@color/colorSecondary"
-        android:textSize="10sp"
+        android:textSize="@dimen/fragment_dialog_weather1"
         app:layout_constraintEnd_toEndOf="@+id/textView13"
         app:layout_constraintStart_toStartOf="@+id/textView13"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
@@ -48,7 +48,7 @@
         android:layout_marginTop="10dp"
         android:text="@string/weather_data"
         android:textColor="@color/colorSecondary"
-        android:textSize="16sp"
+        android:textSize="@dimen/fragment_dialog_weather2"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />

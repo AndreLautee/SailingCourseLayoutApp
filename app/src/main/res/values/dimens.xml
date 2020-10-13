@@ -55,4 +55,30 @@
     <dimen name="weather_txt">16sp</dimen>
     <dimen name="weather_name">30sp</dimen>
     <dimen name="weather_txt2">18sp</dimen>
+    <!-- FRAGMENT PAGES -->
+    <dimen name="fragment_dialog_weather">20sp</dimen><!--20sp-->
+    <dimen name="fragment_dialog_weather1">10sp</dimen><!--10sp-->
+    <dimen name="fragment_dialog_weather2">16sp</dimen><!--16sp-->
+
+    <dimen name="fragment_confirm_dialog">18sp</dimen><!--18sp-->
+    <dimen name="fragment_confirm_dialog1">16sp</dimen><!--16sp-->
+
+    <dimen name="fragment_dialog_weather_error">20sp</dimen><!--20sp-->
+    <dimen name="fragment_dialog_weather_error1">20sp</dimen><!--20sp-->
+    <dimen name="fragment_dialog_weather_error2">10sp</dimen><!--10sp-->
+    <dimen name="fragment_dialog_weather_error3">16sp</dimen><!--16sp-->
+
+    <dimen name="fragment_help_dialog">18sp</dimen><!--18sp-->
+    <dimen name="fragment_help_dialog1">12sp</dimen><!--12sp-->
+    <dimen name="fragment_help_dialog2">16sp</dimen><!--16sp-->
+
+    <dimen name="fragment_page1">14sp</dimen><!--14sp-->
+
+    <dimen name="fragment_page2">14sp</dimen><!--14sp-->
+
+    <dimen name="fragment_page3">14sp</dimen><!--14sp-->
+
+
+
+
 </resources>
