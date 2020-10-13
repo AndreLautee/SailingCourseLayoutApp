@@ -10,10 +10,12 @@
     <dimen name="nav_compass_txt">36sp</dimen><!--20sp-->
     <dimen name="nav_map_txt">28sp</dimen>
     <dimen name="nav_map_bear">32sp</dimen>
+    <dimen name="crosshir_btn">50dp</dimen>
     <dimen name="main_txt">50sp</dimen>
-    <dimen name="weather_txt">22sp</dimen>
+    <dimen name="home_btn_txt">36sp</dimen>
+    <dimen name="weather_txt">28sp</dimen>
     <dimen name="weather_name">46sp</dimen>
-    <dimen name="weather_txt2">24sp</dimen>
+    <dimen name="weather_txt2">32sp</dimen>
 
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">26sp</dimen>
     <dimen name="design_bottom_navigation_text_size" tools:override="true">22sp</dimen>

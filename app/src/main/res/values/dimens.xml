@@ -45,9 +45,11 @@
     <!-- NAV MAP PAGE -->
     <dimen name="nav_map_txt">12sp</dimen>
     <dimen name="nav_map_bear">16sp</dimen>
+    <dimen name="crosshir_btn">30dp</dimen>
 
     <!-- MAIN PAGE -->
     <dimen name="main_txt">34sp</dimen>
+    <dimen name="home_btn_txt">20sp</dimen>
 
     <!-- WEATHER PAGE -->
     <dimen name="weather_txt">16sp</dimen>
