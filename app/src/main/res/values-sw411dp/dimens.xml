@@ -8,6 +8,14 @@
     <dimen name="mark_label">28sp</dimen><!--20sp-->
     <dimen name="nav_compass_labels">18sp</dimen><!--12sp-->
     <dimen name="nav_compass_txt">28sp</dimen><!--20sp-->
+    <dimen name="nav_map_txt">20sp</dimen>
+    <dimen name="nav_map_bear">24sp</dimen>
+    <dimen name="crosshir_btn">40dp</dimen>
+    <dimen name="main_txt">42sp</dimen>
+    <dimen name="home_btn_txt">28sp</dimen>
+    <dimen name="weather_txt">22sp</dimen>
+    <dimen name="weather_name">38sp</dimen>
+    <dimen name="weather_txt2">24sp</dimen>
 
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">18sp</dimen>
     <dimen name="design_bottom_navigation_text_size" tools:override="true">16sp</dimen>
@@ -15,4 +23,31 @@
     <dimen name="design_bottom_navigation_height" tools:override="true">76dp</dimen>
 
     <dimen name="dots_size">30dp</dimen>
+
+    <dimen name="fragment_dialog_weather">26sp</dimen><!--20sp-->
+    <dimen name="fragment_dialog_weather1">14sp</dimen><!--10sp-->
+    <dimen name="fragment_dialog_weather2">20sp</dimen><!--16sp-->
+
+    <dimen name="fragment_confirm_dialog">24sp</dimen><!--18sp-->
+    <dimen name="fragment_confirm_dialog1">20sp</dimen><!--16sp-->
+
+    <dimen name="fragment_dialog_weather_error">26sp</dimen><!--20sp-->
+    <dimen name="fragment_dialog_weather_error1">26sp</dimen><!--20sp-->
+    <dimen name="fragment_dialog_weather_error2">14sp</dimen><!--10sp-->
+    <dimen name="fragment_dialog_weather_error3">20sp</dimen><!--16sp-->
+
+    <dimen name="fragment_help_dialog">24sp</dimen><!--18sp-->
+    <dimen name="fragment_help_dialog1">16sp</dimen><!--12sp-->
+    <dimen name="fragment_help_dialog2">20sp</dimen><!--16sp-->
+
+    <dimen name="fragment_page1">18sp</dimen><!--14sp-->
+
+    <dimen name="fragment_page2">18sp</dimen><!--14sp-->
+
+    <dimen name="fragment_page3">18sp</dimen><!--14sp-->
+
+    <dimen name="popup_txt">20sp</dimen><!--16sp-->
+    <dimen name="popup_txt_padding">10dp</dimen>
+    <dimen name="title_txt">26sp</dimen>
+
 </resources>

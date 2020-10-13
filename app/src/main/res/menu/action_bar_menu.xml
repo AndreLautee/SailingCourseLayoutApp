@@ -15,7 +15,7 @@
         android:icon="@drawable/radar"
         app:showAsAction="never" />
     <item android:id="@+id/btn_settings"
-        android:title="SETTINGS"
+        android:title="@string/settings"
         android:icon="@drawable/outline_settings_black_24dp"
         app:showAsAction="never" />
 </menu>

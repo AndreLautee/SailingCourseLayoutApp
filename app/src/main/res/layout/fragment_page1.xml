@@ -16,7 +16,7 @@
         android:text="Connecting to the internet \n will help you obtain the\n latest weather data"
         android:textAlignment="center"
         android:textColor="@color/colorOnPrimary"
-        android:textSize="14sp"
+        android:textSize="@dimen/fragment_page1"
         android:textStyle="bold"
         android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/epy"
