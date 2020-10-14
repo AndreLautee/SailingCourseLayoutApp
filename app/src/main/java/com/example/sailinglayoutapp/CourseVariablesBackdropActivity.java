@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -16,11 +15,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -41,6 +38,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
@@ -53,15 +52,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -75,7 +65,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     BottomSheetBehavior<LinearLayout> sheetBehavior;
     CourseVariablesObject cvObject;
     String shape;
-    View calcButton, stubView, arrow, topBar, helpButton, advancedBar;
+    View calcButton, stubView, arrow, topBar, helpButton, weatherButton, locateButton, continueBtn;
     EditText txtLat, txtLon, txtWind, txtDist, txtLatMin, txtLonMin;
     TextInputLayout txtLayLat, txtLayLon, txtLayWind, txtLayDist, txtLayLatMin, txtLayLonMin;
     RadioGroup rgAngle, rgType, rg2ndBeat, rgReach;
@@ -90,19 +80,8 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_variables_backdrop);
-        swipeRefreshLayout = findViewById(R.id.swiperefresh);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                },1000);
-            }
-        });
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         setupUI(findViewById(R.id.ui_behind_backdrop));
 
@@ -154,23 +133,11 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         sheetBehavior.setFitToContents(false);
         sheetBehavior.setHideable(false);//prevents the boottom sheet from completely hiding off the screen
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);//initially state to fully expanded
-        sheetBehavior.setHalfExpandedRatio(0.2f);
+        sheetBehavior.setHalfExpandedRatio(0.1f);
 
 
 
         topBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                }
-                if(sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-            }
-        });
-
-        advancedBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
@@ -208,8 +175,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
         }
 
-        final View button_locate = findViewById(R.id.locate_button);
-        button_locate.setOnClickListener(new View.OnClickListener(){
+        locateButton.setOnClickListener(new View.OnClickListener(){
             @SuppressLint("DefaultLocale")
             public void onClick(View v) {
 
@@ -230,8 +196,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
             }
         });
 
-        final View button_weather = findViewById(R.id.weather_button);
-        button_weather.setOnClickListener(new View.OnClickListener(){
+        weatherButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 getLocation();
 
@@ -261,6 +226,14 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
             }
         });
 
+        continueBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            }
+        });
 
         txtLat.addTextChangedListener(new TextWatcher() {
             @Override
@@ -553,9 +526,11 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
         helpButton = findViewById(R.id.help_button);
         calcButton = stubView.findViewById(R.id.img_calculate);
+        continueBtn = findViewById(R.id.continue_btn);
+        locateButton = findViewById(R.id.locate_button);
+        weatherButton = findViewById(R.id.weather_button);
         arrow = findViewById(R.id.filterIcon);
         topBar = findViewById(R.id.topBar);
-        advancedBar = stubView.findViewById(R.id.LinearLayout2);
 
         rgAngle = stubView.findViewById(R.id.radioGroup_angle);
         rgType = stubView.findViewById(R.id.radioGroup_type);
@@ -902,33 +877,31 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
             // Make minute text boxes disappear
             txtLayLatMin.setVisibility(View.GONE);
             txtLayLonMin.setVisibility(View.GONE);
-            // New dimension of text box set to 200dp
-            dp1 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200,
-                    getResources().getDisplayMetrics());
-            // Apply new width to both the lat and lon text boxes
-            ViewGroup.LayoutParams lp = txtLayLat.getLayoutParams();
-            lp.width = dp1;
-            txtLayLat.requestLayout();
+
+            ConstraintLayout constraintLayout = findViewById(R.id.ui_behind_backdrop);
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(constraintLayout);
+            constraintSet.connect(R.id.latitude_layout,ConstraintSet.LEFT,R.id.guideline21,ConstraintSet.LEFT,0);
+            constraintSet.connect(R.id.latitude_layout,ConstraintSet.TOP,R.id.guideline24,ConstraintSet.TOP,0);
+            constraintSet.connect(R.id.latitude_layout,ConstraintSet.END,R.id.guideline22,ConstraintSet.END,0);
+            constraintSet.applyTo(constraintLayout);
+
             txtLayLat.setHelperText(getResources().getString(R.string.coordinate_format_deg_lat));
-            lp = txtLayLon.getLayoutParams();
-            lp.width = dp1;
-            txtLayLon.requestLayout();
             txtLayLon.setHelperText(getResources().getString(R.string.coordinate_format_deg_lon));
         } else {
             // Make minute text boxes appear
             txtLayLatMin.setVisibility(View.VISIBLE);
             txtLayLonMin.setVisibility(View.VISIBLE);
-            // New dimension of text box set to 95dp
-            dp1 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 95,
-                    getResources().getDisplayMetrics());
-            // Apply new width to both the lat and lon text boxes
-            ViewGroup.LayoutParams lp = txtLayLat.getLayoutParams();
-            lp.width = dp1;
-            txtLayLat.requestLayout();
+
+            ConstraintLayout constraintLayout = findViewById(R.id.ui_behind_backdrop);
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(constraintLayout);
+            constraintSet.connect(R.id.latitude_layout,ConstraintSet.LEFT,R.id.guideline21,ConstraintSet.LEFT,0);
+            constraintSet.connect(R.id.latitude_layout,ConstraintSet.TOP,R.id.guideline24,ConstraintSet.TOP,0);
+            constraintSet.connect(R.id.latitude_layout,ConstraintSet.END,R.id.guideline23,ConstraintSet.END,0);
+            constraintSet.applyTo(constraintLayout);
+
             txtLayLat.setHelperText(getResources().getString(R.string.coord_format_degmin_deg_lat));
-            lp = txtLayLon.getLayoutParams();
-            lp.width = dp1;
-            txtLayLon.requestLayout();
             txtLayLon.setHelperText(getResources().getString(R.string.coord_format_degmin_deg_lon));
         }
     }
@@ -1170,14 +1143,15 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                         m = 0;
                     }
                     d = Double.parseDouble(String.valueOf(txtLat.getText()));
-                    txtLat.setText(String.valueOf(degMins2decDeg(d,m)));
+                    txtLat.setText(String.valueOf(DoubleRounder.round(degMins2decDeg(d,m),5)));
+
                     if (!txtLonMin.getText().toString().equals("")) {
                         m = Double.parseDouble(String.valueOf(txtLonMin.getText()));
                     } else {
                         m = 0;
                     }
                     d = Double.parseDouble(String.valueOf(txtLon.getText()));
-                    txtLon.setText(String.valueOf(degMins2decDeg(d,m)));
+                    txtLon.setText(String.valueOf(DoubleRounder.round(degMins2decDeg(d,m),5)));
                 } else {
                     double d = Double.parseDouble(String.valueOf(txtLat.getText()));
                     txtLat.setText(String.valueOf((int) d));

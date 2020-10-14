@@ -86,6 +86,10 @@
     <string name="help_text">The coordinates you input will be used as the reference point and mark 4 coordinates.</string>
     <string name="confirm_text">By proceeding to this page you will lose the existing course setup.</string>
     <string name="settings">SETTINGS</string>
+    <string name="advanced_variables">Advanced Variables</string>
+    <string name="locate_me">LOCATE ME</string>
+    <string name="connect">CONNECT</string>
+    <string name="continuebtn">CONTINUE</string>
     <string-array name="course_shapes">
         <item>Windward-Leeward</item>
         <item>Triangle</item>

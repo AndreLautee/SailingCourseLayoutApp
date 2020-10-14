@@ -50,4 +50,21 @@
     <dimen name="popup_txt_padding">10dp</dimen>
     <dimen name="title_txt">26sp</dimen>
 
+    <dimen name="btm_sheet_peak_height">75dp</dimen>
+    <dimen name="btm_sheet_peak_height_10">85dp</dimen>
+    <dimen name="adv_title">26sp</dimen>
+    <dimen name="adv_arrow">26dp</dimen>
+    <dimen name="btn_txt">18sp</dimen>
+    <dimen name="cont_btn_txt">26sp</dimen>
+    <dimen name="btn_height">45dp</dimen>
+    <dimen name="input_txt">20sp</dimen>
+
+    <dimen name="shape_btn">90dp</dimen>
+    <dimen name="shape_img">75dp</dimen>
+    <dimen name="top_caption">20sp</dimen>
+    <dimen name="radio_text">20sp</dimen>
+    <dimen name="calc_text">20sp</dimen>
+    <dimen name="top_margin">10dp</dimen>
+
+
 </resources>

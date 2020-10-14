@@ -144,8 +144,6 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
         }
 
-        getLocation();
-
         // Set number of radio buttons to number of marks
 
         Typeface font = ResourcesCompat.getFont(this, R.font.roboto_medium);
@@ -186,6 +184,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
 
         gLView = new NavMapGLSurfaceView(this, course.getCoords(), locations, selectedMark, bearingDirection);
 
+        getLocation();
         float courseBearing = (float) - rad2deg(course.getCourseVariablesObject().getBearing());
         bearingDirection = -courseBearing;
         img_compass.setRotation(courseBearing);

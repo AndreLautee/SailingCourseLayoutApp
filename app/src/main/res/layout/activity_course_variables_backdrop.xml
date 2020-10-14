@@ -2,348 +2,390 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <!--This the interface sitting behind the backdrop and shown when it is collapsed-->
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        android:id="@+id/ui_behind_backdrop">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|start|center_horizontal"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_weight="0"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_globe" />
-
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.SCLApp.TextInputLayout"
-                            android:id="@+id/latitude_layout"
-                            android:layout_width="95dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:hint="@string/latitude"
-                            app:hintTextColor="@color/colorOnPrimary"
-                            app:helperText="@string/coord_format_degmin_deg_lat"
-                            app:errorEnabled="true"
-                            app:suffixText="@string/degrees">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editText_lat"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:inputType="numberDecimal|numberSigned"
-                                android:maxLines="1"
-                                android:textColor="@color/colorOnPrimary"
-                                android:textSize="16dp" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.SCLApp.TextInputLayout"
-                            android:id="@+id/latitude_layout_min"
-                            android:layout_width="100dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:hint="@string/latitude"
-                            app:hintTextColor="@color/colorOnPrimary"
-                            app:helperText="@string/coord_format_degmin_min"
-                            app:errorEnabled="true"
-                            app:suffixText="@string/minutes">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editText_lat_min"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:inputType="numberDecimal"
-                                android:maxLines="1"
-                                android:textColor="@color/colorOnPrimary"
-                                android:textSize="16dp" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/lon_logo" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.SCLApp.TextInputLayout"
-                        android:id="@+id/longitude_layout"
-                        android:layout_width="95dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:hint="@string/longitude"
-                        app:hintTextColor="@color/colorOnPrimary"
-                        app:helperText="@string/coord_format_degmin_deg_lon"
-                        app:errorEnabled="true"
-                        app:suffixText="@string/degrees">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editText_lon"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:inputType="numberDecimal|numberSigned"
-                            android:maxLines="1"
-                            android:textColor="@color/colorOnPrimary"
-                            android:textSize="16dp" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.SCLApp.TextInputLayout"
-                        android:id="@+id/longitude_layout_min"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:hint="@string/longitude"
-                        app:hintTextColor="@color/colorOnPrimary"
-                        app:helperText="@string/coord_format_degmin_min"
-                        app:errorEnabled="true"
-                        app:suffixText="@string/minutes">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editText_lon_min"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:textColor="@color/colorOnPrimary"
-                            android:textSize="16dp" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/locate_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_marginStart="25dp"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/baseline_help_outline_black_18dp"
-                    android:tint="@color/colorOnPrimaryDefault"
-                    android:id="@+id/help_button"/>
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/crosshair"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="LOCATE"
-                    android:textColor="@color/colorOnPrimaryDefault"
-                    android:textSize="14dp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|start|center_horizontal"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_weight="0"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="41dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/wind" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.SCLApp.TextInputLayout"
-                android:id="@+id/wind_layout"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:hint="Wind Direction"
-                app:hintTextColor="@color/colorOnPrimary"
-                app:helperText="@string/wind_dir_helper"
-                app:errorEnabled="true"
-                app:suffixText="@string/degrees">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editText_wind"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:inputType="numberDecimal"
-                    android:maxLines="1"
-                    android:textColor="@color/colorOnPrimary"
-                    android:textSize="16dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:id="@+id/weather_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="20dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/radar" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="CONNECT"
-                    android:textColor="@color/colorOnPrimaryDefault"
-                    android:textSize="14dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|start|center_horizontal"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_weight="0"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ruler" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.SCLApp.TextInputLayout"
-                android:id="@+id/distance_layout"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:hint="Course Length"
-                app:hintTextColor="@color/colorOnPrimary"
-                app:helperText="@string/length_format_nm"
-                app:errorEnabled="true"
-                app:suffixText="@string/length_unit_nm">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editText_dist"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:inputType="numberDecimal"
-                    android:maxLines="1"
-                    android:textColor="@color/colorOnPrimary"
-                    android:textSize="16dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <!--This is the backdrop's content with a BottomSheetBehaviour applied to it-->
-    <LinearLayout
-        android:id="@+id/contentLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:behavior_peekHeight="150dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:background="@drawable/backdrop_round_edges">
-
-        <!--This is the backdrop's header with a title and icon-->
-        <LinearLayout
+        android:fillViewport="true"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ui_behind_backdrop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:clickable="true"
-            android:elevation="4dp"
-            android:id="@+id/topBar"
-            >
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
-                <TextView
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="@dimen/btn_height"
+                    android:layout_height="@dimen/btn_height"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ruler"
+                    app:layout_constraintBottom_toBottomOf="@+id/distance_layout"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline21"
+                    app:layout_constraintStart_toStartOf="@+id/guideline25"
+                    app:layout_constraintTop_toTopOf="@+id/distance_layout"
+                    app:layout_constraintVertical_bias="0.32" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/wind_layout"
+                    style="@style/Widget.SCLApp.TextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Wind Direction"
+                    app:errorEnabled="true"
+                    app:helperText="@string/wind_dir_helper"
+                    app:hintTextColor="@color/colorOnPrimary"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline22"
+                    app:layout_constraintStart_toStartOf="@+id/guideline21"
+                    app:layout_constraintTop_toBottomOf="@+id/weather_button"
+                    app:suffixText="@string/degrees">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_wind"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:textColor="@color/colorOnPrimary"
+                        android:textSize="@dimen/input_txt" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="@dimen/btn_height"
+                    android:layout_height="@dimen/btn_height"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/wind"
+                    app:layout_constraintBottom_toBottomOf="@+id/wind_layout"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline21"
+                    app:layout_constraintStart_toStartOf="@+id/guideline25"
+                    app:layout_constraintTop_toTopOf="@+id/wind_layout"
+                    app:layout_constraintVertical_bias=".32" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/longitude_layout_min"
+                    style="@style/Widget.SCLApp.TextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:hint="@string/longitude"
+                    app:errorEnabled="true"
+                    app:helperText="@string/coord_format_degmin_min"
+                    app:hintTextColor="@color/colorOnPrimary"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline22"
+                    app:layout_constraintStart_toStartOf="@+id/guideline23"
+                    app:layout_constraintTop_toTopOf="@+id/longitude_layout"
+                    app:suffixText="@string/minutes">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_lon_min"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:textColor="@color/colorOnPrimary"
+                        android:textSize="@dimen/input_txt" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/longitude_layout"
+                    style="@style/Widget.SCLApp.TextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/longitude"
+                    app:errorEnabled="true"
+                    app:helperText="@string/coord_format_degmin_deg_lon"
+                    app:hintTextColor="@color/colorOnPrimary"
+                    app:layout_constraintEnd_toEndOf="@+id/latitude_layout"
+                    app:layout_constraintStart_toStartOf="@+id/guideline21"
+                    app:layout_constraintTop_toBottomOf="@+id/latitude_layout"
+                    app:suffixText="@string/degrees">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_lon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:inputType="numberDecimal|numberSigned"
+                        android:maxLines="1"
+                        android:textColor="@color/colorOnPrimary"
+                        android:textSize="@dimen/input_txt" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="@dimen/btn_height"
+                    android:layout_height="@dimen/btn_height"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/lon_logo"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline21"
+                    app:layout_constraintStart_toStartOf="@+id/guideline25"
+                    app:layout_constraintTop_toTopOf="@+id/longitude_layout" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="@dimen/btn_height"
+                    android:layout_height="@dimen/btn_height"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_globe"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline21"
+                    app:layout_constraintStart_toStartOf="@+id/guideline25"
+                    app:layout_constraintTop_toTopOf="@+id/guideline24" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.1" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.25" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.88" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent=".1" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/latitude_layout"
+                    style="@style/Widget.SCLApp.TextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:hint="@string/latitude"
+                    app:errorEnabled="true"
+                    app:helperText="@string/coord_format_degmin_deg_lat"
+                    app:hintTextColor="@color/colorOnPrimary"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline23"
+                    app:layout_constraintStart_toStartOf="@+id/guideline21"
+                    app:layout_constraintTop_toTopOf="@+id/guideline24"
+                    app:suffixText="@string/degrees">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_lat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:inputType="numberDecimal|numberSigned"
+                        android:maxLines="1"
+                        android:textColor="@color/colorOnPrimary"
+                        android:textSize="@dimen/input_txt" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/latitude_layout_min"
+                    style="@style/Widget.SCLApp.TextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:hint="@string/latitude"
+                    app:errorEnabled="true"
+                    app:helperText="@string/coord_format_degmin_min"
+                    app:hintTextColor="@color/colorOnPrimary"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline22"
+                    app:layout_constraintStart_toStartOf="@+id/guideline23"
+                    app:layout_constraintTop_toTopOf="@+id/guideline24"
+                    app:suffixText="@string/minutes">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_lat_min"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:textColor="@color/colorOnPrimary"
+                        android:textSize="@dimen/input_txt" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/distance_layout"
+                    style="@style/Widget.SCLApp.TextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:hint="Course Length"
+                    app:errorEnabled="true"
+                    app:helperText="@string/length_format_nm"
+                    app:hintTextColor="@color/colorOnPrimary"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline22"
+                    app:layout_constraintStart_toStartOf="@+id/guideline21"
+                    app:layout_constraintTop_toBottomOf="@+id/wind_layout"
+                    app:suffixText="@string/length_unit_nm">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_dist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:textColor="@color/colorOnPrimary"
+                        android:textSize="@dimen/input_txt" />
+                </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/weather_button"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/btn_height"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:drawableLeft="@drawable/radar"
+                android:drawablePadding="5dp"
+                android:drawableTint="@color/colorWhite"
+                android:text="@string/connect"
+                android:textSize="@dimen/btn_txt"
+                android:textColor="@color/colorWhite"
+                app:layout_constraintBottom_toTopOf="@+id/wind_layout"
+                app:layout_constraintEnd_toStartOf="@+id/guideline22"
+                app:layout_constraintTop_toBottomOf="@+id/longitude_layout" />
+
+                <Button
+                    android:id="@+id/locate_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/btn_height"
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:drawableLeft="@drawable/crosshair"
+                    android:drawablePadding="5dp"
+                    android:drawableTint="@color/colorWhite"
+                    android:text="@string/locate_me"
+                    android:textSize="@dimen/btn_txt"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintBottom_toTopOf="@+id/latitude_layout"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline22" />
+
+            <Button
+                android:id="@+id/continue_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/home_start_button"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:padding="10dp"
+                android:text="@string/continuebtn"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/cont_btn_txt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/distance_layout" />
+
+            <ImageButton
+                android:id="@+id/help_button"
+                android:layout_width="@dimen/btn_height"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:src="@drawable/baseline_help_outline_black_18dp"
+                android:tint="@color/colorWhite"
+                app:layout_constraintBottom_toTopOf="@+id/guideline24"
+                app:layout_constraintEnd_toStartOf="@+id/locate_button"
+                app:layout_constraintTop_toTopOf="@+id/locate_button"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <View
+                android:id="@+id/blank"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btm_sheet_peak_height_10"
+                app:layout_constraintTop_toBottomOf="@id/continue_btn"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/contentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:behavior_peekHeight="@dimen/btm_sheet_peak_height"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            android:background="@drawable/backdrop_round_edges"
+            app:layout_constraintTop_toBottomOf="@+id/continue_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!--This is the backdrop's header with a title and icon-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btm_sheet_peak_height"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:elevation="4dp"
+                android:id="@+id/topBar"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Advanced Variables"
+                    android:text="@string/advanced_variables"
                     android:textColor="@color/colorOnSecondary"
-                    android:textSize="20dp"
+                    android:textSize="@dimen/adv_title"
                     android:layout_margin="15dp"
                     android:layout_gravity="center"
                     android:gravity="start"/>
 
                 <ImageView
                     android:id="@+id/filterIcon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/adv_arrow"
+                    android:layout_height="@dimen/adv_arrow"
                     android:layout_gravity="center"
                     android:layout_margin="15dp"
                     android:src="@drawable/frontlayerarrow"/>
 
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <!--And finally this is the body of the backdrop's content. You can add here whatever you need inside a view group (LinearLayout, RelativeLayout, SwipeRefreshLayout, ConstraintLayout, etc.)-->
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swiperefresh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <ViewStub
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/layout_stub"
-                android:inflatedId="@+id/message_layout" />
-            <!--The content's body goes here-->
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:id="@+id/bottom_sheet"
+                >
+                <ViewStub
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layout_stub"
+                    android:inflatedId="@+id/message_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/bottom_sheet"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
