@@ -26,11 +26,12 @@
         android:layout_height="25dp"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
         android:src="@drawable/line"
         android:translationZ="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/img_compass"
         app:layout_constraintEnd_toEndOf="@+id/img_compass"
-        app:layout_constraintStart_toStartOf="@+id/img_compass" />
+        app:layout_constraintStart_toStartOf="@+id/img_compass"
+        app:layout_constraintTop_toBottomOf="@+id/navCompass_top_navigation" />
 
     <ImageView
         android:id="@+id/img_compass"
@@ -38,14 +39,26 @@
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
         android:elevation="2dp"
         android:gravity="center_horizontal"
         android:src="@drawable/navcompass"
+        app:layout_constraintBottom_toTopOf="@+id/text_NavCompDist"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toBottomOf="@+id/navCompass_top_navigation" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <RadioGroup
+        android:id="@+id/rgNavCompass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal"
+        android:translationZ="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/text_NavCompHead"
@@ -88,12 +101,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="50dp"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/current_nheading"
         android:textColor="@color/colorOnSecondary"
         android:textSize="@dimen/nav_compass_labels"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="@+id/textView2" />
 
@@ -102,7 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="30dp"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/distance_nto_mark"
         android:textColor="@color/colorOnSecondary"
@@ -116,13 +129,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginEnd="50dp"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/bearing_nto_mark"
         android:textColor="@color/colorOnSecondary"
         android:textSize="@dimen/nav_compass_labels"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView2" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -130,7 +143,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.9" />
+        app:layout_constraintGuide_percent=".9" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -152,16 +165,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.65" />
-    <RadioGroup
-        android:id="@+id/rgNavCompass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:orientation="horizontal"
-        android:translationZ="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

@@ -129,9 +129,11 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             public void onClick(View v) {
                 if (locate) {
                     gLView.setUserCentre();
+                    img_crosshair.setColorFilter(ContextCompat.getColor(getBaseContext(),R.color.colorGray));
                     locate = false;
                 } else {
                     gLView.resetMapCentre();
+                    img_crosshair.setColorFilter(ContextCompat.getColor(getBaseContext(),R.color.colorError));
                     locate = true;
                 }
             }

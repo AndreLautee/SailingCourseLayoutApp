@@ -87,7 +87,7 @@
     <string name="confirm_text">By proceeding to this page you will lose the existing course setup.</string>
     <string name="settings">SETTINGS</string>
     <string name="advanced_variables">Advanced Variables</string>
-    <string name="locate_me">LOCATE ME</string>
+    <string name="locate_me">LOCATE</string>
     <string name="connect">CONNECT</string>
     <string name="continuebtn">CONTINUE</string>
     <string-array name="course_shapes">

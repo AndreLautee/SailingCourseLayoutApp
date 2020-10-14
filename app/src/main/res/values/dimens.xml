@@ -20,10 +20,10 @@
     <dimen name="text_size">14sp</dimen>
 
     <!-- TOP NAVIGATION BAR -->
-    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">14sp</dimen>
-    <dimen name="design_bottom_navigation_text_size" tools:override="true">12sp</dimen>
-    <dimen name="design_bottom_navigation_icon_size" tools:override="true">24dp</dimen>
-    <dimen name="design_bottom_navigation_height" tools:override="true">60dp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12sp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">10sp</dimen>
+    <dimen name="design_bottom_navigation_icon_size" tools:override="true">22dp</dimen>
+    <dimen name="design_bottom_navigation_height" tools:override="true">40dp</dimen>
 
     <!-- COURSE SELECTION PAGE -->
     <dimen name="course_selection_text">20sp</dimen>
