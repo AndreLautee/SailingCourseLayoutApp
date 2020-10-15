@@ -64,7 +64,8 @@
     <dimen name="top_caption">20sp</dimen>
     <dimen name="radio_text">20sp</dimen>
     <dimen name="calc_text">20sp</dimen>
-    <dimen name="top_margin">10dp</dimen>
+    <dimen name="top_margin">20dp</dimen>
+    <dimen name="radio_padding_margin">10dp</dimen>
 
 
 </resources>

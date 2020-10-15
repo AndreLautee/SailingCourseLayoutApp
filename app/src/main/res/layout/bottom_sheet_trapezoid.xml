@@ -60,6 +60,9 @@
                     android:layout_weight="1"
                     android:text="@string/_1_2_beat_length"
                     android:textSize="@dimen/radio_text"
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
                     android:gravity="center_vertical|end"
                     android:layoutDirection="rtl"
                     android:lines="1"/>
@@ -71,6 +74,9 @@
                     android:layout_weight="1"
                     android:text="@string/_2_3_beat_length"
                     android:textSize="@dimen/radio_text"
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
                     android:gravity="center_vertical|start"
                     android:lines="1"/>
             </RadioGroup>
@@ -157,6 +163,9 @@
                     android:gravity="center_vertical"
                     android:layoutDirection="rtl"
                     android:lines="1"
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
                     android:text="60°,120°"
                     android:textSize="@dimen/radio_text"/>
 
@@ -167,6 +176,9 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical|start"
                     android:lines="1"
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
                     android:text="70°,110°"
                     android:textSize="@dimen/radio_text"/>
             </RadioGroup>
@@ -238,6 +250,9 @@
                     android:layout_weight="1"
                     android:lines="1"
                     android:layoutDirection="rtl"
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
                     android:text="@string/equal"
                     android:textSize="@dimen/radio_text"/>
 
@@ -248,6 +263,9 @@
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
                     android:lines="1"
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
                     android:text="@string/unequal"
                     android:textSize="@dimen/radio_text"/>
             </RadioGroup>
@@ -269,6 +287,9 @@
                     android:text="@string/starboard"
                     android:gravity="center_vertical|end"
                     android:lines="1"
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
                     android:layoutDirection="rtl"
                     android:textSize="@dimen/radio_text"/>
 
@@ -279,6 +300,9 @@
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
                     android:lines="1"
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
                     android:text="@string/portboard"
                     android:textSize="@dimen/radio_text"/>
             </RadioGroup>

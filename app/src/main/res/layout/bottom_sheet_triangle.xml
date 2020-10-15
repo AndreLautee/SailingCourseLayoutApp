@@ -99,7 +99,11 @@
                     android:gravity="center_vertical"
                     android:layoutDirection="rtl"
                     android:lines="1"
-                    android:text="60°,60°,60°" />
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
+                    android:text="60°,60°,60°"
+                    android:textSize="@dimen/radio_text"/>
 
                 <RadioButton
                     android:id="@+id/rb_angle_2"
@@ -108,7 +112,11 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical|start"
                     android:lines="1"
-                    android:text="45°,90°,45°" />
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
+                    android:text="45°,90°,45°"
+                    android:textSize="@dimen/radio_text"/>
             </RadioGroup>
 
             <TextView
@@ -176,6 +184,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/starboard"
+                    android:textSize="@dimen/radio_text"
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
                     android:gravity="center_vertical|end"
                     android:lines="1"
                     android:layoutDirection="rtl"/>
@@ -187,6 +199,10 @@
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
                     android:lines="1"
+                    android:padding="@dimen/radio_padding_margin"
+                    android:layout_marginStart="@dimen/radio_padding_margin"
+                    android:button="@drawable/selector_radio"
+                    android:textSize="@dimen/radio_text"
                     android:text="@string/portboard" />
             </RadioGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
