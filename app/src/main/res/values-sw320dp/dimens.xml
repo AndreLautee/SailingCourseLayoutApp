@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="course_selection_text">16sp</dimen>
     <dimen name="dots_size">22dp</dimen>
     <dimen name="radio_button_text">16sp</dimen><!--14sp-->
 
+    <dimen name="design_bottom_navigation_active_text_size" tools:ignore="PrivateResource">14sp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:ignore="PrivateResource">12sp</dimen>
+    <dimen name="design_bottom_navigation_icon_size" tools:ignore="PrivateResource">24dp</dimen>
+    <dimen name="design_bottom_navigation_height" tools:ignore="PrivateResource">48dp</dimen>
 </resources>

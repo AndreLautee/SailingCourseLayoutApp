@@ -69,6 +69,42 @@
         <item name="errorTextColor">@color/colorError</item>
     </style>
 
+    <style name="TextAppearance.SCLApp.ButtonText" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.SCLApp.FABText" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textColor">@color/colorOnSecondary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="IconContainedButton" parent="Widget.MaterialComponents.Button.Icon">
+        <item name="android:textAppearance">@style/TextAppearance.SCLApp.ButtonText</item>
+        <item name="backgroundTint">@color/colorPrimaryDark</item>
+        <item name="iconTint">@color/colorWhite</item>
+        <item name="iconSize">18dp</item>
+        <item name="iconGravity">start</item>
+        <item name="iconPadding">4dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
+    <style name="IconFAB" parent="Widget.MaterialComponents.ExtendedFloatingActionButton.Icon">
+        <item name="android:textAppearance">@style/TextAppearance.SCLApp.FABText</item>
+        <item name="backgroundTint">@color/colorSecondary</item>
+        <item name="iconTint">@color/colorOnSecondaryHighEmphasis</item>
+        <item name="iconSize">24dp</item>
+        <item name="iconGravity">start</item>
+        <item name="iconPadding">4dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
     <declare-styleable name="LayoutGLSurfaceView">
 
     </declare-styleable>

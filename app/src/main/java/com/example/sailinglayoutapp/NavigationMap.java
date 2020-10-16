@@ -129,9 +129,11 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             public void onClick(View v) {
                 if (locate) {
                     gLView.setUserCentre();
+                    img_crosshair.setColorFilter(ContextCompat.getColor(getBaseContext(),R.color.colorGray));
                     locate = false;
                 } else {
                     gLView.resetMapCentre();
+                    img_crosshair.setColorFilter(ContextCompat.getColor(getBaseContext(),R.color.colorError));
                     locate = true;
                 }
             }
@@ -143,8 +145,6 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         if(checkLocationPermission()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
         }
-
-        getLocation();
 
         // Set number of radio buttons to number of marks
 
@@ -186,6 +186,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
 
         gLView = new NavMapGLSurfaceView(this, course.getCoords(), locations, selectedMark, bearingDirection);
 
+        getLocation();
         float courseBearing = (float) - rad2deg(course.getCourseVariablesObject().getBearing());
         bearingDirection = -courseBearing;
         img_compass.setRotation(courseBearing);

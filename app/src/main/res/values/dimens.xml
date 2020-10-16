@@ -20,10 +20,10 @@
     <dimen name="text_size">14sp</dimen>
 
     <!-- TOP NAVIGATION BAR -->
-    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">14sp</dimen>
-    <dimen name="design_bottom_navigation_text_size" tools:override="true">12sp</dimen>
-    <dimen name="design_bottom_navigation_icon_size" tools:override="true">24dp</dimen>
-    <dimen name="design_bottom_navigation_height" tools:override="true">60dp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12sp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">10sp</dimen>
+    <dimen name="design_bottom_navigation_icon_size" tools:override="true">22dp</dimen>
+    <dimen name="design_bottom_navigation_height" tools:override="true">40dp</dimen>
 
     <!-- COURSE SELECTION PAGE -->
     <dimen name="course_selection_text">20sp</dimen>
@@ -83,5 +83,23 @@
     <dimen name="popup_txt_padding">5dp</dimen>
     <dimen name="title_txt">20sp</dimen>
 
+    <!-- COURSE VARIABLES PAGE -->
+    <dimen name="btm_sheet_peak_height">60dp</dimen>
+    <dimen name="btm_sheet_peak_height_10">70dp</dimen>
+    <dimen name="adv_title">20sp</dimen>
+    <dimen name="adv_arrow">20dp</dimen>
+    <dimen name="btn_txt">14sp</dimen>
+    <dimen name="cont_btn_txt">20sp</dimen>
+    <dimen name="btn_height">32dp</dimen>
+    <dimen name="input_txt">16sp</dimen>
+    <dimen name="help_btn">30dp</dimen>
 
+    <!-- ADVANCED VARIABLES PAGE -->
+    <dimen name="shape_btn">60dp</dimen>
+    <dimen name="shape_img">45dp</dimen>
+    <dimen name="top_caption">15sp</dimen>
+    <dimen name="radio_text">14sp</dimen>
+    <dimen name="calc_text">16sp</dimen>
+    <dimen name="top_margin">5dp</dimen>
+    <dimen name="radio_padding_margin">5dp</dimen>
 </resources>
