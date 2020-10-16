@@ -90,7 +90,7 @@
     <dimen name="adv_arrow">20dp</dimen>
     <dimen name="btn_txt">14sp</dimen>
     <dimen name="cont_btn_txt">20sp</dimen>
-    <dimen name="btn_height">38dp</dimen>
+    <dimen name="btn_height">32dp</dimen>
     <dimen name="input_txt">16sp</dimen>
 
     <!-- ADVANCED VARIABLES PAGE -->

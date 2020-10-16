@@ -71,31 +71,31 @@
                     app:layout_constraintTop_toTopOf="@+id/wind_layout"
                     app:layout_constraintVertical_bias=".32" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/longitude_layout_min"
-                    style="@style/Widget.SCLApp.TextInputLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:hint="@string/longitude"
-                    app:errorEnabled="true"
-                    app:helperText="@string/coord_format_degmin_min"
-                    app:hintTextColor="@color/colorOnPrimary"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline22"
-                    app:layout_constraintStart_toStartOf="@+id/guideline23"
-                    app:layout_constraintTop_toTopOf="@+id/longitude_layout"
-                    app:suffixText="@string/minutes">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/longitude_layout_min"
+                style="@style/Widget.SCLApp.TextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:hint="@string/longitude"
+                app:errorEnabled="true"
+                app:helperText="@string/coord_format_degmin_min"
+                app:hintTextColor="@color/colorOnPrimary"
+                app:layout_constraintEnd_toStartOf="@+id/guideline22"
+                app:layout_constraintStart_toStartOf="@+id/guideline23"
+                app:layout_constraintTop_toTopOf="@+id/longitude_layout"
+                app:suffixText="@string/minutes">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editText_lon_min"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:inputType="numberDecimal"
-                        android:maxLines="1"
-                        android:textColor="@color/colorOnPrimary"
-                        android:textSize="@dimen/input_txt" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editText_lon_min"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:textColor="@color/colorOnPrimary"
+                    android:textSize="@dimen/input_txt" />
+            </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/longitude_layout"
@@ -258,62 +258,55 @@
                         android:textColor="@color/colorOnPrimary"
                         android:textSize="@dimen/input_txt" />
                 </com.google.android.material.textfield.TextInputLayout>
-            <Button
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/weather_button"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/btn_height"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:drawableLeft="@drawable/radar"
-                android:drawablePadding="5dp"
-                android:drawableTint="@color/colorWhite"
+                style="@style/IconContainedButton"
+                android:layout_marginTop="32dp"
+                android:minWidth="0dp"
+                android:minHeight="40dp"
                 android:text="@string/connect"
-                android:textSize="@dimen/btn_txt"
-                android:textColor="@color/colorWhite"
+                app:icon="@drawable/radar"
                 app:layout_constraintBottom_toTopOf="@+id/wind_layout"
                 app:layout_constraintEnd_toStartOf="@+id/guideline22"
                 app:layout_constraintTop_toBottomOf="@+id/longitude_layout" />
 
-                <Button
-                    android:id="@+id/locate_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/btn_height"
-                    android:backgroundTint="@color/colorPrimaryDark"
-                    android:drawableLeft="@drawable/crosshair"
-                    android:drawablePadding="5dp"
-                    android:drawableTint="@color/colorWhite"
-                    android:text="@string/locate_me"
-                    android:textSize="@dimen/btn_txt"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toTopOf="@+id/latitude_layout"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline22" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/locate_button"
+                style="@style/IconContainedButton"
+                app:icon="@drawable/crosshair"
+                android:text="@string/locate_me"
+                android:minWidth="0dp"
+                android:minHeight="40dp"
 
-            <Button
+                app:layout_constraintBottom_toTopOf="@+id/latitude_layout"
+                app:layout_constraintEnd_toStartOf="@+id/guideline22" />
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/continue_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/home_start_button"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:padding="10dp"
+                style="@style/IconFAB"
+                android:layout_marginTop="24dp"
                 android:text="@string/continuebtn"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/cont_btn_txt"
+                app:icon="@drawable/frontlayerarrow"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/distance_layout" />
 
-            <ImageButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/help_button"
-                android:layout_width="@dimen/btn_height"
-                android:layout_height="0dp"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:src="@drawable/baseline_help_outline_black_18dp"
-                android:tint="@color/colorWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:backgroundTint="@color/colorPrimaryDark"
+                app:elevation="2dp"
+                app:fabCustomSize="30dp"
+                app:layout_constrainedWidth="false"
                 app:layout_constraintBottom_toTopOf="@+id/guideline24"
                 app:layout_constraintEnd_toStartOf="@+id/locate_button"
-                app:layout_constraintTop_toTopOf="@+id/locate_button"
-                app:layout_constraintVertical_bias="1.0" />
+                app:maxImageSize="20dp"
+                app:srcCompat="@drawable/baseline_help_outline_black_18dp"
+                app:tint="@color/colorWhite"
+                app:useCompatPadding="false" />
 
             <View
                 android:id="@+id/blank"
