@@ -58,6 +58,7 @@
     <dimen name="cont_btn_txt">32sp</dimen>
     <dimen name="btn_height">52dp</dimen>
     <dimen name="input_txt">24sp</dimen>
+    <dimen name="help_btn">42dp</dimen>
 
     <dimen name="shape_btn">120dp</dimen>
     <dimen name="shape_img">105dp</dimen>
