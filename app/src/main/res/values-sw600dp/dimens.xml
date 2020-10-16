@@ -9,7 +9,6 @@
     <dimen name="nav_compass_labels">24sp</dimen><!--12sp-->
     <dimen name="nav_compass_txt">36sp</dimen><!--20sp-->
     <dimen name="nav_map_txt">28sp</dimen>
-    <dimen name="nav_map_bear">32sp</dimen>
     <dimen name="crosshir_btn">50dp</dimen>
     <dimen name="main_txt">50sp</dimen>
     <dimen name="home_btn_txt">36sp</dimen>

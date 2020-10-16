@@ -83,7 +83,7 @@
         android:layout_gravity="center"
         android:fontFamily="@font/roboto"
         android:textColor="@color/colorBlack"
-        android:textSize="@dimen/nav_map_bear"
+        android:textSize="@dimen/nav_map_txt"
         android:translationZ="2dp"
         app:layout_constraintEnd_toEndOf="@+id/img_NavMapCompass"
         app:layout_constraintStart_toStartOf="@+id/img_NavMapCompass"

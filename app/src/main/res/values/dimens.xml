@@ -44,7 +44,6 @@
 
     <!-- NAV MAP PAGE -->
     <dimen name="nav_map_txt">12sp</dimen>
-    <dimen name="nav_map_bear">16sp</dimen>
     <dimen name="crosshir_btn">30dp</dimen>
 
     <!-- MAIN PAGE -->
