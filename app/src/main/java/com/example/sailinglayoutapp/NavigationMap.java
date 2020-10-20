@@ -144,6 +144,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if(checkLocationPermission()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 10, locationListenerNetwork);
         }
 
         // Set number of radio buttons to number of marks
@@ -256,8 +257,15 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
 
     private void getLocation() {
         if (checkLocationPermission()) {
-            if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
-                showLocationNullDialog();
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showLocationServicesDialog();
+            }
+            else if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
+                if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                    updateLocation(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER));
+                } else {
+                    showLocationNullDialog();
+                }
             } else {
                 updateLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
             }
@@ -283,6 +291,33 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         @Override
         public void onLocationChanged(Location location) {
             updateLocation(location);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            showConnectingDialog();
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            showLocationServicesDialog();
+        }
+    };
+
+    LocationListener locationListenerNetwork = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            if(checkLocationPermission()) {
+                if(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
+                    updateLocation(location);
+                }
+            }
         }
 
         @Override

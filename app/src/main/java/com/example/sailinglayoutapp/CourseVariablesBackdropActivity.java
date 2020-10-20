@@ -173,6 +173,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
         if(checkLocationPermission()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,1000,10,locationListenerNetwork);
         }
 
         locateButton.setOnClickListener(new View.OnClickListener(){
@@ -202,6 +203,8 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
 
                 if (currentLocation != null) {
                     showWeatherDialog();
+                } else {
+                    showLocationNullDialog();
                 }
 
             }
@@ -401,7 +404,11 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
                 showLocationServicesDialog();
             }
             else if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
-                showLocationNullDialog();
+                if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                    currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                } else {
+                    showLocationNullDialog();
+                }
             } else {
                 currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
@@ -427,6 +434,27 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         public void onProviderDisabled(String provider) {
             showLocationServicesDialog();
         }
+    };
+
+    LocationListener locationListenerNetwork = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            if(checkLocationPermission()) {
+                if(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
+                    currentLocation = location;
+                }
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {  }
+
+        @Override
+        public void onProviderEnabled(String provider) { showConnectingDialog(); }
+
+        @Override
+        public void onProviderDisabled(String provider) { showLocationServicesDialog(); }
     };
 
     boolean mIsStateAlreadySaved = false, mPendingShowDialog = false;

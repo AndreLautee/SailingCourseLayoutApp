@@ -74,18 +74,30 @@ public class WeatherAPIActivity extends AppCompatActivity implements LocationNul
             actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_black_24dp);
         }
 
-        Intent gpsIntent = getIntent();
-
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         location = null;
 
         if(checkLocationPermission()) {
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            getLocation();
         }
         if (location != null) {
             find_weather();
         } else {
             showLocationNullDialog();
+        }
+    }
+
+    private void getLocation() {
+        if (checkLocationPermission()) {
+            if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
+                if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                } else {
+                    showLocationNullDialog();
+                }
+            } else {
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
         }
     }
 
