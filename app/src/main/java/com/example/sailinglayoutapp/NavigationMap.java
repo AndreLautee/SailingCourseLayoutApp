@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -159,7 +160,9 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             radioButtons.get(i).setTextSize(getResources().getDimensionPixelSize(R.dimen.radio_button_text)/ getResources().getDisplayMetrics().density);
             radioButtons.get(i).setTypeface(font);
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
-            radioButtons.get(i).setPadding(7,0,20,0);
+            radioButtons.get(i).setWidth(getResources().getDisplayMetrics().widthPixels/courseSize);
+            radioButtons.get(i).setGravity(Gravity.CENTER);
+            radioButtons.get(i).setMinWidth(0);
         }
         // If selected mark = 0, then that is the final mark
         if (selectedMark == 0) {
