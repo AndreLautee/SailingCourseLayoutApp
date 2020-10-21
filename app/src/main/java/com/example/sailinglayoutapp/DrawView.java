@@ -18,7 +18,7 @@ public class DrawView extends View {
         this.startView = startView;
         this.endView = endView;
         paint.setColor(getResources().getColor(R.color.colorLayoutLine));
-        paint.setStrokeWidth(45);
+        paint.setStrokeWidth(getResources().getDimension(R.dimen.line_width));
     }
 
     public void onDraw(Canvas canvas) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="course_selection_text">24sp</dimen><!--20sp-->
-    <dimen name="radio_button_text">20sp</dimen><!--14sp-->
+    <dimen name="radio_button_text">18sp</dimen><!--14sp-->
     <dimen name="coordinate_text">28sp</dimen><!--20sp-->
     <dimen name="coordinate_label">18sp</dimen> <!--12sp-->
     <dimen name="mark_text">24sp</dimen><!--14sp-->
@@ -15,6 +15,8 @@
     <dimen name="weather_txt">22sp</dimen>
     <dimen name="weather_name">38sp</dimen>
     <dimen name="weather_txt2">24sp</dimen>
+    <dimen name="line_width">35dp</dimen>
+
 
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">18sp</dimen>
     <dimen name="design_bottom_navigation_text_size" tools:override="true">16sp</dimen>

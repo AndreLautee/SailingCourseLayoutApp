@@ -133,12 +133,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="40dp"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/longitudeCaps"
         android:textColor="@color/colorOnSecondary"
         android:textSize="@dimen/coordinate_label"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline13"
         app:layout_constraintEnd_toStartOf="@+id/guideline10"
         app:layout_constraintStart_toStartOf="@+id/guideline10" />
 
@@ -147,12 +146,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="40dp"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/latitudeCaps"
         android:textColor="@color/colorOnSecondary"
         android:textSize="@dimen/coordinate_label"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline13"
         app:layout_constraintEnd_toStartOf="@+id/guideline9"
         app:layout_constraintStart_toStartOf="@+id/guideline9" />
 
@@ -161,7 +159,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:fontFamily="@font/roboto_medium"
         android:textColor="@color/colorOnSecondary"
         android:textSize="@dimen/mark_text"
@@ -202,6 +200,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/courseLayout_top_navigation"

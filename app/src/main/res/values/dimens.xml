@@ -29,11 +29,12 @@
     <dimen name="course_selection_text">20sp</dimen>
 
     <!-- COURSE LAYOUT PAGE -->
-    <dimen name="radio_button_text">14sp</dimen>
+    <dimen name="radio_button_text">12sp</dimen>
     <dimen name="coordinate_text">20sp</dimen>
     <dimen name="coordinate_label">12sp</dimen>
     <dimen name="mark_text">14sp</dimen>
     <dimen name="mark_label">20sp</dimen>
+    <dimen name="line_width">15dp</dimen>
 
     <!-- NAV COMPASS PAGE -->
     <dimen name="nav_compass_labels">12sp</dimen>

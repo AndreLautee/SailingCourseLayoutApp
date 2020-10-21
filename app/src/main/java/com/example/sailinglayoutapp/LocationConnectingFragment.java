@@ -42,12 +42,14 @@ public class LocationConnectingFragment extends DialogFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Location location = null;
+                Location locationGPS = null;
+                Location locationNetwork = null;
                 LocationManager locationManager;
                 locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
                 if (checkLocationPermission()){
-                    while (location == null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    while (locationGPS == null && locationNetwork == null) {
+                        locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        locationNetwork = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         try {
                             TimeUnit.SECONDS.sleep(3);
                         } catch (InterruptedException e) {

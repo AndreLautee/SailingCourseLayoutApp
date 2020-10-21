@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -144,6 +145,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if(checkLocationPermission()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 10, locationListenerNetwork);
         }
 
         // Set number of radio buttons to number of marks
@@ -158,7 +160,9 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             radioButtons.get(i).setTextSize(getResources().getDimensionPixelSize(R.dimen.radio_button_text)/ getResources().getDisplayMetrics().density);
             radioButtons.get(i).setTypeface(font);
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
-            radioButtons.get(i).setPadding(7,0,20,0);
+            radioButtons.get(i).setWidth(getResources().getDisplayMetrics().widthPixels/courseSize);
+            radioButtons.get(i).setGravity(Gravity.CENTER);
+            radioButtons.get(i).setMinWidth(0);
         }
         // If selected mark = 0, then that is the final mark
         if (selectedMark == 0) {
@@ -256,8 +260,15 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
 
     private void getLocation() {
         if (checkLocationPermission()) {
-            if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
-                showLocationNullDialog();
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showLocationServicesDialog();
+            }
+            else if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
+                if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                    updateLocation(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER));
+                } else {
+                    showLocationNullDialog();
+                }
             } else {
                 updateLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
             }
@@ -283,6 +294,33 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
         @Override
         public void onLocationChanged(Location location) {
             updateLocation(location);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            showConnectingDialog();
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            showLocationServicesDialog();
+        }
+    };
+
+    LocationListener locationListenerNetwork = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            if(checkLocationPermission()) {
+                if(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) == null) {
+                    updateLocation(location);
+                }
+            }
         }
 
         @Override

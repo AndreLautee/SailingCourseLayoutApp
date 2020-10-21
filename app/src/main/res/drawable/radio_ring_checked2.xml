@@ -8,7 +8,7 @@
     <solid android:color="@color/colorRadioBorder" />
 
     <size
-        android:height="30dp"
-        android:width="30dp" />
+        android:height="20dp"
+        android:width="20dp" />
 
 </shape>
