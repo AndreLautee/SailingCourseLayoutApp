@@ -4,9 +4,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_sclanalogo_icon"
+        android:icon="@mipmap/ic_sclana_product_icon"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_sclanalogo_icon"
+        android:roundIcon="@mipmap/ic_sclana_product_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
