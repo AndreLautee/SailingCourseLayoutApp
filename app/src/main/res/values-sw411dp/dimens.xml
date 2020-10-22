@@ -16,6 +16,7 @@
     <dimen name="weather_name">38sp</dimen>
     <dimen name="weather_txt2">24sp</dimen>
     <dimen name="line_width">35dp</dimen>
+    <dimen name="main_subtext">22sp</dimen>
 
 
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">18sp</dimen>

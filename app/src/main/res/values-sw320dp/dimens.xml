@@ -3,6 +3,7 @@
     <dimen name="course_selection_text">16sp</dimen>
     <dimen name="dots_size">22dp</dimen>
     <dimen name="radio_button_text">14sp</dimen><!--14sp-->
+    <dimen name="main_subtext">18sp</dimen>
 
 
     <dimen name="design_bottom_navigation_active_text_size" tools:ignore="PrivateResource">14sp</dimen>
