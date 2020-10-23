@@ -15,7 +15,7 @@
     <dimen name="weather_txt">28sp</dimen>
     <dimen name="weather_name">46sp</dimen>
     <dimen name="weather_txt2">32sp</dimen>
-    <dimen name="line_width">50dp</dimen>
+    <dimen name="line_width">40dp</dimen>
     <dimen name="main_subtext">26sp</dimen>
 
 

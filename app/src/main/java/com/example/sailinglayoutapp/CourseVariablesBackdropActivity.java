@@ -451,10 +451,10 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
         public void onStatusChanged(String provider, int status, Bundle extras) {  }
 
         @Override
-        public void onProviderEnabled(String provider) { showConnectingDialog(); }
+        public void onProviderEnabled(String provider) {  }
 
         @Override
-        public void onProviderDisabled(String provider) { showLocationServicesDialog(); }
+        public void onProviderDisabled(String provider) {  }
     };
 
     boolean mIsStateAlreadySaved = false, mPendingShowDialog = false;
@@ -898,8 +898,6 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
     }
 
     public void setupCoordTextFields() {
-        int dp1;
-
         // Change text boxes to cater for new coord format
         if (coordFormat.equals("deg")) {
             // Make minute text boxes disappear
@@ -1062,6 +1060,7 @@ public class CourseVariablesBackdropActivity extends AppCompatActivity
             dialog.show(getSupportFragmentManager(),null);
         }
     }
+
     public void findWeather(Location location) {
         double lat = location.getLatitude();
         double lon = location.getLongitude();

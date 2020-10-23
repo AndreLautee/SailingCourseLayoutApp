@@ -130,11 +130,11 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             public void onClick(View v) {
                 if (locate) {
                     gLView.setUserCentre();
-                    img_crosshair.setColorFilter(ContextCompat.getColor(getBaseContext(),R.color.colorGray));
+                    img_crosshair.setColorFilter(ContextCompat.getColor(getBaseContext(),R.color.colorError));
                     locate = false;
                 } else {
                     gLView.resetMapCentre();
-                    img_crosshair.setColorFilter(ContextCompat.getColor(getBaseContext(),R.color.colorError));
+                    img_crosshair.setColorFilter(ContextCompat.getColor(getBaseContext(),R.color.colorGray));
                     locate = true;
                 }
             }
@@ -160,6 +160,7 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
             radioButtons.get(i).setTextSize(getResources().getDimensionPixelSize(R.dimen.radio_button_text)/ getResources().getDisplayMetrics().density);
             radioButtons.get(i).setTypeface(font);
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
+            radioButtons.get(i).setPadding(0,0,5,0);
             radioButtons.get(i).setWidth(getResources().getDisplayMetrics().widthPixels/courseSize);
             radioButtons.get(i).setGravity(Gravity.CENTER);
             radioButtons.get(i).setMinWidth(0);
@@ -330,12 +331,12 @@ public class NavigationMap extends AppCompatActivity implements ConfirmDialogFra
 
         @Override
         public void onProviderEnabled(String provider) {
-            showConnectingDialog();
+
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-            showLocationServicesDialog();
+
         }
     };
 

@@ -169,6 +169,7 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
             radioButtons.get(i).setTextSize(getResources().getDimensionPixelSize(R.dimen.radio_button_text)/ getResources().getDisplayMetrics().density);
             radioButtons.get(i).setTypeface(font);
             radioButtons.get(i).setButtonDrawable(R.drawable.selector_radio);
+            radioButtons.get(i).setPadding(0,0,5,0);
             radioButtons.get(i).setWidth(getResources().getDisplayMetrics().widthPixels/courseSize);
             radioButtons.get(i).setGravity(Gravity.CENTER);
             radioButtons.get(i).setMinWidth(0);
@@ -289,12 +290,12 @@ public class NavigationCompassActivity extends AppCompatActivity implements Sens
 
         @Override
         public void onProviderEnabled(String provider) {
-            showConnectingDialog();
+
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-            showLocationServicesDialog();
+
         }
     };
 
