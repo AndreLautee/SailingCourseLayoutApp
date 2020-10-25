@@ -8,13 +8,12 @@
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/home_btn"
-        android:onClick="Start_onclick"
         style="@style/IconFAB"
-        android:layout_marginTop="24dp"
+        android:onClick="Start_onclick"
         android:text="@string/start"
         android:textSize="@dimen/cont_btn_txt"
-        app:icon="@drawable/ic_icon_create"
         android:translationZ="2dp"
+        app:icon="@drawable/ic_icon_create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

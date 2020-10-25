@@ -289,7 +289,7 @@
                 style="@style/IconFAB"
                 android:layout_marginTop="24dp"
                 android:text="@string/continuebtn"
-                android:textSize="20sp"
+                android:textSize="@dimen/cont_btn_txt"
                 app:icon="@drawable/frontlayerarrow"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
