@@ -6,6 +6,6 @@
         android:font="@font/spartan_medium" />
     <font
         android:fontStyle="normal"
-        android:fontWeight="100"
+        android:fontWeight="200"
         android:font="@font/spartan_thin" />
 </font-family>

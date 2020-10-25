@@ -24,20 +24,14 @@
             android:layout_height="match_parent">
 
 
-            <Button
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/img_calculate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:background="@drawable/home_start_button"
-                android:drawableLeft="@drawable/ic_path"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/roboto_medium"
-                android:padding="15dp"
-                android:text="CALCULATE"
-                android:textColor="@color/colorOnSecondary"
-                android:textSize="@dimen/calc_text"
+                style="@style/IconFAB"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:text="@string/calculate"
+                android:textSize="20sp"
+                app:icon="@drawable/ic_path"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline27"
                 app:layout_constraintStart_toStartOf="@+id/guideline27"
