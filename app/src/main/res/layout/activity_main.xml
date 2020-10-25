@@ -6,25 +6,39 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <Button
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/home_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/home_start_button"
-        android:drawableStart="@drawable/ic_icon_create"
-        android:drawablePadding="15dp"
-        android:fontFamily="@font/roboto_medium"
         android:onClick="Start_onclick"
-        android:padding="15dp"
+        style="@style/IconFAB"
+        android:layout_marginTop="24dp"
         android:text="@string/start"
-        android:textColor="@color/colorOnSecondary"
-        android:textSize="@dimen/home_btn_txt"
+        android:textSize="@dimen/cont_btn_txt"
+        app:icon="@drawable/ic_icon_create"
         android:translationZ="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+<!--    <Button-->
+<!--        android:id="@+id/home_btn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:background="@drawable/home_start_button"-->
+<!--        android:drawableStart="@drawable/ic_icon_create"-->
+<!--        android:drawablePadding="15dp"-->
+<!--        android:fontFamily="@font/roboto_medium"-->
+<!--        android:onClick="Start_onclick"-->
+<!--        android:padding="15dp"-->
+<!--        android:text="@string/start"-->
+<!--        android:textColor="@color/colorOnSecondary"-->
+<!--        android:textSize="@dimen/home_btn_txt"-->
+<!--        android:translationZ="2dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView12" />-->
 
     <ImageView
         android:id="@+id/main_logo"
